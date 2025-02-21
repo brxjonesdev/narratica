@@ -19,7 +19,7 @@ export type NarrativeCardProps = {
   image: string;
 };
 
-export default function Narratives() {
+export default async function Narratives() {
   const sampleNarratives: NarrativeCardProps[] = [
     // {
     //     id: '1',
@@ -27,12 +27,12 @@ export default function Narratives() {
     //     lastUpdated: '2022-01-01',
     //     image: 'https://placekitten.com/200/200'
     // },
-    {
-        id: '2',
-        title: 'A narrative about a dog',
-        lastUpdated: '2022-01-02',
-        image: 'https://placedog.net/200/200'
-    },
+    // {
+    //     id: '2',
+    //     title: 'A narrative about a dog',
+    //     lastUpdated: '2022-01-02',
+    //     image: 'https://placedog.net/200/200'
+    // },
     // {
     //     id: '3',
     //     title: 'A narrative about a bird',
@@ -40,6 +40,8 @@ export default function Narratives() {
     //     image: 'https://placebird.net/200/200'
     // },
   ];
+
+
 
   return (
     <div className="flex-1 bg-white/5 rounded-lg p-4 flex flex-wrap gap-4">

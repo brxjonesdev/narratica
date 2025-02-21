@@ -11,10 +11,10 @@ import { Card, CardContent, CardFooter,} from "@/components/ui/card"
 
 export default function NarrativeForm() {
   const [formData, setFormData] = useState({
-    title: "",
-    subtitle: "",
-    penName: "",
-    blurb: "",
+    title: "crownsfall",
+    subtitle: "witches and the like",
+    penName: "yo daddy",
+    blurb: "oooohhh, spooky",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -25,9 +25,29 @@ export default function NarrativeForm() {
     }))
   }
 
+  const handleNarrativeCreation = async ({
+    title,
+    subtitle,
+    penName,
+    blurb,
+  }: {
+    title: string
+    subtitle: string
+    penName: string
+    blurb: string
+  }) => {
+    console.log("Creating narrative with data:", {
+      title,
+      subtitle,
+      penName,
+      blurb,
+    })
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log("Form submitted:", formData)
+    handleNarrativeCreation(formData)
     // Here you would typically send the data to an API or perform other actions
   }
 
@@ -40,7 +60,7 @@ export default function NarrativeForm() {
             <Input
               id="title"
               name="title"
-              placeholder="Enter the title of your narrative"
+              placeholder="Enter the title of your story"
               value={formData.title}
               onChange={handleChange}
               required
@@ -73,6 +93,7 @@ export default function NarrativeForm() {
               id="blurb"
               name="blurb"
               placeholder="Enter a brief description or teaser for your narrative"
+              className="resize-none"
               value={formData.blurb}
               onChange={handleChange}
               rows={4}

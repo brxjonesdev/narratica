@@ -5,7 +5,6 @@ import { createClient } from '@/lib/utils/server';
 export default async function Page() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser()
-  console.log('user', user)
 
   return user ? <Dashboard /> : <LandingPage />;
 }
