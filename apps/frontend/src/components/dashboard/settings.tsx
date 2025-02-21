@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -7,8 +8,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Button } from '../ui/button';
+import { createClient } from '@/lib/utils/client';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardSettings() {
+  const supabase = createClient();
+  const router = useRouter();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+  };
+
+
   return (
     <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -26,6 +39,15 @@ export default function DashboardSettings() {
         </p>
         <span className='font-bold inline-block'>Braxton Jones</span>
       </div>
+      <Button
+        variant='secondary'
+        className='w-full mt-2'
+        onClick={signOut}
+      >
+        SignOut
+
+        
+      </Button>
 
     </DropdownMenuContent>
   </DropdownMenu>
