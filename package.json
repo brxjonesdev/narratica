@@ -1,5 +1,5 @@
 {
-  "name": "narratica_mr",
+  "name": "narratica",
   "private": true,
   "scripts": {
     "build": "turbo run build",
