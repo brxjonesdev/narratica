@@ -17,29 +17,27 @@ import { useRouter } from 'next/navigation';
 export default function AuthPage() {
   const supabase = createClient();
   const router = useRouter();
-  
+
   async function handleGoogleSignIn() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `http://localhost:3000/auth/callback`,
       },
-    })
+    });
     if (error) {
       console.error('Error during Google sign-in:', error.message);
       return;
     }
-    if (data) { 
+    if (data) {
       console.log('Google sign-in successful:', data);
     }
 
-    router.refresh()
-    
+    router.refresh();
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen font-figtree flex-col ">
-      
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center ">Sign in</CardTitle>
@@ -49,9 +47,7 @@ export default function AuthPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Button variant="outline" className="w-full"
-            onClick={handleGoogleSignIn}
-            >
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5 mr-2">
                 <path
                   fill="#FFC107"
@@ -81,18 +77,20 @@ export default function AuthPage() {
               <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
-            <div className="space-y-2">
+          <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
             <Input id="username" type="text" placeholder="Your username" disabled />
-            </div>
-            <div className="space-y-2">
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" disabled />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" disabled>Sign In</Button>
-          </CardFooter>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button className="w-full" disabled>
+            Sign In
+          </Button>
+        </CardFooter>
         {/* <div className="text-center text-sm text-gray-500 my-4">
           Don&apos;t have an account?{' '}
           <Link href="/auth/create-account" className="text-cyan-500 hover:underline">

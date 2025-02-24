@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
+import { Toaster } from "@/components/ui/sonner"
 import './globals.css';
 
 const figtree = Figtree({
@@ -62,6 +63,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${figtree.variable} antialiased flex flex-col h-dvh overflow-x-hidden`}>
+      <Toaster />
         {children}
       </body>
     </html>

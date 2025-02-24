@@ -1,3 +1,1 @@
-export function handleGoogleSignIn(){
-    
-}
+export function handleGoogleSignIn() {}

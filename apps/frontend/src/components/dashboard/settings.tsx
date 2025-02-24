@@ -1,56 +1,50 @@
-"use client";
 import React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
-import { createClient } from '@/lib/utils/client';
-import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/utils/server';
+import { redirect } from 'next/navigation';
+import { Separator } from '../ui/separator';
+import { UserCircle2Icon } from 'lucide-react';
 
-export default function DashboardSettings() {
-  const supabase = createClient();
-  const router = useRouter();
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
+export default async function DashboardSettings() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
 
   return (
     <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-    <Avatar className="h-[35px] w-[35px] cursor-pointer">
-      <AvatarImage src="https://github.com/shadcn.png" />
-      <AvatarFallback></AvatarFallback>
-    </Avatar>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent className='font-figtree'>
-      <DropdownMenuLabel>Settings</DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <div className='p-2 bg-white/5 rounded-lg flex text-xs flex-wrap gap-1'>
-        <p className=''>
-          Signed in as
-        </p>
-        <span className='font-bold inline-block'>Braxton Jones</span>
-      </div>
-      <Button
-        variant='secondary'
-        className='w-full mt-2'
-        onClick={signOut}
-      >
-        SignOut
-
+      <DropdownMenuTrigger asChild>
+        <UserCircle2Icon className="h-5 w-5 text-white/80 hover:text-white cursor-pointer" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="font-figtree">
+        <section className="flex flex-col gap-2">
+          <div className="p-2 bg-white/5 rounded-lg flex text-xs gap-1 flex-col text-center">
+            <p className="">Signed in as</p>
+            <span className="font-bold inline-block">{user?.user_metadata.name}</span> 
+            <Separator className='my-2'/>
+            <form
+            action={async () => {
+              'use server';
+              const supabase = await createClient();
+              await supabase.auth.signOut();
+              redirect('/');
+            }}
+            className="flex flex-col gap-2"
+          >
+            <Button type="submit" variant="secondary" className="w-full text-xs " size={"sm"}>
+              Sign Out
+            </Button>
+          </form>
+          </div>
         
-      </Button>
-
-    </DropdownMenuContent>
-  </DropdownMenu>
-  
+        </section>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
