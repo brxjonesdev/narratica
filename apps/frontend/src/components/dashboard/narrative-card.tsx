@@ -1,24 +1,41 @@
-import React from 'react';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
-import { NarrativeCardProps } from './narratives';
+'use client';
 
-export default function NarrativeCard({ id, title, lastUpdated, image }: NarrativeCardProps) {
+import type React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import type { NarrativeCardProps } from './narratives';
+import { Separator } from '@/components/ui/separator';
+
+export default function NarrativeCard({
+  tagline,
+  blurb,
+  name,
+  narrativeID,
+  updatedAt,
+}: NarrativeCardProps) {
+
+
   return (
-    <Link href={`/narrative/${id}`}>
-      <Card className="h-full max-h-[50%] flex flex-col max-w-36 hover:border-2">
-        <CardHeader
-          className="flex-1 bg-white/10 rounded-t-xl"
-          style={{
-            backgroundImage: `url(${image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        ></CardHeader>
-        <CardFooter className="flex flex-col gap-2 items-start p-4">
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{lastUpdated}</CardDescription>
-        </CardFooter>
+    <Link
+      href={`/narrative/${narrativeID}`}
+      className="w-1/5 h-[50%]"
+    >
+      <Card className="w-full h-full bg-black/50 hover:bg-black/60 transition-all duration-300 ease-in-out flex flex-col justify-between relative">
+        <CardHeader>
+          <CardTitle>{name}</CardTitle>
+          <CardDescription>{tagline}</CardDescription>
+        </CardHeader>
+        <Separator />
+        <CardContent className="pt-2 flex flex-col flex-1">
+            <p className="text-sm text-muted-foreground">
+            {blurb.length > 100 ? `${blurb.substring(0, 120)}...` : blurb}
+            </p>
+          <Separator className="mt-auto my-2 " />
+          <p className="text-xs text-muted-foreground justify-self">
+            Updated at: {new Date(updatedAt).toLocaleDateString()}
+          </p>
+        </CardContent>
+      
       </Card>
     </Link>
   );

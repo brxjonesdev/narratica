@@ -2,7 +2,7 @@ import React from 'react';
 import { Separator } from '@/components/ui/separator';
 import Narratives from '@/components/dashboard/narratives';
 import DashboardHeader from '@/components/dashboard/header';
-import Roadmap from '@/components/dashboard/roadmap';
+import Link from 'next/link';
 
 export default function Dashboard() {
   return (
@@ -12,7 +12,11 @@ export default function Dashboard() {
         <Separator className="my-4" />
         <Narratives />
       </section>
-      <Roadmap />
+      <Link href="#">
+      <div className="text-muted-foreground text-xs text-center flex flex-col gap-1 items-center hover:bg-white/5 p-2 rounded-lg">
+        <p>This is a work in progress. Please be patient as I add more features.</p>
+      </div>
+    </Link>
     </main>
   );
 }

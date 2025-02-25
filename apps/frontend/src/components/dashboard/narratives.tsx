@@ -1,4 +1,4 @@
-'use client'; // Ensures this runs as a Client Component
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import NarrativeCard from './narrative-card';
@@ -15,80 +15,121 @@ import { Separator } from '../ui/separator';
 import NarrativeForm from './create-form';
 import { GET_USER_NARRATIVES } from '@/lib/graphql/narratives';
 import { createClient } from '@/lib/utils/client';
+import { PlusCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export type NarrativeCardProps = {
-  id: string;
-  title: string;
-  lastUpdated: string;
-  image: string;
+  userID: string;
+  name: string;
+  tagline: string;
+  image?: string;
+  blurb: string;
+  narrativeID: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export default function Narratives() {
   const [narratives, setNarratives] = useState<NarrativeCardProps[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-
-
-  // Fetch by the correct userID
-  // Handle CRUD operations
-  // Handle Errors
-  // Handle Loading States
-  // Handle Empty States
-  // Max 12 narratives per account
+  const router = useRouter();
 
   useEffect(() => {
     const fetchNarratives = async () => {
       const supabase = createClient();
-
-    const { data: { user } } = await supabase.auth.getUser();
-    const userId = user?.id;
-    if (!userId) {
-      console.error('User ID not found');
-    // TOAST ERROR
-      setLoading(false);
-      return;
-    }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const userId = user?.id;
+      console.log('User ID:', userId);
+      if (!userId) {
+        toast.error('User not found. Please log in again.');
+        setLoading(false);
+        router.push('/auth');
+        return;
+      }
       try {
-        const response = await fetch("/api/graphql", { // ✅ Uses relative URL
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             query: GET_USER_NARRATIVES,
             variables: {
-              "where": {
-                "userID_EQ": null
-              }
+              where: {
+                userID_EQ: userId,
+              },
             },
           }),
         });
-        
-        console.log('Response status:', response);
         const { data } = await response.json();
-        console.log('Fetched narratives:', data);
-        setNarratives(data?.narratives || []);
+        setNarratives([...narratives, ...data.narratives]);
       } catch (error) {
+        toast.error('Failed to fetch narratives. Please try again later.');
         console.error('Error fetching narratives:', error);
-        // TOAST ERROR
       } finally {
         setLoading(false);
       }
     };
 
     fetchNarratives();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function addNarrative(narrative: NarrativeCardProps) {
+    setNarratives([...narratives, narrative]);
+  }
+
+  function closeForm(){
+    setFormOpen(false);
+  }
 
   return (
     <section className="mt-4 flex-1 flex flex-col gap-4">
-      <div className='flex items-center justify-between'>
-      <h3 className="font-bold">Your Narratives.</h3>
-      <div>
-        <p className='text-xs text-muted-foreground'>{narratives.length}/12 slots available</p>
+      <div className="flex items-center justify-between">
+        <h3 className="font-bold">Your Narratives.</h3>
+        <div>
+          <p className="text-xs text-muted-foreground">{narratives.length}/12 slots available</p>
+        </div>
       </div>
-      </div>
-      <div className="flex-1 bg-white/5 rounded-lg p-4 flex flex-wrap gap-4">
+      <div className="flex-1 bg-white/5 rounded-lg p-4 flex ">
         {loading ? (
           <p className="text-muted-foreground">Loading narratives...</p>
         ) : narratives.length > 0 ? (
-          narratives.map((narrative) => <NarrativeCard key={narrative.id} {...narrative} />)
+          <div className="flex flex-wrap w-full gap-4">
+            {narratives
+            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+            .map((narrative) => (
+              <NarrativeCard key={narrative.narrativeID} {...narrative} />
+            ))}
+            {narratives.length < 12 && (
+              <Dialog open={formOpen} onOpenChange={setFormOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant={'default'}
+                    className="h-[50%] bg-white/5 hover:bg-white/10 text-white w-1/5"
+                  >
+                    <PlusCircle />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl font-figtree">
+                  <DialogHeader>
+                    <DialogTitle>Create New Narrative</DialogTitle>
+                    <DialogDescription>
+                      Let&apos;s start creating a new narrative. The world&apos;s next big story
+                      starts here and now!
+                    </DialogDescription>
+                  </DialogHeader>
+                  <Separator />
+                  <NarrativeForm
+                    addNarrative={addNarrative}
+                    closeForm={closeForm} // Pass the closeForm function to the form
+                  />
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center">
             <p className="text-md text-muted-foreground">No narratives found.</p>
@@ -105,7 +146,10 @@ export default function Narratives() {
                   </DialogDescription>
                 </DialogHeader>
                 <Separator />
-                <NarrativeForm />
+                <NarrativeForm
+                  addNarrative={addNarrative}
+                  closeForm={closeForm}
+                />
               </DialogContent>
             </Dialog>
           </div>

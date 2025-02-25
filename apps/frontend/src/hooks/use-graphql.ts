@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const useGraphQLRequest = () => {
   const [loading, setLoading] = useState(false);
@@ -9,9 +9,9 @@ const useGraphQLRequest = () => {
     setError(null);
 
     try {
-      const response = await fetch("/api/graphql", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, variables }),
       });
 
@@ -20,7 +20,7 @@ const useGraphQLRequest = () => {
       const { data } = await response.json();
       return data;
     } catch (err) {
-      console.error("GraphQL request error:", err);
+      console.error('GraphQL request error:', err);
       setError(err.message);
       return null;
     } finally {

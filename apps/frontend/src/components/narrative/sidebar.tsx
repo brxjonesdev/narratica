@@ -14,13 +14,11 @@ import {
 } from '@/components/ui/sidebar';
 import InfoCard from './sidebar/info-card';
 
-
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <InfoCard/>
+        <InfoCard />
       </SidebarHeader>
       <SidebarRail />
     </Sidebar>

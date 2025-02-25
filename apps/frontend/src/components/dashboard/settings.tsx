@@ -16,7 +16,6 @@ export default async function DashboardSettings() {
     data: { user },
   } = await supabase.auth.getUser();
 
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,23 +25,22 @@ export default async function DashboardSettings() {
         <section className="flex flex-col gap-2">
           <div className="p-2 bg-white/5 rounded-lg flex text-xs gap-1 flex-col text-center">
             <p className="">Signed in as</p>
-            <span className="font-bold inline-block">{user?.user_metadata.name}</span> 
-            <Separator className='my-2'/>
+            <span className="font-bold inline-block">{user?.user_metadata.name}</span>
+            <Separator className="my-2" />
             <form
-            action={async () => {
-              'use server';
-              const supabase = await createClient();
-              await supabase.auth.signOut();
-              redirect('/');
-            }}
-            className="flex flex-col gap-2"
-          >
-            <Button type="submit" variant="secondary" className="w-full text-xs " size={"sm"}>
-              Sign Out
-            </Button>
-          </form>
+              action={async () => {
+                'use server';
+                const supabase = await createClient();
+                await supabase.auth.signOut();
+                redirect('/');
+              }}
+              className="flex flex-col gap-2"
+            >
+              <Button type="submit" variant="secondary" className="w-full text-xs " size={'sm'}>
+                Sign Out
+              </Button>
+            </form>
           </div>
-        
         </section>
       </DropdownMenuContent>
     </DropdownMenu>

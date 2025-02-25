@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function MatrixView() {
-  return (
-    <div>MatrixView</div>
-  )
+  return <div>MatrixView</div>;
 }
