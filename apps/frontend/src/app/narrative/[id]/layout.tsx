@@ -5,22 +5,20 @@ import { AppSidebar } from '@/components/narrative/sidebar';
 import Menu from '@/components/narrative/menu';
 import Settings from '@/components/narrative/settings';
 
-export default function NarrativeLayout({ children }: { children: React.ReactNode }) {
+export default async function NarrativeLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { id: string };
+}) {
+  const { id } = await params;
+  console.log('narrative id:', id);
   return (
     <main className="font-figtree">
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b justify-between pr-4">
-            <div className="flex items-center gap-2 px-3">
-              <SidebarTrigger />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              <Menu />
-            </div>
-            <Settings />
-          </header>
-          {children}
-        </SidebarInset>
+      <SidebarProvider defaultOpen={true}>
+        <AppSidebar narrativeID={id} />
+        <SidebarInset>{children}</SidebarInset>
       </SidebarProvider>
     </main>
   );

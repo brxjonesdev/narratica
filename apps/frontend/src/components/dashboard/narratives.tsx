@@ -81,7 +81,7 @@ export default function Narratives() {
     setNarratives([...narratives, narrative]);
   }
 
-  function closeForm(){
+  function closeForm() {
     setFormOpen(false);
   }
 
@@ -99,10 +99,10 @@ export default function Narratives() {
         ) : narratives.length > 0 ? (
           <div className="flex flex-wrap w-full gap-4">
             {narratives
-            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-            .map((narrative) => (
-              <NarrativeCard key={narrative.narrativeID} {...narrative} />
-            ))}
+              .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+              .map((narrative) => (
+                <NarrativeCard key={narrative.narrativeID} {...narrative} />
+              ))}
             {narratives.length < 12 && (
               <Dialog open={formOpen} onOpenChange={setFormOpen}>
                 <DialogTrigger asChild>
@@ -146,10 +146,7 @@ export default function Narratives() {
                   </DialogDescription>
                 </DialogHeader>
                 <Separator />
-                <NarrativeForm
-                  addNarrative={addNarrative}
-                  closeForm={closeForm}
-                />
+                <NarrativeForm addNarrative={addNarrative} closeForm={closeForm} />
               </DialogContent>
             </Dialog>
           </div>

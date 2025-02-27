@@ -13,10 +13,10 @@ export default function Dashboard() {
         <Narratives />
       </section>
       <Link href="#">
-      <div className="text-muted-foreground text-xs text-center flex flex-col gap-1 items-center hover:bg-white/5 p-2 rounded-lg">
-        <p>This is a work in progress. Please be patient as I add more features.</p>
-      </div>
-    </Link>
+        <div className="text-muted-foreground text-xs text-center flex flex-col gap-1 items-center hover:bg-white/5 p-2 rounded-lg">
+          <p>This is a work in progress. Please be patient as I add more features.</p>
+        </div>
+      </Link>
     </main>
   );
 }

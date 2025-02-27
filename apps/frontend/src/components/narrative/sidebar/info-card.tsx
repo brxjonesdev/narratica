@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Separator } from '@/components/ui/separator';
 
 export default function InfoCard() {
+  // fetch metadata from the database
   return (
     <Card className="flex items-center p-3 gap-3">
       <section className="">

@@ -35,15 +35,21 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function NarrativeForm({ addNarrative, closeForm }: { addNarrative: (narrative : {
-  userID: string;
-  tagline: string;
-  blurb: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  narrativeID: string;
-}) => void, closeForm: () => void }) {
+export default function NarrativeForm({
+  addNarrative,
+  closeForm,
+}: {
+  addNarrative: (narrative: {
+    userID: string;
+    tagline: string;
+    blurb: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    narrativeID: string;
+  }) => void;
+  closeForm: () => void;
+}) {
   const { sendRequest, loading, error } = useGraphQLRequest();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -85,7 +91,7 @@ export default function NarrativeForm({ addNarrative, closeForm }: { addNarrativ
       addNarrative(variables.input[0]);
       form.reset();
       toast.custom(() => (
-        <Card className='font-figtree text-sm'>
+        <Card className="font-figtree text-sm">
           <CardHeader>
             <CardTitle>A new Narrative was just created!</CardTitle>
             <CardDescription>{variables.input[0].name}</CardDescription>
@@ -154,7 +160,6 @@ export default function NarrativeForm({ addNarrative, closeForm }: { addNarrativ
               {error && <p className="text-red-500">{error}</p>}
             </Button>
           </CardFooter>
-          
         </form>
       </Form>
     </Card>
