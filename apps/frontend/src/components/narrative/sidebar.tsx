@@ -1,22 +1,22 @@
 'use client';
 import * as React from 'react';
-import { ChevronDown, MoreHorizontal, Plus, Search } from 'lucide-react';
+import { BadgeHelpIcon, ChevronDown,Plus} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInput,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import InfoCard from './sidebar/info-card';
+import InfoCard from './sidebar/info';
 import { GET_ENTRIES, type NarrativeData } from '@/lib/graphql/entries';
 import Loading from './sidebar/loading';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
@@ -37,14 +37,21 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
-import { Label } from '../ui/label';
+import { Separator } from '../ui/separator';
+import Search from './sidebar/search';
+import { Button } from '../ui/button';
+import CreateEnitity from './sidebar/create-entity';
+import Help from './sidebar/help';
+
+
 
 export function AppSidebar({ narrativeID }: { narrativeID: string }) {
   const [entries, setEntries] = React.useState<NarrativeData | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [query, setQuery] = React.useState<string>('');
 
   React.useEffect(() => {
     setLoading(true);
@@ -55,7 +62,7 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             query: GET_ENTRIES,
-            variables: { narrativeID: 'irene!' },
+            variables: { narrativeID },
           }),
         });
 
@@ -76,6 +83,10 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
 
   {
     /*
+    1. InfoCard
+    2. Create new entity
+    3. Search
+    4. Submenus
    
     
   */
@@ -93,27 +104,16 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
           <SidebarGroupLabel className="text-sm tracking-wider">
             Narrative Synesis
           </SidebarGroupLabel>
-          <SidebarGroupAction title="Add Entity" className="hover:bg-white/20">
-            <Plus /> <span className="sr-only">Add Entity</span>
-          </SidebarGroupAction>
-          <form >
-      <SidebarGroup className="px-0">
-        <SidebarGroupContent className="relative">
-          <Label htmlFor="search" className="sr-only">
-            Search
-          </Label>
-          <SidebarInput
-            id="search"
-            placeholder="Search..."
-            className="pl-8"
+          <CreateEnitity/>
+          <Search
+            query={query}
+            setQuery={setQuery} 
           />
-          <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
-        </SidebarGroupContent>
-      </SidebarGroup>
-    </form>
+    <Separator className="my-2" />
+    {loading && <Loading message="Loading entries..." size="md" />}
           {entries && (
             <SidebarGroupContent>
-              {loading && <Loading message="Loading entries..." size="md" />}
+              
               {error && <div className="p-2 text-red-500 text-sm">Error: {error}</div>}
 
               {entries && Object.values(entries).every((list) => list.length === 0) && (
@@ -142,11 +142,17 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
 
               <SidebarMenu className="">
                 {Object.entries(entries)
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+                  .map(([category, list]) => [
+                    category,
+                    list.filter((item) =>
+                      item.name.toLowerCase().includes(query.toLowerCase())
+                    ),
+                  ])
                   .filter(([_, list]) => list.length > 0)
                   .map(([category, items]) => (
                     <Collapsible defaultOpen className="group/collapsible" key={category}>
-                      <SidebarGroup className="pr-1.5">
+                      <SidebarGroup className="p-1">
                         <SidebarGroupLabel asChild>
                           <CollapsibleTrigger className="hover:underline text-sm tracking-wider flex items-center">
                             {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -183,6 +189,12 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
           )}
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className='flex items-start justify-around gap-2 flex-row'>
+        <p className="text-xs text-muted-foreground pb-2">
+          Synesis- Build 022825.1
+        </p>
+       
+      </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>

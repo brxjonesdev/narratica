@@ -41,3 +41,26 @@ mutation CreateNarratives($input: [NarrativeCreateInput!]!) {
   }
 }
 `;
+
+export const FETCH_NARRATIVE_DETAILS = `
+query Narratives($where: NarrativeWhere) {
+  narratives(where: $where) {
+    name
+    tagline
+    blurb
+    updatedAt
+  }
+}`
+
+export const UPDATE_NARRATIVE = `
+mutation UpdateNarrative($where: NarrativeWhere!, $update: NarrativeUpdateInput!) {
+  updateNarratives(where: $where, update: $update) {
+    narratives {
+      name
+      tagline
+      blurb
+      updatedAt
+    }
+  }
+}
+`

@@ -1,3 +1,4 @@
+"use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import GridView from '@/components/narrative/outline/grid';
 import ListView from '@/components/narrative/outline/list';
@@ -6,6 +7,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
 import Settings from './settings/page';
 import Menu from '@/components/narrative/menu';
+import { useParams } from 'next/navigation';
 
 type NarrativeOutline = {
   act: {
@@ -32,7 +34,7 @@ type NarrativeOutline = {
   }[];
 };
 
-export default function NarrativeOutline() {
+export default function NarrativeOutline({}) {
   const sampleData: NarrativeOutline = {
     act: [
       {
@@ -65,6 +67,7 @@ export default function NarrativeOutline() {
       },
     ],
   };
+  const { id } = useParams();
 
   const views = [
     { name: 'Grid', value: 'grid', component: <GridView data={sampleData} /> },
@@ -78,7 +81,7 @@ export default function NarrativeOutline() {
         <div className="flex items-center gap-2 px-3">
           <SidebarTrigger />
           <Separator orientation="vertical" className="mr-2 h-4" />
-          <Menu />
+          <Menu id={id} />
         </div>
       </header>
       <section className="flex flex-1 flex-col gap-4 p-4 bg-white/5 m-2 rounded-xl">

@@ -1,5 +1,50 @@
+import { SidebarGroupAction } from '@/components/ui/sidebar';
+import { Plus } from 'lucide-react';
 import React from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 export default function CreateEnitity() {
-  return <div>CreatEnitity</div>;
+
+
+  // Clicking one of the buttons should create a new entity of that type in state and open the details view for that entity
+  // The entity should be added to the narrative and the sidebar should update to show the new entity
+  const ENTITY_TYPES = [
+    { label: 'Character', value: 'character' },
+    { label: 'Location', value: 'location' },
+    { label: 'Item', value: 'item' },
+    { label: 'Subplot', value: 'subplot' },
+    { label: 'Lore', value: 'lore' },
+    { label: 'Faction', value: 'faction' },
+    { label: 'Species', value: 'species' },
+  ]
+  return(
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+  <SidebarGroupAction title="Add Entity" className="hover:bg-white/20">
+  <Plus /> <span className="sr-only">Add Entity</span>
+</SidebarGroupAction>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent
+    align="start"
+    side='right'
+    className="w-fit bg-background border border-border rounded-md shadow-lg p-2"
+    sideOffset={28}
+    style={{ zIndex: 9999 }}
+  >
+    {ENTITY_TYPES.map((entity) => (
+      <DropdownMenuItem key={entity.value} className="cursor-pointer font-figtree text-sm text-center hover:bg-white/20" onClick={() => console.log(`Creating ${entity.label}`)}>
+        {entity.label}
+      </DropdownMenuItem>
+    ))}
+  </DropdownMenuContent>
+</DropdownMenu>
+)
 }

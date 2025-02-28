@@ -3,7 +3,7 @@ import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useRouter } from 'next/navigation';
 
-export default function Menu() {
+export default function Menu({id}: {id: string}) {
   const router = useRouter();
   const OPTIONS = [
     { label: 'Outline', value: 'outline' },
@@ -13,7 +13,7 @@ export default function Menu() {
 
   const handleChange = (value: string) => {
     if (value === 'outline') return router.push(`/narrative/1`);
-    router.push(`/narrative/1/${value}`);
+    router.push(`/narrative/${id}/${value}`);
   };
   return (
     <ToggleGroup type="single" defaultValue="outline">
