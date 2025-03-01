@@ -2,6 +2,8 @@
 import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useRouter } from 'next/navigation';
+import { Button } from '../ui/button';
+import { Home } from 'lucide-react';
 
 export default function Menu({id}: {id: string}) {
   const router = useRouter();
@@ -15,7 +17,8 @@ export default function Menu({id}: {id: string}) {
     if (value === 'outline') return router.push(`/narrative/1`);
     router.push(`/narrative/${id}/${value}`);
   };
-  return (
+  return (<>
+  
     <ToggleGroup type="single" defaultValue="outline">
       {OPTIONS.map((option) => (
         <ToggleGroupItem
@@ -28,5 +31,5 @@ export default function Menu({id}: {id: string}) {
         </ToggleGroupItem>
       ))}
     </ToggleGroup>
-  );
+  </>);
 }

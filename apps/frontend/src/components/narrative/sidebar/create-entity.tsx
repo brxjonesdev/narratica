@@ -1,3 +1,4 @@
+"use client"
 import { SidebarGroupAction } from '@/components/ui/sidebar';
 import { Plus } from 'lucide-react';
 import React from 'react';
@@ -5,13 +6,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
 
-export default function CreateEnitity() {
+export default function CreateEnitity({handleAdd}: {handleAdd: (entityType: string) => void}) {
+  const [isOpen, setIsOpen] = React.useState(false);
 
 
   // Clicking one of the buttons should create a new entity of that type in state and open the details view for that entity
@@ -26,7 +26,7 @@ export default function CreateEnitity() {
     { label: 'Species', value: 'species' },
   ]
   return(
-<DropdownMenu>
+<DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
   <DropdownMenuTrigger asChild>
   <SidebarGroupAction title="Add Entity" className="hover:bg-white/20">
   <Plus /> <span className="sr-only">Add Entity</span>
@@ -40,7 +40,14 @@ export default function CreateEnitity() {
     style={{ zIndex: 9999 }}
   >
     {ENTITY_TYPES.map((entity) => (
-      <DropdownMenuItem key={entity.value} className="cursor-pointer font-figtree text-sm text-center hover:bg-white/20" onClick={() => console.log(`Creating ${entity.label}`)}>
+      <DropdownMenuItem key={entity.value} 
+      onSelect={(e) => {
+        e.preventDefault();
+        handleAdd(entity.value);
+        setIsOpen(false);
+      }
+      }
+      className="cursor-pointer font-figtree text-sm text-center hover:bg-white/20" onClick={() => console.log(`Creating ${entity.label}`)}>
         {entity.label}
       </DropdownMenuItem>
     ))}

@@ -8,6 +8,9 @@ import { Separator } from '@/components/ui/separator';
 import Settings from './settings/page';
 import Menu from '@/components/narrative/menu';
 import { useParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Home } from 'lucide-react';
+import Link from 'next/link';
 
 type NarrativeOutline = {
   act: {
@@ -80,7 +83,13 @@ export default function NarrativeOutline({}) {
       <header className="flex h-16 shrink-0 items-center gap-2 border-b justify-between pr-4">
         <div className="flex items-center gap-2 px-3">
           <SidebarTrigger />
-          <Separator orientation="vertical" className="mr-2 h-4" />
+          <Separator orientation="vertical" className="h-4" />
+            <Link href="/">
+            <Button variant="ghost" size="icon" className="h-7 w-7">
+              <Home />
+            </Button>
+            </Link>
+  <Separator orientation="vertical" className="h-4" />
           <Menu id={id} />
         </div>
       </header>

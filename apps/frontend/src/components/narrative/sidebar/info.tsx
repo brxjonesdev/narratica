@@ -57,8 +57,6 @@ export default function InfoCard() {
       </Card>
     )
   }
-
-  console.log(info, "meowwww");
   return (
     <Card className="flex items-center p-3 gap-3 relative group">
       <div className='h-full w-1 bg-white/50 rounded-full'/>

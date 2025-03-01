@@ -43,7 +43,7 @@ import { Separator } from '../ui/separator';
 import Search from './sidebar/search';
 import { Button } from '../ui/button';
 import CreateEnitity from './sidebar/create-entity';
-import Help from './sidebar/help';
+import SubMenu from './submenu/submenu';
 
 
 
@@ -81,16 +81,25 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
   }, [narrativeID]);
   console.log('entries', entries, typeof entries);
 
-  {
-    /*
-    1. InfoCard
-    2. Create new entity
-    3. Search
-    4. Submenus
-   
-    
-  */
+  function handleAddEntity(category: string) {
+    setEntries((prevEntries) => {
+      if (!prevEntries) return prevEntries;
+
+      const newEntity = {
+        id: null,
+        name: `New ${category}`,
+        category,
+      };
+
+      return {
+        ...prevEntries,
+        [category]: [...(prevEntries[category] || []), newEntity],
+      };
+    }
+    );
   }
+
+  console.log('entries', entries, typeof entries);
 
   return (
     <Sidebar className="transition-all duration-300 ease-in-out">
@@ -104,7 +113,7 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
           <SidebarGroupLabel className="text-sm tracking-wider">
             Narrative Synesis
           </SidebarGroupLabel>
-          <CreateEnitity/>
+          <CreateEnitity handleAdd={handleAddEntity}/>
           <Search
             query={query}
             setQuery={setQuery} 
@@ -164,7 +173,10 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
                             <SidebarMenuSub className="ml-1.5 pl-2 mr-0 pr-0 border-muted-foreground/20 border-l-2">
                               {items.map((item) => (
                                 <SidebarMenuItem key={item.id}>
-                                  <DropdownMenu>
+                                  <DropdownMenu 
+                                  // defaultOpen={!item.id}
+                              
+                                  >
                                     <DropdownMenuTrigger asChild>
                                       <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-white/20 w-full">
                                         {item.name || item.title || 'Unnamed'}
@@ -173,8 +185,13 @@ export function AppSidebar({ narrativeID }: { narrativeID: string }) {
                                     <DropdownMenuContent
                                       side="right"
                                       align="center"
-                                      className="min-w-56 rounded-lg ml-8"
-                                    ></DropdownMenuContent>
+                                      className="w-[30rem] ml-8 p-0 border-none rounded-xl"
+                                    >
+                                      <SubMenu
+                                        isNew={!item.id}
+                                        entity={item}
+                                      />
+                                    </DropdownMenuContent>
                                   </DropdownMenu>
                                 </SidebarMenuItem>
                               ))}
