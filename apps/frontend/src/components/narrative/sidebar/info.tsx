@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import * as React from 'react';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -9,24 +9,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 import { useParams } from 'next/navigation';
 import { FETCH_NARRATIVE_DETAILS } from '@/lib/graphql/narratives';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import {MoreVerticalIcon} from 'lucide-react';
+import { MoreVerticalIcon } from 'lucide-react';
 import Metadata from './info-views/details';
 
-
-
 export default function InfoCard() {
-  const {id} = useParams();
-  const [info, setInfo] = React.useState<
-  { name: string; tagline: string; blurb: string; updatedAt: string } | null
-  >(null);
-  const [isModalOpen, setIsModalOpen] = React.useState(false)
-
-
+  const { id } = useParams();
+  const [info, setInfo] = React.useState<{
+    name: string;
+    tagline: string;
+    blurb: string;
+    updatedAt: string;
+  } | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     async function fetchData() {
@@ -40,10 +39,9 @@ export default function InfoCard() {
       });
       const data = await response.json();
       setInfo(data.data.narratives[0]);
-     
     }
     fetchData();
-  }, [id, isModalOpen])
+  }, [id, isModalOpen]);
 
   if (!info) {
     return (
@@ -55,15 +53,15 @@ export default function InfoCard() {
           <Skeleton className="h-4 w-1/4 mt-2" />
         </section>
       </Card>
-    )
+    );
   }
   return (
     <Card className="flex items-center p-3 gap-3 relative group">
-      <div className='h-full w-1 bg-white/50 rounded-full'/>
+      <div className="h-full w-1 bg-white/50 rounded-full" />
       <section className="w-full">
         <div className="flex items-top justify-between">
           <div>
-            <p className='text-lg font-semibold tracking-wide'>{info.name}</p>
+            <p className="text-lg font-semibold tracking-wide">{info.name}</p>
             <p className="text-xs text-muted-foreground tracking-wide">{info.tagline}</p>
           </div>
 
@@ -71,21 +69,16 @@ export default function InfoCard() {
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
               <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVerticalIcon/>
+                  <MoreVerticalIcon />
                   <span className="sr-only">Edit</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className='max-w-xl font-figtree'>
+              <DialogContent className="max-w-xl font-figtree">
                 <DialogHeader>
                   <DialogTitle>Edit Project</DialogTitle>
                   <DialogDescription>Make changes to your project or delete it.</DialogDescription>
                 </DialogHeader>
-               <Metadata
-                info={info}
-                id={id}
-                closeModal={() => setIsModalOpen(false)}
-             
-               />      
+                <Metadata info={info} id={id} closeModal={() => setIsModalOpen(false)} />
               </DialogContent>
             </Dialog>
           </div>
@@ -93,14 +86,14 @@ export default function InfoCard() {
         <Separator className="my-2" />
         <div>
           <p className="text-xs">
-            Last Updated:{" "}
+            Last Updated:{' '}
             <span className="text-xs text-muted-foreground">
-              {new Date(info.updatedAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
+              {new Date(info.updatedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
                 hour12: true,
               })}
             </span>

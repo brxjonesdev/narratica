@@ -1,105 +1,93 @@
 // Fetch Entries for a narrative
 export const GET_ENTRIES = `
 query Query($narrativeID: ID!) {
-  characters(where: { narrativeID_EQ: $narrativeID }) {
+  characters(where: { narrative_EQ: $narrativeID }) {
     id
     name
-    description
-    role
+   details
   }
-  locations(where: { narrativeID_EQ: $narrativeID }) {
+
+  locations(where: { narrative_EQ: $narrativeID }) {
     id
     name
     description
-    type
-    tags
+    details
+  }
+  items(where: { narrative_EQ: $narrativeID }) {
+    id
+    name
+    description
+    details
     
   }
-  items(where: { narrativeID_EQ: $narrativeID }) {
-    id
-    name
-    description
-    type
-    tags
-  }
-  subplots(where: { narrativeID_EQ: $narrativeID }) {
-    id
-    name
-    description
-    status
-  }
-  lores(where: { narrativeID_EQ: $narrativeID }) {
+  subplots(where: { narrative_EQ: $narrativeID }) {
     id
     title
-    content
+    description
+    details
+    
   }
-  factions(where: { narrativeID_EQ: $narrativeID }) {
+  factions(where: { narrative_EQ: $narrativeID }) {
     id
     name
     description
-    type
-    locatedIn {
-      name
-    }
-  }
-  species(where: { narrativeID_EQ: $narrativeID }) {
-    id
-    name
-    description
-  }
+    details
 }
 
+}
 `;
+
 export type Character = {
   id: string;
   name: string;
-  description: string;
   role: string;
+  appearance: string;
+  personality: string;
+  backstory: string;
+  goal: string;
+  alignment: string;
+  factions: { name: string }[];
+  species: { name: string }[];
+  subplots: { title: string }[];
 };
 
 export type Location = {
   id: string;
   name: string;
   description: string;
-  type: string;
-  tags: string[];
 };
 
 export type Item = {
   id: string;
   name: string;
   description: string;
-  type: string;
-  tags: string[];
+  owner: { name: string };
+  location: { name: string };
 };
 
 export type Subplot = {
   id: string;
-  name: string;
-  description: string;
-  status: string;
-};
-
-export type Lore = {
-  id: string;
   title: string;
-  content: string;
+  description: string;
+  charactersInvolved: { name: string }[];
+  itemsInvolved: { name: string }[];
 };
 
 export type Faction = {
   id: string;
   name: string;
   description: string;
-  type: string;
-  locatedIn?: {
-    name: string;
-  };
+  alignment: string;
+  members: { name: string }[];
+  allies: { name: string }[];
+  enemies: { name: string }[];
 };
 
 export type Species = {
   id: string;
   name: string;
   description: string;
+  alignment: string;
 };
 
 export type NarrativeData = {
@@ -107,7 +95,6 @@ export type NarrativeData = {
   locations: Location[];
   items: Item[];
   subplots: Subplot[];
-  lores: Lore[];
   factions: Faction[];
   species: Species[];
 };

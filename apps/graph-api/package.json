@@ -22,7 +22,7 @@
   },
   "contributors": [],
   "scripts": {
-    "dev": "",
+    "dev": "node index.js",
     "test": ""
   },
   "dependencies": {

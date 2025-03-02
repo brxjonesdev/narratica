@@ -2,10 +2,8 @@
 import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useRouter } from 'next/navigation';
-import { Button } from '../ui/button';
-import { Home } from 'lucide-react';
 
-export default function Menu({id}: {id: string}) {
+export default function Menu({ id }: { id: string | string[] | undefined }) {
   const router = useRouter();
   const OPTIONS = [
     { label: 'Outline', value: 'outline' },
@@ -17,19 +15,20 @@ export default function Menu({id}: {id: string}) {
     if (value === 'outline') return router.push(`/narrative/1`);
     router.push(`/narrative/${id}/${value}`);
   };
-  return (<>
-  
-    <ToggleGroup type="single" defaultValue="outline">
-      {OPTIONS.map((option) => (
-        <ToggleGroupItem
-          key={option.value}
-          value={option.value}
-          onClick={() => handleChange(option.value)}
-          className="tracking-widest font-bold"
-        >
-          {option.label}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
-  </>);
+  return (
+    <>
+      <ToggleGroup type="single" defaultValue="outline">
+        {OPTIONS.map((option) => (
+          <ToggleGroupItem
+            key={option.value}
+            value={option.value}
+            onClick={() => handleChange(option.value)}
+            className="tracking-widest font-bold"
+          >
+            {option.label}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+    </>
+  );
 }

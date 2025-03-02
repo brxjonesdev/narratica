@@ -1,37 +1,45 @@
-"use client"
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import DeleteDialog from "./delete-narrative"
-import { UPDATE_NARRATIVE } from "@/lib/graphql/narratives"
+'use client';
+import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import DeleteDialog from './delete-narrative';
+import { UPDATE_NARRATIVE } from '@/lib/graphql/narratives';
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: 'Name must be at least 2 characters.',
   }),
   tagline: z.string().min(2, {
-    message: "Tagline must be at least 2 characters.",
+    message: 'Tagline must be at least 2 characters.',
   }),
   blurb: z.string().min(10, {
-    message: "Blurb must be at least 10 characters.",
+    message: 'Blurb must be at least 10 characters.',
   }),
-})
+});
 
 export default function EditMetadata({
   info,
   id,
   closeModal,
-  
-}: { info: { name: string; tagline: string; blurb: string; updatedAt: string }; 
-id: string | string[] | undefined ;
-closeModal: () => void;}) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+}: {
+  info: { name: string; tagline: string; blurb: string; updatedAt: string };
+  id: string | string[] | undefined;
+  closeModal: () => void;
+}) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,37 +48,37 @@ closeModal: () => void;}) {
       tagline: info.tagline,
       blurb: info.blurb,
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
-      const response = await fetch("/api/graphql", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query: UPDATE_NARRATIVE,
-          variables: { 
+          variables: {
             where: {
-              narrativeID: id
+              narrativeID: id,
             },
             update: {
               name: values.name,
               tagline: values.tagline,
               blurb: values.blurb,
               updatedAt: new Date().toISOString(),
-            }
+            },
           },
         }),
-      })
-      const data = await response.json()
-      console.log("Update response:", data)
+      });
+      const data = await response.json();
+      console.log('Update response:', data);
     } catch (error) {
-      console.error("Failed to update metadata:", error)
+      console.error('Failed to update metadata:', error);
       // You could add an error notification here
     } finally {
-      setIsSubmitting(false)
-      closeModal()
+      setIsSubmitting(false);
+      closeModal();
     }
   }
 
@@ -78,13 +86,13 @@ closeModal: () => void;}) {
     try {
       // Here you would make an API call to delete the data
       // Example: await deleteMetadata(id)
-      console.log("Deleting metadata with ID:", id)
+      console.log('Deleting metadata with ID:', id);
       // You could add a success notification here or redirect
     } catch (error) {
-      console.error("Failed to delete metadata:", error)
+      console.error('Failed to delete metadata:', error);
       // You could add an error notification here
     } finally {
-      setIsDeleteDialogOpen(false)
+      setIsDeleteDialogOpen(false);
     }
   }
 
@@ -127,7 +135,11 @@ closeModal: () => void;}) {
               <FormItem>
                 <FormLabel>Blurb</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter blurb" className="min-h-[120px] resize-none" {...field} />
+                  <Textarea
+                    placeholder="Enter blurb"
+                    className="min-h-[120px] resize-none"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,20 +147,19 @@ closeModal: () => void;}) {
           />
 
           <div className="flex items-center gap-4 justify-end">
-          <DeleteDialog
-        narrativeName={info.name}
-        isDeleteDialogOpen={isDeleteDialogOpen}
-        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-        handleDelete={handleDelete}
-      />
+            <DeleteDialog
+              narrativeName={info.name}
+              isDeleteDialogOpen={isDeleteDialogOpen}
+              setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+              handleDelete={handleDelete}
+            />
 
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Changes"}
+              {isSubmitting ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </form>
       </Form>
     </div>
-  )
+  );
 }
-

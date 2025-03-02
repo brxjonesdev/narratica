@@ -1,9 +1,6 @@
 import React from 'react';
-import { Separator } from '@/components/ui/separator';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/narrative/sidebar';
-import Menu from '@/components/narrative/menu';
-import Settings from '@/components/narrative/settings';
 
 export default async function NarrativeLayout({
   children,

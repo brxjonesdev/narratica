@@ -50,7 +50,7 @@ query Narratives($where: NarrativeWhere) {
     blurb
     updatedAt
   }
-}`
+}`;
 
 export const UPDATE_NARRATIVE = `
 mutation UpdateNarrative($where: NarrativeWhere!, $update: NarrativeUpdateInput!) {
@@ -63,4 +63,4 @@ mutation UpdateNarrative($where: NarrativeWhere!, $update: NarrativeUpdateInput!
     }
   }
 }
-`
+`;

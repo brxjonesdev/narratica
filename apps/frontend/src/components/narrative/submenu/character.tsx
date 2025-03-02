@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function character() {
-  return (
-    <div>character</div>
-  )
+  return <div>character</div>;
 }

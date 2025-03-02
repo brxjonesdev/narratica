@@ -1,11 +1,10 @@
-"use client"
+'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import GridView from '@/components/narrative/outline/grid';
 import ListView from '@/components/narrative/outline/list';
 import MatrixView from '@/components/narrative/outline/matrix';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
-import Settings from './settings/page';
 import Menu from '@/components/narrative/menu';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -84,12 +83,12 @@ export default function NarrativeOutline({}) {
         <div className="flex items-center gap-2 px-3">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
-            <Link href="/">
+          <Link href="/">
             <Button variant="ghost" size="icon" className="h-7 w-7">
               <Home />
             </Button>
-            </Link>
-  <Separator orientation="vertical" className="h-4" />
+          </Link>
+          <Separator orientation="vertical" className="h-4" />
           <Menu id={id} />
         </div>
       </header>

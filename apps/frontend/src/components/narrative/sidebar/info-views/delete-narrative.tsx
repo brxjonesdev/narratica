@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { AlertCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react';
+import { AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -12,15 +12,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface DeleteDialogProps {
-  narrativeName: string
-  isDeleteDialogOpen: boolean
-  setIsDeleteDialogOpen: (open: boolean) => void
-  handleDelete: () => void
+  narrativeName: string;
+  isDeleteDialogOpen: boolean;
+  setIsDeleteDialogOpen: (open: boolean) => void;
+  handleDelete: () => void;
 }
 
 export default function DeleteDialog({
@@ -29,29 +29,30 @@ export default function DeleteDialog({
   setIsDeleteDialogOpen,
   handleDelete,
 }: DeleteDialogProps) {
-  const [firstConfirmation, setFirstConfirmation] = useState("")
-  const [secondConfirmation, setSecondConfirmation] = useState("")
+  const [firstConfirmation, setFirstConfirmation] = useState('');
+  const [secondConfirmation, setSecondConfirmation] = useState('');
 
-  const isConfirmationValid = firstConfirmation === narrativeName && secondConfirmation === narrativeName
+  const isConfirmationValid =
+    firstConfirmation === narrativeName && secondConfirmation === narrativeName;
 
   const resetInputs = () => {
-    setFirstConfirmation("")
-    setSecondConfirmation("")
-  }
+    setFirstConfirmation('');
+    setSecondConfirmation('');
+  };
 
   const handleDialogOpenChange = (open: boolean) => {
     if (!open) {
-      resetInputs()
+      resetInputs();
     }
-    setIsDeleteDialogOpen(open)
-  }
+    setIsDeleteDialogOpen(open);
+  };
 
   const handleDeleteClick = () => {
     if (isConfirmationValid) {
-      handleDelete()
-      resetInputs()
+      handleDelete();
+      resetInputs();
     }
-  }
+  };
 
   return (
     <Dialog open={isDeleteDialogOpen} onOpenChange={handleDialogOpenChange}>
@@ -67,24 +68,28 @@ export default function DeleteDialog({
             Confirm Deletion
           </DialogTitle>
           <DialogDescription>
-            This will permanently delete the narrative &quot;{narrativeName}&quot; and all
-            connected information. This action cannot be undone.
+            This will permanently delete the narrative &quot;{narrativeName}&quot; and all connected
+            information. This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
           <div className="space-y-2">
-            <Label htmlFor="first-confirmation">Type <span className="font-bold">{narrativeName}</span> to confirm:</Label>
+            <Label htmlFor="first-confirmation">
+              Type <span className="font-bold">{narrativeName}</span> to confirm:
+            </Label>
             <Input
               id="first-confirmation"
               value={firstConfirmation}
               onChange={(e) => setFirstConfirmation(e.target.value)}
-              placeholder={"Type the narrative name to confirm"}
+              placeholder={'Type the narrative name to confirm'}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="second-confirmation">Type <span className="font-bold">{narrativeName}</span> again:</Label>
+            <Label htmlFor="second-confirmation">
+              Type <span className="font-bold">{narrativeName}</span> again:
+            </Label>
             <Input
               id="second-confirmation"
               value={secondConfirmation}
@@ -100,12 +105,16 @@ export default function DeleteDialog({
               Cancel
             </Button>
           </DialogClose>
-          <Button type="button" variant="destructive" onClick={handleDeleteClick} disabled={!isConfirmationValid}>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={handleDeleteClick}
+            disabled={!isConfirmationValid}
+          >
             Delete
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
