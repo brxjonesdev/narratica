@@ -1,97 +1,20 @@
 'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import GridView from '@/components/narrative/outline/grid';
-import ListView from '@/components/narrative/outline/list';
-import MatrixView from '@/components/narrative/outline/matrix';
-import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Separator } from '@/components/ui/separator';
-import Menu from '@/components/narrative/menu';
-import { useParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Home } from 'lucide-react';
-import Link from 'next/link';
+// import { useParams } from 'next/navigation';
 
-type NarrativeOutline = {
-  act: {
-    id: string;
-    title: string;
-    description: string;
-    chapters: {
-      id: string;
-      title: string;
-      description: string;
-      scenes: {
-        id: string;
-        title: string;
-        description: string;
-        labels: string[];
-        associatedLinks: {
-          id: string;
-          title: string;
-          description: string;
-          category: string;
-        }[];
-      }[];
-    }[];
-  }[];
-};
 
-export default function NarrativeOutline({}) {
-  const sampleData: NarrativeOutline = {
-    act: [
-      {
-        id: 'act1',
-        title: 'Act 1',
-        description: 'The beginning of the story',
-        chapters: [
-          {
-            id: 'chapter1',
-            title: 'Chapter 1',
-            description: 'Introduction to the main character',
-            scenes: [
-              {
-                id: 'scene1',
-                title: 'Scene 1',
-                description: 'Character wakes up',
-                labels: ['morning', 'introduction'],
-                associatedLinks: [
-                  {
-                    id: 'link1',
-                    title: "Character's House",
-                    description: 'Description of the house',
-                    category: 'Location',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-  const { id } = useParams();
+
+export default function NarrativeOutline() {
+ 
+  // const { id } = useParams();
 
   const views = [
-    { name: 'Grid', value: 'grid', component: <GridView data={sampleData} /> },
-    { name: 'List', value: 'list', component: <ListView data={sampleData} /> },
-    { name: 'Matrix', value: 'matrix', component: <MatrixView data={sampleData} /> },
+    { name: 'Grid', value: 'grid', component: null },
+    { name: 'List', value: 'list', component: null },
+    { name: 'Matrix', value: 'matrix', component: null },
   ];
 
   return (
-    <>
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b justify-between pr-4">
-        <div className="flex items-center gap-2 px-3">
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="h-4" />
-          <Link href="/">
-            <Button variant="ghost" size="icon" className="h-7 w-7">
-              <Home />
-            </Button>
-          </Link>
-          <Separator orientation="vertical" className="h-4" />
-          <Menu id={id} />
-        </div>
-      </header>
       <section className="flex flex-1 flex-col gap-4 p-4 bg-white/5 m-2 rounded-xl">
         <Tabs defaultValue="grid" className="">
           <TabsList>
@@ -108,6 +31,5 @@ export default function NarrativeOutline({}) {
           ))}
         </Tabs>
       </section>
-    </>
   );
 }

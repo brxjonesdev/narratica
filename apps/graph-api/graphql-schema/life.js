@@ -27,7 +27,7 @@ type Item @node {
 type Subplot @node {
     id: ID!
     narrative: ID!
-    title: String!
+    name: String!
     description: String
     details: String
 }

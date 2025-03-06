@@ -1,5 +1,5 @@
-import Dashboard from '@/app/_views/dashboard';
-import LandingPage from '@/app/_views/landing';
+import Dashboard from '@/components/_views/dashboard';
+import LandingPage from '@/components/_views/landing';
 import { createClient } from '@/lib/utils/server';
 
 export default async function Page() {

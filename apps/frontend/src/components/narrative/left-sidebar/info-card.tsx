@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
 import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import {
   Dialog,
   DialogContent,
@@ -11,11 +10,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useParams } from 'next/navigation';
-import { FETCH_NARRATIVE_DETAILS } from '@/lib/graphql/narratives';
+import { FETCH_NARRATIVE_DETAILS } from '@/graphql/narratives';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { MoreVerticalIcon } from 'lucide-react';
-import Metadata from './info-views/details';
+import Metadata from './info-card-utils/details';
 
 export default function InfoCard() {
   const { id } = useParams();
@@ -49,14 +48,12 @@ export default function InfoCard() {
         <section className="w-full">
           <Skeleton className="h-6 w-3/4 mb-2" />
           <Skeleton className="h-4 w-1/2 mb-2" />
-          <Separator className="my-2" />
-          <Skeleton className="h-4 w-1/4 mt-2" />
         </section>
       </Card>
     );
   }
   return (
-    <Card className="flex items-center p-3 gap-3 relative group">
+    <Card className="flex items-center p-3 gap-3 relative group m-2">
       <div className="h-full w-1 bg-white/50 rounded-full" />
       <section className="w-full">
         <div className="flex items-top justify-between">
@@ -83,22 +80,8 @@ export default function InfoCard() {
             </Dialog>
           </div>
         </div>
-        <Separator className="my-2" />
-        <div>
-          <p className="text-xs">
-            Last Updated:{' '}
-            <span className="text-xs text-muted-foreground">
-              {new Date(info.updatedAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true,
-              })}
-            </span>
-          </p>
-        </div>
+
+      
       </section>
     </Card>
   );

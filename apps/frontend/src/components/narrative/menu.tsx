@@ -2,9 +2,11 @@
 import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
-export default function Menu({ id }: { id: string | string[] | undefined }) {
+export default function Menu() {
   const router = useRouter();
+  const { id } = useParams();
   const OPTIONS = [
     { label: 'Outline', value: 'outline' },
     { label: 'Draft', value: 'draft' },
@@ -12,7 +14,7 @@ export default function Menu({ id }: { id: string | string[] | undefined }) {
   ];
 
   const handleChange = (value: string) => {
-    if (value === 'outline') return router.push(`/narrative/1`);
+    if (value === 'outline') return router.push(`/narrative/${id}`);
     router.push(`/narrative/${id}/${value}`);
   };
   return (

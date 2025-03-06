@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import useGraphQLRequest from '@/hooks/use-graphql';
-import { CREATE_NARRATIVE } from '@/lib/graphql/narratives';
+import { CREATE_NARRATIVE } from '@/graphql/narratives';
 import { nanoid } from 'nanoid';
 import { createClient } from '@/lib/utils/client';
 import toast from 'react-hot-toast';

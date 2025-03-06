@@ -1,9 +1,8 @@
 import narrative from './narratives.js';
-import life from './life.js';
+
 
 const typeDefs = [
-    narrative,
-    life,
+    narrative
 ];
 
 export default typeDefs;

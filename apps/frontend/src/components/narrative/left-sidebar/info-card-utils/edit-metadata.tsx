@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import DeleteDialog from './delete-narrative';
-import { UPDATE_NARRATIVE } from '@/lib/graphql/narratives';
+import { UPDATE_NARRATIVE } from '@/graphql/narratives';
 
 const formSchema = z.object({
   name: z.string().min(2, {

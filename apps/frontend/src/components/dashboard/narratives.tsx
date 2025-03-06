@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '../ui/separator';
 import NarrativeForm from './create-form';
-import { GET_USER_NARRATIVES } from '@/lib/graphql/narratives';
+import { GET_USER_NARRATIVES } from '@/graphql/narratives';
 import { createClient } from '@/lib/utils/client';
 import { PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
