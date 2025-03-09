@@ -16,11 +16,7 @@ import {
 import { CREATE_NARRATIVE } from '@/infrastructure/graphql/narratives';
 import { nanoid } from 'nanoid';
 import toast from 'react-hot-toast';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from '@/presentation/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/presentation/components/ui/card';
 import { Narrative } from '@/entities/Narrative';
 import { useAuth } from '@/presentation/hooks/use-user';
 import { GraphQLFetcher } from '@/lib/fetcher';
@@ -41,7 +37,7 @@ export default function NarrativeForm({
   addNarrative: (narrative: Narrative) => void;
   closeForm: () => void;
 }) {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
 
@@ -78,7 +74,9 @@ export default function NarrativeForm({
       ],
     };
 
-    const response = await GraphQLFetcher(CREATE_NARRATIVE, variables) as { data: { createNarratives: {narratives : Narrative[]} } };
+    const response = (await GraphQLFetcher(CREATE_NARRATIVE, variables)) as {
+      data: { createNarratives: { narratives: Narrative[] } };
+    };
     const newNarrative = response.data.createNarratives.narratives[0];
     if (newNarrative) {
       addNarrative(newNarrative);
@@ -92,7 +90,6 @@ export default function NarrativeForm({
       setError('Failed to create narrative.');
       return toast.error('Failed to create narrative. Please try again.');
     }
-    
   };
 
   return (

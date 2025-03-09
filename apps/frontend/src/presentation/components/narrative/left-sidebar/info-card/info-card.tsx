@@ -14,7 +14,7 @@ import { FETCH_NARRATIVE_DETAILS } from '@/infrastructure/graphql/narratives';
 import { Skeleton } from '@/presentation/components/ui/skeleton';
 import { Button } from '@/presentation/components/ui/button';
 import { MoreVerticalIcon } from 'lucide-react';
-import Metadata from './info-card/details';
+import Metadata from './details';
 
 export default function InfoCard() {
   const { id } = useParams();
@@ -44,7 +44,7 @@ export default function InfoCard() {
 
   if (!info) {
     return (
-      <Card className="flex items-center p-3 gap-3">
+      <Card className="flex items-center p-3 gap-3 my-4 mx-2">
         <section className="w-full">
           <Skeleton className="h-6 w-3/4 mb-2" />
           <Skeleton className="h-4 w-1/2 mb-2" />
@@ -53,12 +53,14 @@ export default function InfoCard() {
     );
   }
   return (
-    <Card className="flex items-center p-3 gap-3 relative group m-2">
-      <div className="h-full w-1 bg-white/50 rounded-full" />
+    <Card className="flex items-center p-3 gap-3 relative group my-4 mx-2 pr-10">
       <section className="w-full">
         <div className="flex items-top justify-between">
           <div>
-            <p className="text-lg font-semibold tracking-wide">{info.name}</p>
+            <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-sm">
+              {info.name}
+            </p>
+
             <p className="text-xs text-muted-foreground tracking-wide">{info.tagline}</p>
           </div>
 
@@ -80,8 +82,6 @@ export default function InfoCard() {
             </Dialog>
           </div>
         </div>
-
-      
       </section>
     </Card>
   );

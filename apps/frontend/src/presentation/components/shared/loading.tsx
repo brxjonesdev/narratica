@@ -1,31 +1,31 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 interface LoadingProps {
-  message?: string
-  color?: string
+  message?: string;
+  color?: string;
 }
 
-export default function Loading({ message = "Loading...", color = "primary" }: LoadingProps) {
-  const [progress, setProgress] = useState(0)
+export default function Loading({ message = 'Loading...', color = 'primary' }: LoadingProps) {
+  const [progress, setProgress] = useState(0);
 
   // Simulate progress for visual feedback
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(interval)
-          return 100
+          clearInterval(interval);
+          return 100;
         }
         // Random increment between 5-15 to make it feel more natural
-        return Math.min(prev + Math.random() * 10 + 5, 100)
-      })
-    }, 400)
+        return Math.min(prev + Math.random() * 10 + 5, 100);
+      });
+    }, 400);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div
@@ -43,7 +43,7 @@ export default function Loading({ message = "Loading...", color = "primary" }: L
           <motion.circle
             initial={{ pathLength: 0 }}
             animate={{ pathLength: progress / 100 }}
-            transition={{ type: "spring", stiffness: 60, damping: 20 }}
+            transition={{ type: 'spring', stiffness: 60, damping: 20 }}
             className={`text-${color}`}
             cx="50"
             cy="50"
@@ -54,7 +54,7 @@ export default function Loading({ message = "Loading...", color = "primary" }: L
             strokeLinecap="round"
             style={{
               rotate: -90,
-              transformOrigin: "center",
+              transformOrigin: 'center',
             }}
           />
         </svg>
@@ -69,7 +69,7 @@ export default function Loading({ message = "Loading...", color = "primary" }: L
           transition={{
             duration: 1.5,
             repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
+            ease: 'easeInOut',
           }}
         />
       </div>
@@ -84,28 +84,7 @@ export default function Loading({ message = "Loading...", color = "primary" }: L
         >
           {message}
         </motion.div>
-
-        {/* Animated dots */}
-        <div className="flex justify-center mt-1">
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className={`w-2 h-2 mx-1 rounded-full bg-${color}`}
-              animate={{
-                y: [0, -10, 0],
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{
-                duration: 1,
-                repeat: Number.POSITIVE_INFINITY,
-                delay: i * 0.2,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
       </div>
     </div>
-  )
+  );
 }
-

@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
-
 import './globals.css';
-import { ApolloWrapper } from '@/lib/apolloWrapper';
 
 const figtree = Figtree({
   variable: '--font-figtree',
@@ -66,9 +64,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${figtree.variable} antialiased flex flex-col h-dvh overflow-x-hidden`}>
         <Toaster position="bottom-right" reverseOrder={false} />
-        <ApolloWrapper>
         {children}
-        </ApolloWrapper>
       </body>
     </html>
   );

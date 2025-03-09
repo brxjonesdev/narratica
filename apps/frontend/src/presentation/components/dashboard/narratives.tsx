@@ -17,15 +17,10 @@ import { useUserNarratives } from '@/presentation/hooks/use-narratives';
 import { PlusCircle } from 'lucide-react';
 import Loading from '../shared/loading';
 
-
-
 export default function Narratives() {
   const [formOpen, setFormOpen] = React.useState(false);
   const { narratives, addNarrative, loading } = useUserNarratives();
 
- 
-
- 
   return (
     <section className="mt-4 flex-1 flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -36,18 +31,15 @@ export default function Narratives() {
       </div>
       <div className="flex-1 bg-white/5 rounded-lg p-4 flex w-full ">
         {loading ? (
-          <Loading
-          message='Loading narratives...'
-          color='bg-white/10'
-          />
+          <Loading message="Loading narratives..." color="bg-white/10" />
         ) : narratives.length > 0 ? (
-          <div className="grid grid-cols-6 grid-rows-2 gap-4">
+          <div className="grid grid-cols-4 grid-rows-2 gap-4">
             {narratives
               .sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime())
               .map((narrative) => (
                 <NarrativeCard key={narrative.narrativeID} {...narrative} />
               ))}
-            {narratives.length < 12 && (
+            {narratives.length < 8 && (
               <Dialog open={formOpen} onOpenChange={setFormOpen}>
                 <DialogTrigger asChild>
                   <Button
@@ -68,7 +60,7 @@ export default function Narratives() {
                   <Separator />
                   <NarrativeForm
                     addNarrative={addNarrative}
-                    closeForm={()=> {
+                    closeForm={() => {
                       setFormOpen(false);
                     }} // Pass the closeForm function to the form
                   />
@@ -92,9 +84,12 @@ export default function Narratives() {
                   </DialogDescription>
                 </DialogHeader>
                 <Separator />
-                <NarrativeForm addNarrative={addNarrative} closeForm={()=> {
-                      setFormOpen(false);
-                    }}  />
+                <NarrativeForm
+                  addNarrative={addNarrative}
+                  closeForm={() => {
+                    setFormOpen(false);
+                  }}
+                />
               </DialogContent>
             </Dialog>
           </div>

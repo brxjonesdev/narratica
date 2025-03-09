@@ -8,13 +8,6 @@ type Narrative @node {
   createdAt: DateTime!  # Timestamp of when the narrative was created
   updatedAt: DateTime!  # Timestamp of when the narrative was last updated
 }
-
-type Character @node {
-  narrativeID: ID!  # Unique identifier for the narrative
-  id: ID!  # Unique identifier for the character
-  name: String!  # The name of the character
-  details: String  # Optional details about the character
-}
 `;
 
 export default narratives;

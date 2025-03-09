@@ -1,9 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/utils/client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -18,12 +16,12 @@ export const useAuth = () => {
       if (!data) {
         setLoading(false);
         router.push('/auth');
-        return
-            }     
-             setUser(data.user);
+        return;
+      }
+      setUser(data.user);
       setLoading(false);
     };
-    
+
     fetchUser();
   }, [router]);
 

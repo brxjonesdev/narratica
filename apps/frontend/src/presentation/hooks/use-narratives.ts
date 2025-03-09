@@ -38,9 +38,7 @@ export const useUserNarratives = () => {
 
   const addNarrative = (narrative: Narrative) => {
     setNarratives((prev) => [...prev, narrative]);
-  }
+  };
 
-
-
-  return { narratives, loading , addNarrative};
+  return { narratives, loading, addNarrative };
 };

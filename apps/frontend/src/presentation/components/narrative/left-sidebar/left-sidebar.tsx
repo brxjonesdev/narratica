@@ -1,32 +1,20 @@
-"use client"
-import React from 'react'
-import {Sidebar, SidebarHeader, SidebarContent, SidebarRail } from '../../ui/sidebar'
-import InfoCard from './info-card'
-
-import { usePathname } from 'next/navigation'
-
-
+'use client';
+import React from 'react';
+import { Sidebar, SidebarHeader, SidebarRail } from '../../ui/sidebar';
+import InfoCard from './info-card/info-card';
+import CharacterDirectory from './character-directory/character-directory';
+import { Separator } from '@/presentation/components/ui/separator';
 
 export default function LeftSidebar() {
-  const pathname = usePathname()
-  const showSidebar = !pathname.includes('draft') && !pathname.includes('review')
-
   return (
-    <>
-    {showSidebar && (<Sidebar className="transition-all duration-300 ease-in-out">
-      <InfoCard/>
-      <SidebarHeader className=" bg-white/5 p-4 text-md m-2 mb-0 rounded-xl rounded-b-none font-bold">
-        <p>Reference</p>
+    <Sidebar className="transition-all duration-300 ease-in-out">
+      <SidebarHeader className=" bg-white/5 text-2xl font-bold text-center tracking-wider py-4">
+        <p>Narratica</p>
       </SidebarHeader>
-      <div className=' h-0.5 bg-white/15 mx-2'/>
-
- 
-      <SidebarContent className="p-2 bg-white/5 m-2 mt-0 rounded-xl rounded-t-none">
-      </SidebarContent>
-
-
+      <InfoCard />
+      <Separator />
+      <CharacterDirectory />
       <SidebarRail />
-    </Sidebar>)}
-    </>
-  )
+    </Sidebar>
+  );
 }

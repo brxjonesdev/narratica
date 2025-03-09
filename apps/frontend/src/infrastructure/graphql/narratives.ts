@@ -1,11 +1,10 @@
-
 export type GetUserNarrativesProps = {
   userID: string;
   tagline: string;
   name: string;
   blurb: string;
 };
-export const GET_USER_NARRATIVES =`
+export const GET_USER_NARRATIVES = `
 query Narratives($where: NarrativeWhere) {
   narratives(where: $where) {
     userID

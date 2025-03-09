@@ -12,7 +12,12 @@ import { Input } from '@/presentation/components/ui/input';
 import { Separator } from '@/presentation/components/ui/separator';
 import { Sheet, SheetContent } from '@/presentation/components/ui/sheet';
 import { Skeleton } from '@/presentation/components/ui/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/presentation/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/presentation/components/ui/tooltip';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -404,7 +409,10 @@ const SidebarGroup = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'
       <div
         ref={ref}
         data-sidebar="group"
-        className={cn('relative flex w-full min-w-0 flex-col p-2 items-center justify-center', className)}
+        className={cn(
+          'relative flex w-full min-w-0 flex-col p-2 items-center justify-center',
+          className
+        )}
         {...props}
       />
     );
