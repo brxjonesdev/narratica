@@ -46,4 +46,17 @@ export type Character = {
   createdAt: string;
   updatedAt: string;
   new?: boolean;
+  // Relationships
+  relationships?: Relationship[];
 };
+
+export type Relationship = {
+  type: 'FAMILY' | 'FRIEND' | 'LOVES' | 'MENTOR_OF' | 'ENEMY_OF' | 'RIVAL' | 'COLLEAGUE' | 'ALLY';
+  relatedCharacterId: string;
+  status: string; // e.g., "Best friends", "Enemies"
+  since: string; // Date when the relationship started
+  until?: string; // Date when the relationship ended (if applicable)
+  events?: string[]; // Events that affected the relationship
+  intensity?: number; // Intensity of the relationship from 1-10 (e.g., deep friendship, distant rivalry)
+};
+

@@ -11,7 +11,6 @@ export default function Menu() {
   const OPTIONS = [
     { label: 'Outline', value: 'outline' },
     { label: 'Draft', value: 'draft' },
-    { label: 'Review', value: 'review' },
   ];
 
   // Determine the current view from the pathname
@@ -42,7 +41,7 @@ export default function Menu() {
             key={option.value}
             value={option.value}
             onClick={() => handleChange(option.value)}
-            className="tracking-widest font-bold"
+            className="tracking-widest font-bold px-16"
           >
             {option.label}
           </ToggleGroupItem>

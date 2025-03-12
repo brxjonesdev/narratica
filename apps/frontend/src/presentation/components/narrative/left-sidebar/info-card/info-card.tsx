@@ -53,11 +53,10 @@ export default function InfoCard() {
     );
   }
   return (
-    <Card className="flex items-center p-3 gap-3 relative group my-4 mx-2 pr-10">
-      <section className="w-full">
+    <section className="w-full">
         <div className="flex items-top justify-between">
-          <div>
-            <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-sm">
+          <div className='px-2'>
+            <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-lg">
               {info.name}
             </p>
 
@@ -83,6 +82,5 @@ export default function InfoCard() {
           </div>
         </div>
       </section>
-    </Card>
   );
 }

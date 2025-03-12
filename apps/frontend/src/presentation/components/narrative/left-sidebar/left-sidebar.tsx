@@ -1,20 +1,26 @@
 'use client';
 import React from 'react';
-import { Sidebar, SidebarHeader, SidebarRail } from '../../ui/sidebar';
+import { Sidebar, SidebarFooter, SidebarHeader, SidebarRail } from '@/presentation/components/ui/sidebar';
 import InfoCard from './info-card/info-card';
 import CharacterDirectory from './character-directory/character-directory';
 import { Separator } from '@/presentation/components/ui/separator';
+import { Info } from 'lucide-react';
 
 export default function LeftSidebar() {
   return (
     <Sidebar className="transition-all duration-300 ease-in-out">
-      <SidebarHeader className=" bg-white/5 text-2xl font-bold text-center tracking-wider py-4">
-        <p>Narratica</p>
-      </SidebarHeader>
-      <InfoCard />
-      <Separator />
+           <SidebarHeader className="border-b h-[65px] max-h-[65px] flex items-center justify-center">
+           <InfoCard />
+</SidebarHeader>
+    
       <CharacterDirectory />
+  
+      
       <SidebarRail />
     </Sidebar>
   );
 }
+
+
+// <InfoCard />
+// <Separator />

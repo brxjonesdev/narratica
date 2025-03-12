@@ -28,7 +28,7 @@ export default function CharacterDirectory() {
   if (loading) return <Loading message="Getting your characters!" />;
   if (error) return <div>Error loading characters {error}</div>;
   return (
-    <SidebarContent className="p-2">
+    <SidebarContent className="p-2 pt-4">
       <SidebarGroup>
         <SidebarGroupLabel className="text-base font-semibold">Characters</SidebarGroupLabel>
         <SidebarGroupAction
