@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { fetchUserCharacters } from '@/usecases/fetchUserCharacters';
 import { addNewCharacter } from '@/usecases/addNewCharacter';
 import { nanoid } from 'nanoid';
+import { deleteCharacterByID } from '@/usecases/deleteCharacter';
+import toast from 'react-hot-toast';
 
 export const useCharacters = () => {
   const [characters, setCharacters] = React.useState<Character[]>([]);
@@ -57,7 +59,22 @@ export const useCharacters = () => {
     }
     setCharacters((prevCharacters) => [...prevCharacters, { ...newCharacter, new: true }]);
     setActiveID(newCharacter.id);
+    toast.success('Character added successfully');
   };
 
-  return { characters, loading, error, addCharacter, activeID, setActiveID };
+  const deleteCharacter = async (characterID: string) => {
+    if (loading) return;
+    const result: boolean = await deleteCharacterByID(characterID);
+    if (!result) {
+      setError('Failed to delete character. Please try again later.');
+      return;
+    }
+    setCharacters((prevCharacters) =>
+      prevCharacters.filter((character) => character.id !== characterID)
+    );
+    toast.success('Character deleted successfully');
+
+  }
+
+  return { characters, loading, error, addCharacter, activeID, setActiveID, deleteCharacter };
 };

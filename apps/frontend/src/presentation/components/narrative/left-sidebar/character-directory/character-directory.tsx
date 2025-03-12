@@ -22,7 +22,7 @@ import Loading from '@/presentation/components/shared/loading';
 import CharacterView from './view-character';
 
 export default function CharacterDirectory() {
-  const { characters, loading, error, addCharacter, setActiveID, activeID } = useCharacters();
+  const { characters, loading, error, addCharacter, setActiveID, activeID, deleteCharacter } = useCharacters();
 
 
   if (loading) return <Loading message="Getting your characters!" />;
@@ -81,13 +81,13 @@ export default function CharacterDirectory() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     side="right"
-                    className="w-[500px] overflow-y-auto h-[90vh] font-figtree my-10"
+                    className="w-[500px] overflow-y-auto h-[90vh] font-figtree my-10 flex flex-col "
                     sideOffset={30}
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
                   >
-                    <CharacterView character={character} />
+                    <CharacterView character={character} onDelete={deleteCharacter} />
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>
