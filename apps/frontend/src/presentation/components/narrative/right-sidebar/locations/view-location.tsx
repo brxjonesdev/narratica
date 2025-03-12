@@ -1,57 +1,56 @@
-import { Character } from '@/entities/Character'
+import { Location } from '@/entities/Location'
 import { InlineEdit } from '@/presentation/components/shared/inline-edit'
-import { Button } from '@/presentation/components/ui/button'
 import { CardHeader, CardContent } from '@/presentation/components/ui/card'
-import { Separator } from '@/presentation/components/ui/separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/presentation/components/ui/tabs'
-
+import { Separator } from '@radix-ui/react-separator'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/presentation/components/ui/tabs'
 import { Delete } from 'lucide-react'
-import CharacterDetails from './views/character-details'
-import CharacterRelationships from './views/character-relationships'
+import React from 'react'
+import { Button } from '@/presentation/components/ui/button'
+import LocationDetails from './views/location-details'
 
+interface LocationViewProps {
+    location: Location;
+    handleChange: (id: string, updatedLocation: Location) => void;
+}
 
-
-
-export default function CharacterView({character, onDelete, updateCharacter}: {
-  character: Character, 
-  onDelete: (id: string) => void
-  updateCharacter: (updatedCharacter: Character) => void
-}) {
-    function handleEdit(target: string, value: string | string[] | boolean) {
-        updateCharacter({
-          ...character,
-          [target]: value
-        })
-      }
-
-      const options = [
-        { label: 'Details', value: 'details', component: <CharacterDetails character={character} onChange={handleEdit}/> },
-        { label: 'Relationships', value: 'relationships', component: <CharacterRelationships character={character}/> },
-        { label: 'Mentions', value: 'mentions', component: null },
-      ];
-    
+export default function LocationView({location, handleChange}: LocationViewProps) {
+    const options = [
+    { label: 'Details', value: 'details', component: <LocationDetails location={location} onChange={handleChange}/>},
+    { label: "Society", value: 'society', component: <div>Society and Organizations</div>},
+    {label: "Events", value: 'events', component: <div>Events</div>},
+  
+    ]
   return (
     <>
     <CardHeader className="w-full flex items-start flex-col gap-2 h-fit">
                       <div className="flex justify-between items-center w-full">
                         <div>
+                            <div className='flex items-baseline w-full'>
                         <InlineEdit
-                            value={character.name}
-                            onChange={(value) => handleEdit( 'name', value)}
-                            fontSize='2xl'
+                            value={location.name}
+                            onChange={(value) => handleChange( location.id, { ...location, name: value })}
+                            fontSize='4xl'
                             weight='bold'
                              />
                              <InlineEdit
-                            value={character.subname}
-                            onChange={(value) => handleEdit('subname', value)}
+                            value={location.subname}
+                            onChange={(value) => handleChange( location.id, { ...location, subname: value })}
+                            fontSize='xs'
+                             />
+                             </div>
+                             <InlineEdit
+                            value={location.description}
+                            onChange={(value) => handleChange( location.id, { ...location, description: value })}
                             fontSize='sm'
+                            mode='textarea'
+                            rows={9}
                              />
                              </div>
                              
                         <Button className="hover:bg-red-600/60" variant={'ghost'} size={'icon'}
-                            onClick={() => {
-                               onDelete(character.id)
-                            }}
+                            // onClick={() => {
+                            //    onDelete(location.id)
+                            // }}
                         >
                           <Delete />
                         </Button>

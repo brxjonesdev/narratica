@@ -17,18 +17,18 @@ import {
   DropdownMenuTrigger,
 } from '@/presentation/components/ui/dropdown-menu';
 import { Separator } from '@radix-ui/react-separator';
-import { useCharacters } from '@/presentation/hooks/use-characters';
 import Loading from '@/presentation/components/shared/loading';
 import CharacterView from './view-character';
 import { Character } from '@/entities/Character';
+import { useCharacters } from '@/presentation/hooks/use-characters';
 
 export default function CharacterDirectory() {
-  const { characters, loading, error, addCharacter, setActiveID, activeID, deleteCharacter, setCharacters } = useCharacters();
+  const { characters, loading, error, addCharacter, setActiveID, activeID, deleteCharacter, modifyCharacter } = useCharacters();
   console.log('characters', characters);
 
 
   if (loading) return <Loading message="Getting your characters!" />;
-  if (error) return <div>Error loading characters {error}</div>;
+  if (error) return <div className=''>Error loading characters {error}</div>;
   return (
     <SidebarContent className="p-2">
       <SidebarGroup>
@@ -97,17 +97,14 @@ export default function CharacterDirectory() {
                   >
                     <CharacterView character={character} onDelete={deleteCharacter} updateCharacter={
                       (updatedCharacter: Character) => {
-                        const updatedCharacters = characters.map((c) =>
-                          c.id === updatedCharacter.id ? updatedCharacter : c
-                        );
-                        setCharacters(updatedCharacters);
+                        modifyCharacter(updatedCharacter);
                       }
                     } />
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>
             )) : (
-              <div className="my-2 flex flex-col items-center justify-center w-full h-full">
+              <div className="my-2 flex flex-col items-center justify-center w-full flex-1  bg-white/10 rounded-xl min-h-[80vh]">
                 <span className="text-sm text-muted-foreground">No characters found.</span>
                 {/* Explain how to add one */}
               </div>

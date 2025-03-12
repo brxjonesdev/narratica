@@ -16,7 +16,7 @@ interface InlineEditProps {
   inputClassName?: string
   mode?: "input" | "textarea"
   rows?: number
-  fontSize?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl"
+  fontSize?: "xs"| "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl"
   weight?: "normal" | "bold" | "bolder" 
 }
 

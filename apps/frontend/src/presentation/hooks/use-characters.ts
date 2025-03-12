@@ -7,6 +7,7 @@ import { addNewCharacter } from '@/usecases/addNewCharacter';
 import { nanoid } from 'nanoid';
 import { deleteCharacterByID } from '@/usecases/deleteCharacter';
 import toast from 'react-hot-toast';
+import { modifyCharacterByID } from '@/usecases/modifyCharacterByID';
 
 export const useCharacters = () => {
   const [characters, setCharacters] = React.useState<Character[]>([]);
@@ -16,28 +17,32 @@ export const useCharacters = () => {
   const { user, loading: authLoading } = useAuth();
   const { id } = useParams();
 
+  // React.useEffect(() => {
+  //   const fetchCharacters = async () => {
+  //     if (authLoading) return;
+  //     const userId = user?.id;
+  //     if (!userId) {
+  //       setError('User not found. Please log in again.');
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     const userCharacters = await fetchUserCharacters(id as string);
+  //     if (!userCharacters) {
+  //       setError('Failed to fetch user characters. Please try again later.');
+  //       setLoading(false);
+  //       return;
+  //     }
+  //     setLoading(false);
+  //     setCharacters(userCharacters);
+  //   };
+
+  //   fetchCharacters();
+  // }, [authLoading, id, user]);
+
   React.useEffect(() => {
-    const fetchCharacters = async () => {
-      if (authLoading) return;
-      const userId = user?.id;
-      if (!userId) {
-        setError('User not found. Please log in again.');
-        setLoading(false);
-        return;
-      }
-
-      const userCharacters = await fetchUserCharacters(id as string);
-      if (!userCharacters) {
-        setError('Failed to fetch user characters. Please try again later.');
-        setLoading(false);
-        return;
-      }
-      setLoading(false);
-      setCharacters(userCharacters);
-    };
-
-    fetchCharacters();
-  }, [authLoading, id, user]);
+    setLoading(false);
+  }, []);
 
   const addCharacter = async () => {
     const baseCharacter: Character = {
@@ -78,5 +83,18 @@ export const useCharacters = () => {
 
   }
 
-  return { characters, loading, error, addCharacter, activeID, setActiveID, deleteCharacter, setCharacters };
+  const modifyCharacter = async (character: Character) => {
+    if (loading) return;
+    const result= await modifyCharacterByID(character.id, character);
+    if (!result) {
+      setError('Failed to delete character. Please try again later.');
+      return;
+    }
+    const index = characters.findIndex((c) => c.id === character.id);
+    characters[index] = character;
+    setCharacters([...characters]);
+    toast.success('Character modified successfully');
+  }
+
+  return { characters, loading, error, addCharacter, activeID, setActiveID, deleteCharacter, modifyCharacter};
 };

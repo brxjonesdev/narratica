@@ -7,22 +7,16 @@ import { Checkbox } from '@/presentation/components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/presentation/components/ui/select'
 import { InlineEditableList } from '@/presentation/components/shared/inline-list-edit'
 import { Input } from '@/presentation/components/ui/input'
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/presentation/components/ui/tabs'
-// import ArchetypeSelector from '../util-comps/archetype-selector'
-import useSingleCharacter from '@/presentation/hooks/use-singleCharacter'
 
 
 interface CharacterDetailsProps {
-  initialCharacter: Character
-  onChange: (target: string, value: string) => void
+  character: Character
+  onChange: (target: string, value: string | string [] | boolean) => void
 }
 
-export default function CharacterDetails({ initialCharacter, onChange }: CharacterDetailsProps) {
-  // const {handleChange, character } = useSingleCharacter(initialCharacter)
-  // if (!initialCharacter) return <div>No character selected</div>
+export default function CharacterDetails({ character, onChange }: CharacterDetailsProps) {
 
-  const handleChange = onChange
-  const character = initialCharacter
+
 
  
 
@@ -33,7 +27,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
         <Label className="font-semibold">Status:</Label>
         <div className={`flex items-center gap-2 font-bold ${character.isAlive ? "text-green-500" : "text-red-500"}`}>
           {character.isAlive ? "Alive" : "Deceased"}
-          <Checkbox checked={character.isAlive} onCheckedChange={(checked) => handleChange("isAlive", checked)} />
+          <Checkbox checked={character.isAlive} onCheckedChange={(checked) => onChange("isAlive", checked)} />
         </div>
       </div>
 
@@ -41,7 +35,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
       <div className="text-sm">
         <InlineEditableList
           items={character.alias as string[]}
-          onChange={(items) => handleChange("alias", items)}
+          onChange={(items) => onChange("alias", items)}
           title="Also Known As"
           addButtonText="Add new alias"
           placeholder="Edit this alias"
@@ -51,7 +45,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
       {/* Alignment */}
       <div className="text-sm flex items-center gap-2 justify-between">
         <Label className="font-semibold">Alignment:</Label>
-        <Select value={character.alignment} onValueChange={(value) => handleChange("alignment", value)}>
+        <Select value={character.alignment} onValueChange={(value) => onChange("alignment", value)}>
           <SelectTrigger className="w-1/2 mr-2">
             <SelectValue placeholder="Select alignment" />
           </SelectTrigger>
@@ -72,7 +66,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
       {/* Role */}
       <div className="flex items-center text-sm gap-2 justify-between">
         <Label className="font-semibold">Role:</Label>
-        <Select value={character.role} onValueChange={(value) => handleChange("role", value)}>
+        <Select value={character.role} onValueChange={(value) => onChange("role", value)}>
           <SelectTrigger className="w-1/2 mr-2">
             <SelectValue placeholder="Select role" />
           </SelectTrigger>
@@ -104,7 +98,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
         <Label className="font-semibold">Description</Label>
         <InlineEdit
           value={character.description || ""}
-          onChange={(value) => handleChange("description", value)}
+          onChange={(value) => onChange("description", value)}
           fontSize="sm"
           mode="textarea"
           rows={6}
@@ -118,7 +112,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
         <Label className="font-semibold">Personality</Label>
         <InlineEdit
           value={character.personality || ""}
-          onChange={(value) => handleChange("personality", value)}
+          onChange={(value) => onChange("personality", value)}
           fontSize="sm"
           mode="textarea"
           rows={6}
@@ -132,7 +126,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
         <Label className="font-semibold">Appearance</Label>
         <InlineEdit
           value={character.appearance || ""}
-          onChange={(value) => handleChange("appearance", value)}
+          onChange={(value) => onChange("appearance", value)}
           fontSize="sm"
           mode="textarea"
           rows={6}
@@ -149,7 +143,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Input
               id="age"
               value={character.age || ""}
-              onChange={(e) => handleChange("age", e.target.value)}
+              onChange={(e) => onChange("age", e.target.value)}
               className="flex-grow"
             />
           </div>
@@ -160,7 +154,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Input
               id="height"
               value={character.height || ""}
-              onChange={(e) => handleChange("height", e.target.value)}
+              onChange={(e) => onChange("height", e.target.value)}
               className="flex-grow"
             />
           </div>
@@ -171,7 +165,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Input
               id="weight"
               value={character.weight || ""}
-              onChange={(e) => handleChange("weight", e.target.value)}
+              onChange={(e) => onChange("weight", e.target.value)}
               className="flex-grow"
             />
           </div>
@@ -182,7 +176,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Input
               id="eyeColor"
               value={character.eyeColor || ""}
-              onChange={(e) => handleChange("eyeColor", e.target.value)}
+              onChange={(e) => onChange("eyeColor", e.target.value)}
               className="flex-grow"
             />
           </div>
@@ -193,7 +187,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Input
               id="hairColor"
               value={character.hairColor || ""}
-              onChange={(e) => handleChange("hairColor", e.target.value)}
+              onChange={(e) => onChange("hairColor", e.target.value)}
               className="flex-grow"
             />
           </div>
@@ -204,7 +198,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Input
               id="skinColor"
               value={character.skinColor || ""}
-              onChange={(e) => handleChange("skinColor", e.target.value)}
+              onChange={(e) => onChange("skinColor", e.target.value)}
               className="flex-grow"
             />
           </div>
@@ -212,7 +206,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
             <Label htmlFor="bodyType" className="flex-shrink-0">
               Body Type
             </Label>
-            <Select value={character.bodyType || ""} onValueChange={(value) => handleChange("bodyType", value)}>
+            <Select value={character.bodyType || ""} onValueChange={(value) => onChange("bodyType", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select body type" />
               </SelectTrigger>
@@ -236,7 +230,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
           </Label>
           <InlineEditableList
             items={character.strengths || []}
-            onChange={(items) => handleChange("strengths", items)}
+            onChange={(items) => onChange("strengths", items)}
             addButtonText="Add strength"
             placeholder="Enter a strength"
           />
@@ -247,7 +241,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
           </Label>
           <InlineEditableList
             items={character.weaknesses || []}
-            onChange={(items) => handleChange("weaknesses", items)}
+            onChange={(items) => onChange("weaknesses", items)}
             addButtonText="Add weakness"
             placeholder="Enter a weakness"
           />
@@ -258,7 +252,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
           </Label>
           <InlineEditableList
             items={character.fears || []}
-            onChange={(items) => handleChange("fears", items)}
+            onChange={(items) => onChange("fears", items)}
             addButtonText="Add fear"
             placeholder="Enter a fear"
           />
@@ -269,7 +263,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
           </Label>
           <InlineEditableList
             items={character.motivations || []}
-            onChange={(items) => handleChange("motivations", items)}
+            onChange={(items) => onChange("motivations", items)}
             addButtonText="Add motivation"
             placeholder="Enter a motivation"
           />
@@ -280,7 +274,7 @@ export default function CharacterDetails({ initialCharacter, onChange }: Charact
           </Label>
           <InlineEditableList
             items={character.goals || []}
-            onChange={(items) => handleChange("goals", items)}
+            onChange={(items) => onChange("goals", items)}
             addButtonText="Add goal"
             placeholder="Enter a goal"
           />

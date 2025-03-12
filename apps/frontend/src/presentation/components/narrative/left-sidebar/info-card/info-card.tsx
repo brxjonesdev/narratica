@@ -1,6 +1,5 @@
 'use client';
 import * as React from 'react';
-import { Card } from '@/presentation/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -11,10 +10,11 @@ import {
 } from '@/presentation/components/ui/dialog';
 import { useParams } from 'next/navigation';
 import { FETCH_NARRATIVE_DETAILS } from '@/infrastructure/graphql/narratives';
-import { Skeleton } from '@/presentation/components/ui/skeleton';
 import { Button } from '@/presentation/components/ui/button';
 import { MoreVerticalIcon } from 'lucide-react';
 import Metadata from './details';
+
+// Refactor into a hook
 
 export default function InfoCard() {
   const { id } = useParams();
@@ -26,21 +26,21 @@ export default function InfoCard() {
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    async function fetchData() {
-      const response = await fetch('/api/graphql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: FETCH_NARRATIVE_DETAILS,
-          variables: { where: { narrativeID: id } },
-        }),
-      });
-      const data = await response.json();
-      setInfo(data.data.narratives[0]);
-    }
-    fetchData();
-  }, [id, isModalOpen]);
+  // React.useEffect(() => {
+  //   async function fetchData() {
+  //     const response = await fetch('/api/graphql', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         query: FETCH_NARRATIVE_DETAILS,
+  //         variables: { where: { narrativeID: id } },
+  //       }),
+  //     });
+  //     const data = await response.json();
+  //     setInfo(data.data.narratives[0]);
+  //   }
+  //   fetchData();
+  // }, [id, isModalOpen]);
 
   if (!info) {
     return null
