@@ -20,15 +20,17 @@ import { Separator } from '@radix-ui/react-separator';
 import { useCharacters } from '@/presentation/hooks/use-characters';
 import Loading from '@/presentation/components/shared/loading';
 import CharacterView from './view-character';
+import { Character } from '@/entities/Character';
 
 export default function CharacterDirectory() {
-  const { characters, loading, error, addCharacter, setActiveID, activeID, deleteCharacter } = useCharacters();
+  const { characters, loading, error, addCharacter, setActiveID, activeID, deleteCharacter, setCharacters } = useCharacters();
+  console.log('characters', characters);
 
 
   if (loading) return <Loading message="Getting your characters!" />;
   if (error) return <div>Error loading characters {error}</div>;
   return (
-    <SidebarContent className="p-2 pt-4">
+    <SidebarContent className="p-2">
       <SidebarGroup>
         <SidebarGroupLabel className="text-base font-semibold">Characters</SidebarGroupLabel>
         <SidebarGroupAction
@@ -42,15 +44,21 @@ export default function CharacterDirectory() {
         <Separator className="my-1.5" />
         <SidebarGroupContent>
           <SidebarMenu>
-            {characters.map((character) => (
+            {characters?.length > 0 ? characters.map((character) => (
               <SidebarMenuItem
                 key={character.id}
                 className="my-1 hover:bg-primary/5 rounded-md py-1.5 "
               >
                 <SidebarMenuButton
                   className="p-4 py-5"
-                  onClick={() =>
-                    setActiveID((prevId) => (prevId === character.id ? null : character.id))
+                  onClick={
+                    activeID === character.id
+                      ? () => {
+                          setActiveID(null);
+                        }
+                      : () => {
+                          setActiveID(character.id);
+                        }
                   }
                 >
                   <div className="flex items-center gap-3 w-full py-2 justify-center">
@@ -64,7 +72,7 @@ export default function CharacterDirectory() {
                         )}
                       </div>
                       <span className="text-xs text-muted-foreground truncate tracking-wider font-semibold">
-                        {character.role}
+                        {character.subname}
                       </span>
                     </div>
                   </div>
@@ -87,12 +95,18 @@ export default function CharacterDirectory() {
                       e.stopPropagation();
                     }}
                   >
-                    <CharacterView character={character} onDelete={deleteCharacter} />
+                    <CharacterView character={character} onDelete={deleteCharacter} updateCharacter={
+                      (updatedCharacter: Character) => {
+                        const updatedCharacters = characters.map((c) =>
+                          c.id === updatedCharacter.id ? updatedCharacter : c
+                        );
+                        setCharacters(updatedCharacters);
+                      }
+                    } />
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>
-            ))}
-            {characters.length === 0 && (
+            )) : (
               <div className="my-2 flex flex-col items-center justify-center w-full h-full">
                 <span className="text-sm text-muted-foreground">No characters found.</span>
                 {/* Explain how to add one */}

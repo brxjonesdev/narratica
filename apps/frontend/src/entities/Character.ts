@@ -4,12 +4,13 @@ export type Character = {
 
   // Basic Details
   name: string;
+  subname: string;
   alias?: string[];
   description?: string;
   backstory?: string;
   appearance?: string;
   personality?: string;
-  role: 'Protagonist' | 'Antagonist' | 'Supporting' | 'Minor';
+  role?: 'Protagonist' | 'Antagonist' | 'Supporting' | 'Minor';
 
   // Physical Attributes
   age?: number;

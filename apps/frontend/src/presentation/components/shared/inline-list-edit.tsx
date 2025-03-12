@@ -15,7 +15,7 @@ interface InlineEditableListProps {
 }
 
 export function InlineEditableList({
-  items,
+  items = [],
   onChange,
   className,
   title,

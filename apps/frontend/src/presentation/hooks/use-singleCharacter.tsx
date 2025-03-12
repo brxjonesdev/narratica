@@ -5,10 +5,11 @@ export default function useSingleCharacter(initialCharacter: Character) {
     const [character, setCharacter] = useState<Character>(initialCharacter);
 
     const handleChange = (field: string, value: string | boolean | string[]) => {
-        setCharacter((prev) => ({
-            ...prev,
+        console.log(field, value)
+        setCharacter({
+            ...character,
             [field]: value
-        }))
+        })
       }
 
 

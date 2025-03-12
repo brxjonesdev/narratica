@@ -44,7 +44,7 @@ export const useCharacters = () => {
       id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}}`,
       narrative: id as string,
       name: 'New Character',
-      role: 'Minor',
+      subname: 'Minor',
       isAlive: true,
       isActiveInStory: true,
       createdAt: new Date().toISOString(),
@@ -57,8 +57,10 @@ export const useCharacters = () => {
       setError('Failed to add character. Please try again later.');
       return;
     }
-    setCharacters((prevCharacters) => [...prevCharacters, { ...newCharacter, new: true }]);
-    setActiveID(newCharacter.id);
+
+    characters.push(newCharacter);
+    setCharacters([...characters]);
+   
     toast.success('Character added successfully');
   };
 
@@ -76,5 +78,5 @@ export const useCharacters = () => {
 
   }
 
-  return { characters, loading, error, addCharacter, activeID, setActiveID, deleteCharacter };
+  return { characters, loading, error, addCharacter, activeID, setActiveID, deleteCharacter, setCharacters };
 };

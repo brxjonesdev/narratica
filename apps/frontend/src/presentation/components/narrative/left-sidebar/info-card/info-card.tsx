@@ -43,14 +43,7 @@ export default function InfoCard() {
   }, [id, isModalOpen]);
 
   if (!info) {
-    return (
-      <Card className="flex items-center p-3 gap-3 my-4 mx-2">
-        <section className="w-full">
-          <Skeleton className="h-6 w-3/4 mb-2" />
-          <Skeleton className="h-4 w-1/2 mb-2" />
-        </section>
-      </Card>
-    );
+    return null
   }
   return (
     <section className="w-full">

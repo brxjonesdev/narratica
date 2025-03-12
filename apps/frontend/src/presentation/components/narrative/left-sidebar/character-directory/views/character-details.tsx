@@ -14,11 +14,15 @@ import useSingleCharacter from '@/presentation/hooks/use-singleCharacter'
 
 interface CharacterDetailsProps {
   initialCharacter: Character
+  onChange: (target: string, value: string) => void
 }
 
-export default function CharacterDetails({ initialCharacter }: CharacterDetailsProps) {
-  const {handleChange, character } = useSingleCharacter(initialCharacter)
-  if (!initialCharacter) return <div>No character selected</div>
+export default function CharacterDetails({ initialCharacter, onChange }: CharacterDetailsProps) {
+  // const {handleChange, character } = useSingleCharacter(initialCharacter)
+  // if (!initialCharacter) return <div>No character selected</div>
+
+  const handleChange = onChange
+  const character = initialCharacter
 
  
 

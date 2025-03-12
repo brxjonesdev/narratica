@@ -12,17 +12,29 @@ import CharacterRelationships from './views/character-relationships'
 
 
 
-export default function CharacterView({character, onDelete}: {character: Character, onDelete: (id: string) => void}) {
+export default function CharacterView({character, onDelete, updateCharacter}: {
+  character: Character, 
+  onDelete: (id: string) => void
+  updateCharacter: (updatedCharacter: Character) => void
+}) {
     const options = [
-        { label: 'Details', value: 'details', component: <CharacterDetails initialCharacter={character}/> },
+        { label: 'Details', value: 'details', component: <CharacterDetails initialCharacter={character} onChange={
+          (target: string, value: string) => {
+            handleEdit(target, value)
+          }
+        }
+          /> },
         { label: 'Relationships', value: 'relationships', component: <CharacterRelationships character={character}/> },
         { label: 'Mentions', value: 'mentions', component: null },
       ];
 
       console.log('character', character)
 
-      function handleEdit(id: string, target: string, value: string) {
-        console.log('handleEdit', id, target, value)
+      function handleEdit(target: string, value: string) {
+        updateCharacter({
+          ...character,
+          [target]: value
+        })
       }
     
   return (
@@ -32,13 +44,13 @@ export default function CharacterView({character, onDelete}: {character: Charact
                         <div>
                         <InlineEdit
                             value={character.name}
-                            onChange={(value) => handleEdit(character.id, 'name', value)}
+                            onChange={(value) => handleEdit( 'name', value)}
                             fontSize='2xl'
                             weight='bold'
                              />
                              <InlineEdit
-                            value={character.role}
-                            onChange={(value) => handleEdit(character.id, 'name', value)}
+                            value={character.subname}
+                            onChange={(value) => handleEdit('subname', value)}
                             fontSize='sm'
                              />
                              </div>

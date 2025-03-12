@@ -95,17 +95,13 @@ export default function StoryRightSidebar() {
     <Timeline events={timelineEvents} />
   </TabsContent>
   <TabsContent value="locations">
-    <LocationDetails locations={locations} />
+    <LocationDetails  />
   </TabsContent>
 </Tabs>
 
         </SidebarGroup>
       </SidebarContent>
-    <SidebarFooter>
-      <div className="p-2 text-xl font-semibold bg-white/10 rounded-xl text-center">
-        <p>Narratica</p>
-      </div>
-    </SidebarFooter>
+ 
       <SidebarRail />
     </Sidebar>
   )
