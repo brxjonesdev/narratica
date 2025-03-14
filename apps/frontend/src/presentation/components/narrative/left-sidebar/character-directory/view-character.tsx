@@ -12,8 +12,9 @@ import CharacterRelationships from './views/character-relationships'
 
 
 
-export default function CharacterView({character, onDelete, updateCharacter}: {
+export default function CharacterView({availableCharacters ,character, onDelete, updateCharacter}: {
   character: Character, 
+  availableCharacters: Character[],
   onDelete: (id: string) => void
   updateCharacter: (updatedCharacter: Character) => void
 }) {
@@ -26,7 +27,7 @@ export default function CharacterView({character, onDelete, updateCharacter}: {
 
       const options = [
         { label: 'Details', value: 'details', component: <CharacterDetails character={character} onChange={handleEdit}/> },
-        { label: 'Relationships', value: 'relationships', component: <CharacterRelationships character={character}/> },
+        { label: 'Relationships', value: 'relationships', component: <CharacterRelationships character={character} availableCharacters={availableCharacters}/> },
         { label: 'Mentions', value: 'mentions', component: null },
       ];
     

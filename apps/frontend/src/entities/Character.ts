@@ -10,7 +10,27 @@ export type Character = {
   backstory?: string;
   appearance?: string;
   personality?: string;
-  role?: 'Protagonist' | 'Antagonist' | 'Supporting' | 'Minor';
+  role?: 
+    | 'protagonist'
+    | 'antagonist'
+    | 'supporting'
+    | 'minor'
+    | 'deuteragonist'
+    | 'tritagonist'
+    | 'mentor'
+    | 'foil'
+    | 'comic relief'
+    | 'contagonist'
+    | 'love interest'
+    | 'rival'
+    | 'sidekick'
+    | 'herald'
+    | 'guardian'
+    | 'shapeshifter'
+    | 'shadow'
+    | 'ally'
+    | 'bystander'
+    | 'narrator'; // Expanded role options
 
   // Physical Attributes
   age?: number;
@@ -30,17 +50,16 @@ export type Character = {
 
   // Status
   isAlive: boolean;
-  isActiveInStory: boolean;
   alignment?:
-    | 'Chaotic Good'
-    | 'Neutral Good'
-    | 'Lawful Good'
-    | 'Chaotic Neutral'
-    | 'True Neutral'
-    | 'Lawful Neutral'
-    | 'Chaotic Evil'
-    | 'Neutral Evil'
-    | 'Lawful Evil';
+    | 'lawful-good'
+    | 'neutral-good'
+    | 'chaotic-good'
+    | 'lawful-neutral'
+    | 'true-neutral'
+    | 'chaotic-neutral'
+    | 'lawful-evil'
+    | 'neutral-evil'
+    | 'chaotic-evil'; // Expanded alignment options
   archtype?: string;
 
   // Meta Data
@@ -48,16 +67,20 @@ export type Character = {
   updatedAt: string;
   new?: boolean;
   // Relationships
-  relationships?: Relationship[];
+  allies?: Relationship[];
+  enemies?: Relationship[];
+  family?: Relationship[];
+  mentors?: Relationship[];
+  mentees?: Relationship[];
+  rivals?: Relationship[];
+  loveInterests?: Relationship[];
+  friends?: Relationship[];
+
 };
 
 export type Relationship = {
-  type: 'FAMILY' | 'FRIEND' | 'LOVES' | 'MENTOR_OF' | 'ENEMY_OF' | 'RIVAL' | 'COLLEAGUE' | 'ALLY';
-  relatedCharacterId: string;
-  status: string; // e.g., "Best friends", "Enemies"
-  since: string; // Date when the relationship started
-  until?: string; // Date when the relationship ended (if applicable)
-  events?: string[]; // Events that affected the relationship
-  intensity?: number; // Intensity of the relationship from 1-10 (e.g., deep friendship, distant rivalry)
+  id: string;
+  name : string;
+  description?: string;
+  
 };
-

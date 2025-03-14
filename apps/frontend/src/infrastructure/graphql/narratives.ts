@@ -32,6 +32,7 @@ export const CREATE_NARRATIVE = `
 mutation CreateNarratives($input: [NarrativeCreateInput!]!) {
   createNarratives(input: $input) {
     narratives {
+      narrativeID
       userID
       tagline
       blurb

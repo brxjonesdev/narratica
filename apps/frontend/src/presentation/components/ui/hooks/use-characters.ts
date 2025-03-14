@@ -17,33 +17,30 @@ export const useCharacters = () => {
   const { user, loading: authLoading } = useAuth();
   const { id } = useParams();
 
-  // React.useEffect(() => {
-  //   const fetchCharacters = async () => {
-  //     if (authLoading) return;
-  //     const userId = user?.id;
-  //     if (!userId) {
-  //       setError('User not found. Please log in again.');
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     const userCharacters = await fetchUserCharacters(id as string);
-  //     if (!userCharacters) {
-  //       setError('Failed to fetch user characters. Please try again later.');
-  //       setLoading(false);
-  //       return;
-  //     }
-  //     setLoading(false);
-  //     setCharacters(userCharacters);
-  //   };
-
-  //   fetchCharacters();
-  // }, [authLoading, id, user]);
-
   React.useEffect(() => {
-    setLoading(false);
-  }, []);
+    const fetchCharacters = async () => {
+      if (authLoading) return;
+      const userId = user?.id;
+      if (!userId) {
+        setError('User not found. Please log in again.');
+        setLoading(false);
+        return;
+      }
 
+      const userCharacters = await fetchUserCharacters(id as string);
+      if (!userCharacters) {
+        setError('Failed to fetch user characters. Please try again later.');
+        setLoading(false);
+        return;
+      }
+      setLoading(false);
+      setCharacters(userCharacters);
+    };
+
+    fetchCharacters();
+  }, [authLoading, id, user]);
+
+  
   const addCharacter = async () => {
     const baseCharacter: Character = {
       id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}}`,

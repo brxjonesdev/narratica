@@ -18,7 +18,7 @@ import { nanoid } from 'nanoid';
 import toast from 'react-hot-toast';
 import { Card, CardContent, CardFooter } from '@/presentation/components/ui/card';
 import { Narrative } from '@/entities/Narrative';
-import { useAuth } from '@/presentation/hooks/use-user';
+import { useAuth } from '@/presentation/components/ui/hooks/use-user';
 import { GraphQLFetcher } from '@/lib/fetcher';
 import React from 'react';
 
@@ -79,6 +79,7 @@ export default function NarrativeForm({
     };
     const newNarrative = response.data.createNarratives.narratives[0];
     if (newNarrative) {
+      console.log('New Narrative:', newNarrative);
       addNarrative(newNarrative);
       toast.success('Narrative created successfully!');
       setLoading(false);

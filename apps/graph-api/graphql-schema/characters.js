@@ -38,24 +38,18 @@ type Character @node {
   createdAt: DateTime
   updatedAt: DateTime
 
-  # Relationships
-    family: [Character!]! @relationship(type: "FAMILY", direction: OUT)
-    friends: [Character!]! @relationship(type: "FRIEND", direction: OUT)
-    loves: [Character!]! @relationship(type: "LOVES", direction: OUT)
-    mentorOf: [Character!]! @relationship(type: "MENTOR_OF", direction: OUT)
-    enemyOf: [Character!]! @relationship(type: "ENEMY_OF", direction: OUT)
-    rivals: [Character!]! @relationship(type: "RIVAL", direction: OUT)
-    colleagues: [Character!]! @relationship(type: "COLLEAGUE", direction: OUT)
-    allies: [Character!]! @relationship(type: "ALLY", direction: OUT)
-}
+ # Relationships
+ 
+  allies: [Character!]! @relationship(type: "ALLIED_WITH", direction: OUT)
+  enemies: [Character!]! @relationship(type: "ENEMY_OF", direction: OUT)
+  mentors: [Character!]! @relationship(type: "MENTORED_BY", direction: OUT)
+  mentees: [Character!]! @relationship(type: "MENTORS", direction: OUT)
+  loveInterests: [Character!]! @relationship(type: "LOVE_INTEREST", direction: OUT)
+  family: [Character!]! @relationship(type: "FAMILY", direction: OUT)
+  friends: [Character!]! @relationship(type: "FRIENDS_WITH", direction: OUT)
+  rivals: [Character!]! @relationship(type: "RIVAL", direction: OUT)
 
-    type CharacterRelation @relationshipProperties {
-      status: String # Status of relationship e.g. "Best friends", "Enemies"
-      since: DateTime # Start of the relationship
-      until: DateTime # End of the relationship (can be null for ongoing)
-      events: [String] # Events that impacted the relationship
-      intensity: Int # Intensity of the relationship from 1-10 (e.g., "deep friendship", "distant enemies")
-    }
+}
 `;
 
 export default characters;

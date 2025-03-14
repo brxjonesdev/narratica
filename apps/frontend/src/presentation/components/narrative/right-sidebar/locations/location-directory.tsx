@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
 } from "@/presentation/components/ui/dropdown-menu";
 import LocationDetails from "@/presentation/components/narrative/right-sidebar/locations/views/location-details";
-import { useLocations } from "@/presentation/hooks/use-locations";
+import { useLocations } from "@/presentation/components/ui/hooks/use-locations";
 import LocationView from "./view-location";
 
 export function LocationDirectory() {

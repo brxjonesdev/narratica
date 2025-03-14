@@ -24,7 +24,7 @@ export default function LocationView({location, handleChange}: LocationViewProps
     <>
     <CardHeader className="w-full flex items-start flex-col gap-2 h-fit">
                       <div className="flex justify-between items-center w-full">
-                        <div>
+                        <div className='w-full'>
                             <div className='flex items-baseline w-full'>
                         <InlineEdit
                             value={location.name}
@@ -43,7 +43,7 @@ export default function LocationView({location, handleChange}: LocationViewProps
                             onChange={(value) => handleChange( location.id, { ...location, description: value })}
                             fontSize='sm'
                             mode='textarea'
-                            rows={9}
+                            rows={6}
                              />
                              </div>
                              

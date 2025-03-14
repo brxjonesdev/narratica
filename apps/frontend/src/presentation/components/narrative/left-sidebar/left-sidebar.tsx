@@ -7,7 +7,7 @@ import CharacterDirectory from './character-directory/character-directory';
 export default function LeftSidebar() {
   return (
     <Sidebar className="transition-all duration-300 ease-in-out">
-      <SidebarHeader className="border-b h-[65px] max-h-[65px] flex items-center justify-center">
+      <SidebarHeader className="border-b h-32 flex items-center justify-center ">
         <InfoCard />
       </SidebarHeader>
       <CharacterDirectory />
