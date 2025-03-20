@@ -13,7 +13,7 @@ import {
 } from '@/presentation/components/ui/dialog';
 import { Separator } from '../ui/separator';
 import NarrativeForm from './create-form';
-import { useUserNarratives } from '@/presentation/components/ui/hooks/use-narratives';
+import { useUserNarratives } from '@/presentation/hooks/use-narratives';
 import { PlusCircle } from 'lucide-react';
 import Loading from '../shared/loading';
 

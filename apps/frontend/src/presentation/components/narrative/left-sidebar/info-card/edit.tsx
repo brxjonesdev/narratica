@@ -34,7 +34,7 @@ export default function EditMetadata({
   id,
   closeModal,
 }: {
-  info: { name: string; tagline: string; blurb: string; updatedAt: string };
+  info: { name: string; tagline: string; blurb: string; };
   id: string | string[] | undefined;
   closeModal: () => void;
 }) {

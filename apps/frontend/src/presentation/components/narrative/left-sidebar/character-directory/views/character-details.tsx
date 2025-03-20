@@ -202,21 +202,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
               className="flex-grow"
             />
           </div>
-          <div className="flex items-center space-x-4 col-span-2">
-            <Label htmlFor="bodyType" className="flex-shrink-0">
-              Body Type
-            </Label>
-            <Select value={character.bodyType || ""} onValueChange={(value) => onChange("bodyType", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select body type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="endomorph">Endomorph</SelectItem>
-                <SelectItem value="mesomorph">Mesomorph</SelectItem>
-                <SelectItem value="ectomorph">Ectomorph</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+         
         </div>
       </div>
 

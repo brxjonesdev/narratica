@@ -20,7 +20,7 @@ import { Separator } from '@radix-ui/react-separator';
 import Loading from '@/presentation/components/shared/loading';
 import CharacterView from './view-character';
 import { Character } from '@/entities/Character';
-import { useCharacters } from '@/presentation/components/ui/hooks/use-characters';
+import { useCharacters } from '@/presentation/hooks/use-characters';
 
 export default function CharacterDirectory() {
   const { characters, loading, error, addCharacter, setActiveID, activeID, deleteCharacter, modifyCharacter } = useCharacters();

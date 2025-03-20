@@ -8,8 +8,10 @@ import { nanoid } from 'nanoid';
 import { deleteCharacterByID } from '@/usecases/deleteCharacter';
 import toast from 'react-hot-toast';
 import { modifyCharacterByID } from '@/usecases/modifyCharacterByID';
+import { useNarrativeStore } from '../stores/narrative-store-provider';
 
 export const useCharacters = () => {
+  const { setCharactersGlobal } = useNarrativeStore((store) => store);
   const [characters, setCharacters] = React.useState<Character[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -35,10 +37,11 @@ export const useCharacters = () => {
       }
       setLoading(false);
       setCharacters(userCharacters);
+      setCharactersGlobal(userCharacters);
     };
 
     fetchCharacters();
-  }, [authLoading, id, user]);
+  }, [authLoading, id, user, setCharactersGlobal]);
 
   
   const addCharacter = async () => {
@@ -46,9 +49,8 @@ export const useCharacters = () => {
       id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}}`,
       narrative: id as string,
       name: 'New Character',
-      subname: 'Minor',
+      subname: 'No Subname',
       isAlive: true,
-      isActiveInStory: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

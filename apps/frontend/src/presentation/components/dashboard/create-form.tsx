@@ -18,7 +18,7 @@ import { nanoid } from 'nanoid';
 import toast from 'react-hot-toast';
 import { Card, CardContent, CardFooter } from '@/presentation/components/ui/card';
 import { Narrative } from '@/entities/Narrative';
-import { useAuth } from '@/presentation/components/ui/hooks/use-user';
+import { useAuth } from '@/presentation/hooks/use-user';
 import { GraphQLFetcher } from '@/lib/fetcher';
 import React from 'react';
 

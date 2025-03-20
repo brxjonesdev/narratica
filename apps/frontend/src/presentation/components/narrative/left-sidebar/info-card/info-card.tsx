@@ -9,50 +9,20 @@ import {
   DialogTrigger,
 } from '@/presentation/components/ui/dialog';
 import { useParams } from 'next/navigation';
-import { FETCH_NARRATIVE_DETAILS } from '@/infrastructure/graphql/narratives';
 import { Button } from '@/presentation/components/ui/button';
 import { MoreVerticalIcon } from 'lucide-react';
 import Metadata from './details';
+import useNarrativeDetails from '@/presentation/hooks/use-narrativeDetails';
 
 // Refactor into a hook
 
 export default function InfoCard() {
   const { id } = useParams();
-  const [info, setInfo] = React.useState<{
-    name: string;
-    tagline: string;
-    blurb: string;
-    updatedAt: string;
-  } | null>({
-    name: "SpyXFamily",
-    tagline: "In a world of espionage, a spy, an assassin, and a telepath form an unlikely family.",
-    blurb: "In a world of espionage, a spy, an assassin, and a telepath form an unlikely family.",
-    updatedAt: "2025-03-13T00:00:00Z",
-  });
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   async function fetchData() {
-  //     const response = await fetch('/api/graphql', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({
-  //         query: FETCH_NARRATIVE_DETAILS,
-  //         variables: { where: { narrativeID: id } },
-  //       }),
-  //     });
-  //     const data = await response.json();
-  //     setInfo(data.data.narratives[0]);
-  //   }
-  //   fetchData();
-  // }, [id, isModalOpen]);
-
-
- 
-
+  const {info, setIsModalOpen, isModalOpen } = useNarrativeDetails(id); 
   if (!info) {
     return null
-  }
+  } 
+  
   return (
     <section className="w-full bg-white/5 h-full flex flex-col items-center justify-center rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative m-2">
         <div className="flex items-center justify-between h-full w-full">

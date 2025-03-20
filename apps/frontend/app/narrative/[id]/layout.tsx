@@ -7,14 +7,17 @@ import Link from 'next/link';
 import { Button } from '@/presentation/components/ui/button';
 import Menu from '@/presentation/components/narrative/menu';
 import RightSidebar from '@/presentation/components/narrative/right-sidebar/right-sidebar'
+import { NarrativeStoreProvider } from '@/presentation/stores/narrative-store-provider';
 
-export default async function NarrativeLayout({
+
+export default function NarrativeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <main className="font-figtree">
+      <NarrativeStoreProvider>
       <SidebarProvider defaultOpen={true}>
         <LeftSidebar/>
         <SidebarInset>
@@ -35,6 +38,7 @@ export default async function NarrativeLayout({
           </SidebarInset>
           <RightSidebar/>
       </SidebarProvider>
+      </NarrativeStoreProvider>
     </main>
   );
 }

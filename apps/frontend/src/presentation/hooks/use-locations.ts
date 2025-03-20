@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Location } from "@/entities/Location";
 import  modifyLocationByID from "@/usecases/modifyLocationByID";
+import { useNarrativeStore } from "../stores/narrative-store-provider";
 
 const sampleLocation: Location = {
   id: "loc-001",
@@ -62,11 +63,21 @@ const sampleLocation: Location = {
 
 
 export const useLocations = () => {
-  const [locations, setLocations] = useState<Location[]>([sampleLocation]);
+  const {setLocationsGlobal} = useNarrativeStore((store) => store);
+  const [locations, setLocations] = useState<Location[] | null>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeID, setActiveID] = useState<string | null>(null);
 
+ 
+
+  useEffect(() => {
+    setLoading(false);
+    setLocations([sampleLocation]);
+    setLocationsGlobal([sampleLocation]);
+  }, [setLocationsGlobal]);
+
+ 
 
 
 
@@ -77,11 +88,17 @@ export const useLocations = () => {
   }
 
   const handleLocationChange = async (locationID: string, updatedLocation: Location) => {
+    if (!locations) {
+      setError("Locations not found");
+      return;
+    }
+
     const newLocation = await modifyLocationByID({ locationID, updatedLocation });
     if (!newLocation) {
       setError("Failed to update location. Please try again later.");
       return;
     }
+ 
     const locationIndex = locations.findIndex((location) => location.id === locationID);
     if (locationIndex === -1) {
       setError("Location not found");

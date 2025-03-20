@@ -174,7 +174,15 @@ export default function CharacterRelationships({
                   <DropdownMenuSubContent className="w-56">
                     <DropdownMenuLabel>Add {label}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    {filteredCharacters.map((char) => (
+                    {filteredCharacters
+                    .filter((char) => {
+                      const existingRelationship = character[type as RelationshipType]?.find(
+                        (rel) => rel.id === char.id,
+                      )
+                      return !existingRelationship
+                    }
+                    )
+                    .map((char) => (
                       <DropdownMenuItem
                         key={char.id}
                         onClick={() => {
