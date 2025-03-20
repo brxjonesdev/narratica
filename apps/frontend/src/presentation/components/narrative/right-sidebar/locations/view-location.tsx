@@ -14,22 +14,18 @@ interface LocationViewProps {
 }
 
 export default function LocationView({location, handleChange}: LocationViewProps) {
-    const options = [
-    { label: 'Details', value: 'details', component: <LocationDetails location={location} onChange={handleChange}/>},
-    { label: "Society", value: 'society', component: <div>Society and Organizations</div>},
-    {label: "Events", value: 'events', component: <div>Events</div>},
-  
-    ]
+   
   return (
     <>
     <CardHeader className="w-full flex items-start flex-col gap-2 h-fit">
                       <div className="flex justify-between items-center w-full">
                         <div className='w-full'>
                             <div className='flex items-baseline w-full'>
+                              <div className='flex flex-col'>
                         <InlineEdit
                             value={location.name}
                             onChange={(value) => handleChange( location.id, { ...location, name: value })}
-                            fontSize='4xl'
+                            fontSize='2xl'
                             weight='bold'
                              />
                              <InlineEdit
@@ -38,13 +34,8 @@ export default function LocationView({location, handleChange}: LocationViewProps
                             fontSize='xs'
                              />
                              </div>
-                             <InlineEdit
-                            value={location.description}
-                            onChange={(value) => handleChange( location.id, { ...location, description: value })}
-                            fontSize='sm'
-                            mode='textarea'
-                            rows={6}
-                             />
+                             </div>
+                           
                              </div>
                              
                         <Button className="hover:bg-red-600/60" variant={'ghost'} size={'icon'}
@@ -57,29 +48,10 @@ export default function LocationView({location, handleChange}: LocationViewProps
                       </div>
                     </CardHeader>
 
-                    <Separator className="w-full" />
+            
 
-                    <CardContent className="overflow-y-scroll flex-1 flex pt-4 ">
-                      <Tabs defaultValue="details" className="w-full flex-1 overflow-y-scroll  rounded-t-xl pr-4 flex flex-col">
-                        <TabsList className="w-full">
-                          {options.map((option) => (
-                            <TabsTrigger
-                              key={option.value}
-                              value={option.value}
-                              className="w-full"
-                              disabled={option.value === 'mentions'}
-                            >
-                              {option.label}
-                            </TabsTrigger>
-                          ))}
-                        </TabsList>
-
-                        {options.map((option) => (
-                          <TabsContent key={option.value} value={option.value} className="h-full">
-                            {option.component}
-                          </TabsContent>
-                        ))}
-                      </Tabs>
+                    <CardContent className="flex-1 flex ">
+                    <LocationDetails location={location} onUpdate={handleChange}/>
                     </CardContent>
     </>
   )

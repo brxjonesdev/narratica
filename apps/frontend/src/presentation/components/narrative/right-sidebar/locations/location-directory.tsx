@@ -1,5 +1,10 @@
-import { Location } from "@/entities/Location";
 import {
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -9,16 +14,32 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/presentation/components/ui/dropdown-menu";
-import LocationDetails from "@/presentation/components/narrative/right-sidebar/locations/views/location-details";
 import { useLocations } from "@/presentation/hooks/use-locations";
 import LocationView from "./view-location";
+import { Plus } from "lucide-react";
 
 export function LocationDirectory() {
-  const { locations, handleLocationSelect, activeID, handleLocationChange } = useLocations();
+  const { locations, handleLocationSelect, activeID, handleLocationChange, addLocation, } = useLocations();
+
+  if(!locations) {
+    return null
+  }
 
   return (
-    <div>
-      {locations.length > 0 ? (
+    <SidebarContent className="p-1">
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-base font-semibold">Locations</SidebarGroupLabel>
+          <SidebarGroupAction
+          className="hover:bg-primary/10 hover:text-primary"
+          onClick={() => {
+            addLocation();
+          }}
+        >
+          <Plus /> <span className="sr-only">Add Character</span>
+        </SidebarGroupAction>
+        <SidebarGroupContent>
+          <SidebarMenu>  
+          {locations.length > 0 ? (
         locations.map((location) => (
           <SidebarMenuItem
             key={location.id}
@@ -67,6 +88,13 @@ export function LocationDirectory() {
           <span className="text-sm text-muted-foreground">No locations found.</span>
         </div>
       )}
-    </div>
+          </SidebarMenu>
+        </SidebarGroupContent>
+        </SidebarGroup>
+  
+
+       
+      </SidebarContent>
+ 
   );
 }

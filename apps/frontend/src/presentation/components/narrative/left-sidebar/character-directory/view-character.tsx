@@ -26,8 +26,17 @@ export default function CharacterView({availableCharacters ,character, onDelete,
       }
 
       const options = [
-        { label: 'Details', value: 'details', component: <CharacterDetails character={character} onChange={handleEdit}/> },
-        { label: 'Relationships', value: 'relationships', component: <CharacterRelationships character={character} availableCharacters={availableCharacters}/> },
+        { label: 'Details', value: 'details', component: 
+        <CharacterDetails 
+        character={character} 
+        onChange={handleEdit}/> },
+        { label: 'Relationships', value: 'relationships', component: 
+        <CharacterRelationships 
+            character={character}
+            availableCharacters={availableCharacters} 
+            onChange={(target, value) => handleEdit(target, value)}
+        /> 
+        },
         { label: 'Mentions', value: 'mentions', component: null },
       ];
     
