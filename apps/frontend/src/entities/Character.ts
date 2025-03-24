@@ -10,7 +10,7 @@ export type Character = {
   backstory?: string;
   appearance?: string;
   personality?: string;
-  role?: 
+  role?:
     | 'protagonist'
     | 'antagonist'
     | 'supporting'
@@ -75,12 +75,10 @@ export type Character = {
   rivals?: Relationship[];
   loveInterests?: Relationship[];
   friends?: Relationship[];
-
 };
 
 export type Relationship = {
   id: string;
-  name : string;
+  name: string;
   description?: string;
-  
 };

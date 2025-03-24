@@ -43,7 +43,6 @@ export const useCharacters = () => {
     fetchCharacters();
   }, [authLoading, id, user, setCharactersGlobal]);
 
-  
   const addCharacter = async () => {
     const baseCharacter: Character = {
       id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}}`,
@@ -64,7 +63,8 @@ export const useCharacters = () => {
 
     characters.push(newCharacter);
     setCharacters([...characters]);
-   
+    setActiveID(newCharacter.id);
+
     toast.success('Character added successfully');
   };
 
@@ -79,12 +79,11 @@ export const useCharacters = () => {
       prevCharacters.filter((character) => character.id !== characterID)
     );
     toast.success('Character deleted successfully');
-
-  }
+  };
 
   const modifyCharacter = async (character: Character) => {
     if (loading) return;
-    const result= await modifyCharacterByID(character.id, character);
+    const result = await modifyCharacterByID(character.id, character);
     if (!result) {
       setError('Failed to delete character. Please try again later.');
       return;
@@ -93,7 +92,16 @@ export const useCharacters = () => {
     characters[index] = character;
     setCharacters([...characters]);
     toast.success('Character modified successfully');
-  }
+  };
 
-  return { characters, loading, error, addCharacter, activeID, setActiveID, deleteCharacter, modifyCharacter};
+  return {
+    characters,
+    loading,
+    error,
+    addCharacter,
+    activeID,
+    setActiveID,
+    deleteCharacter,
+    modifyCharacter,
+  };
 };

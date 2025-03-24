@@ -1,48 +1,46 @@
-"use client"
+'use client';
 
-import type React from "react"
-import { useState, useRef } from "react"
-import type { Location } from "@/entities/Location"
-import { Button } from "@/presentation/components/ui/button"
-import { Textarea } from "@/presentation/components/ui/textarea"
-import ReactMarkdown from "react-markdown"
-import { Save, X } from "lucide-react"
+import type React from 'react';
+import { useState, useRef } from 'react';
+import type { Location } from '@/entities/Location';
+import { Button } from '@/presentation/components/ui/button';
+import { Textarea } from '@/presentation/components/ui/textarea';
+import ReactMarkdown from 'react-markdown';
+import { Save, X } from 'lucide-react';
 
 interface LocationDetailsProps {
-  location: Location
-  onUpdate: (id: string, updatedLocation: Location) => void
+  location: Location;
+  onUpdate: (id: string, updatedLocation: Location) => void;
 }
 
 export default function LocationDetails({ location, onUpdate }: LocationDetailsProps) {
-  const [content, setContent] = useState(location.details)
-  const [isEditing, setIsEditing] = useState(false)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [content, setContent] = useState(location.details);
+  const [isEditing, setIsEditing] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value)
-  }
+    setContent(e.target.value);
+  };
 
   const handleSave = () => {
-    setIsEditing(false)
-    onUpdate(location.id, { ...location, details: content })
-    console.log("location", location)
-    console.log("content", content)
-  }
+    setIsEditing(false);
+    onUpdate(location.id, { ...location, details: content });
+    console.log('location', location);
+    console.log('content', content);
+  };
 
   const handleCancel = () => {
-    setContent(location.details)
-    setIsEditing(false)
-  }
-
-
+    setContent(location.details);
+    setIsEditing(false);
+  };
 
   const handleClick = () => {
     if (!isEditing) {
-      setIsEditing(true)
+      setIsEditing(true);
     }
-  }
+  };
 
-  const hasChanges = content !== location.details
+  const hasChanges = content !== location.details;
 
   return (
     <section className="w-full mx-3">
@@ -66,7 +64,10 @@ export default function LocationDetails({ location, onUpdate }: LocationDetailsP
           </div>
         </div>
       ) : (
-        <div onClick={handleClick} className="border rounded-md p-4 h-full prose prose-invert max-w-none cursor-text">
+        <div
+          onClick={handleClick}
+          className="border rounded-md p-4 h-full prose prose-invert max-w-none cursor-text"
+        >
           {content ? (
             <ReactMarkdown>{content}</ReactMarkdown>
           ) : (
@@ -74,8 +75,9 @@ export default function LocationDetails({ location, onUpdate }: LocationDetailsP
           )}
         </div>
       )}
-      {hasChanges && !isEditing && <Button onClick={() => setIsEditing(true)}>Continue Editing</Button>}
+      {hasChanges && !isEditing && (
+        <Button onClick={() => setIsEditing(true)}>Continue Editing</Button>
+      )}
     </section>
-  )
+  );
 }
-

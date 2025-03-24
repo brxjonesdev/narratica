@@ -1,73 +1,75 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState, useRef, useEffect } from "react"
-import { Input } from "@/presentation/components/ui/input"
-import { Textarea } from "@/presentation/components/ui/textarea"
-import { Check, X, } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState, useRef, useEffect } from 'react';
+import { Input } from '@/presentation/components/ui/input';
+import { Textarea } from '@/presentation/components/ui/textarea';
+import { Check, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface InlineEditProps {
-  value: string
-  onChange: (value: string) => void
-  className?: string
-  placeholder?: string
-  inputClassName?: string
-  mode?: "input" | "textarea"
-  rows?: number
-  fontSize?: "xs"| "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl"
-  weight?: "normal" | "bold" | "bolder" 
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+  placeholder?: string;
+  inputClassName?: string;
+  mode?: 'input' | 'textarea';
+  rows?: number;
+  fontSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+  weight?: 'normal' | 'bold' | 'bolder';
 }
 
 export function InlineEdit({
   value,
   onChange,
   className,
-  placeholder = "Click to edit",
+  placeholder = 'Click to edit',
   inputClassName,
-  mode = "input",
+  mode = 'input',
   rows = 3,
-  fontSize = "sm",
-  weight = "normal",
+  fontSize = 'sm',
+  weight = 'normal',
 }: InlineEditProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [inputValue, setInputValue] = useState(value)
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(value);
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
-      inputRef.current.focus()
+      inputRef.current.focus();
     }
-  }, [isEditing])
+  }, [isEditing]);
 
   const handleClick = () => {
-    setIsEditing(true)
-  }
+    setIsEditing(true);
+  };
 
   const handleSave = () => {
-    onChange(inputValue)
-    setIsEditing(false)
-  }
+    onChange(inputValue);
+    setIsEditing(false);
+  };
 
   const handleCancel = () => {
-    setInputValue(value)
-    setIsEditing(false)
-  }
+    setInputValue(value);
+    setIsEditing(false);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSave()
-    } else if (e.key === "Escape") {
-      handleCancel()
+    if (e.key === 'Enter') {
+      handleSave();
+    } else if (e.key === 'Escape') {
+      handleCancel();
     }
-  }
+  };
 
   return (
-    <div className={cn("group relative", className)}>
+    <div className={cn('group relative', className)}>
       {isEditing ? (
-        <div className={`flex items-center gap-2 p-2.5 ${mode === "textarea" ? "flex-col" : "flex-row"}`}>
-          {mode === "input" ? (
+        <div
+          className={`flex items-center gap-2 p-2.5 ${mode === 'textarea' ? 'flex-col' : 'flex-row'}`}
+        >
+          {mode === 'input' ? (
             // make the focus color better
             <Input
               ref={inputRef as React.RefObject<HTMLInputElement>}
@@ -85,7 +87,7 @@ export function InlineEdit({
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
-              className={cn("min-h-[80px] resize-none mx-4 w-full", inputClassName)}
+              className={cn('min-h-[80px] h-full  resize-none mx-4 w-full', inputClassName)}
               placeholder={placeholder}
               rows={rows}
             />
@@ -112,13 +114,16 @@ export function InlineEdit({
           onClick={handleClick}
           className="flex cursor-pointer items-center rounded-md px-3 py-1.5 hover:bg-muted/50"
         >
-          <span className={cn(`block whitespace-pre-wrap text-${fontSize} font-${weight}`, !value && "text-muted-foreground")}>
+          <span
+            className={cn(
+              `block whitespace-pre-wrap text-${fontSize} font-${weight}`,
+              !value && 'text-muted-foreground'
+            )}
+          >
             {value || placeholder}
           </span>
-         
         </div>
       )}
     </div>
-  )
+  );
 }
-

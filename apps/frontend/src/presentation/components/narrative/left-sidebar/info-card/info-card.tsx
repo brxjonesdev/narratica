@@ -18,40 +18,40 @@ import useNarrativeDetails from '@/presentation/hooks/use-narrativeDetails';
 
 export default function InfoCard() {
   const { id } = useParams();
-  const {info, setIsModalOpen, isModalOpen } = useNarrativeDetails(id); 
+  const { info, setIsModalOpen, isModalOpen } = useNarrativeDetails(id);
   if (!info) {
-    return null
-  } 
-  
+    return null;
+  }
+
   return (
     <section className="w-full bg-white/5 h-full flex flex-col items-center justify-center rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative m-2">
-        <div className="flex items-center justify-between h-full w-full">
-          <div className='space-y-1 px-4'>
-            <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-lg">
-              {info.name}
-            </p>
+      <div className="flex items-center justify-between h-full w-full">
+        <div className="space-y-1 px-4">
+          <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-lg">
+            {info.name}
+          </p>
 
-            <p className="text-xs text-muted-foreground tracking-wide">{info.tagline}</p>
-          </div>
-
-          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVerticalIcon />
-                  <span className="sr-only">Edit</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-xl font-figtree">
-                <DialogHeader>
-                  <DialogTitle>Edit Project</DialogTitle>
-                  <DialogDescription>Make changes to your project or delete it.</DialogDescription>
-                </DialogHeader>
-                <Metadata info={info} id={id} closeModal={() => setIsModalOpen(false)} />
-              </DialogContent>
-            </Dialog>
-          </div>
+          <p className="text-xs text-muted-foreground tracking-wide">{info.tagline}</p>
         </div>
-      </section>
+
+        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreVerticalIcon />
+                <span className="sr-only">Edit</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-xl font-figtree">
+              <DialogHeader>
+                <DialogTitle>Edit Project</DialogTitle>
+                <DialogDescription>Make changes to your project or delete it.</DialogDescription>
+              </DialogHeader>
+              <Metadata info={info} id={id} closeModal={() => setIsModalOpen(false)} />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+    </section>
   );
 }
