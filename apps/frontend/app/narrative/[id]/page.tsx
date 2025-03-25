@@ -36,7 +36,7 @@ export default function NarrativeOutline() {
      </header>
      <section className="flex flex-1 flex-col gap-4 px-6 py-4 rounded-xl font-figtree">
         <TabsContent value="outline" asChild><OutlineDirectory story={story} locations={locations} characters={characters}/></TabsContent>
-        <TabsContent value="draft" asChild><Draft/></TabsContent>  
+        <TabsContent value="draft" asChild><Draft story={story} locations={locations} characters={characters}/></TabsContent>  
       </section>
     </Tabs>);
 }

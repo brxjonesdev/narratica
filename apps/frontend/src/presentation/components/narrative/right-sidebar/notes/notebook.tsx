@@ -77,10 +77,11 @@ export default function MarkdownNotebook() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full h-full text-sm font-normal">
-          <NotebookPen className="h-4 w-4 mr-2" />
-          Open Notes
-        </Button>
+    
+        <Button size="sm" variant="outline">
+              <NotebookPen className="h-4 w-4 mr-2" />
+              Notes
+            </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[800px] max-h-[80vh] flex flex-col font-figtree">
         <DialogHeader>

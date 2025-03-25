@@ -67,7 +67,7 @@ export function InlineEdit({
     <div className={cn('group relative', className)}>
       {isEditing ? (
         <div
-          className={`flex items-center gap-2 p-2.5 ${mode === 'textarea' ? 'flex-col' : 'flex-row'}`}
+          className={`flex items-center gap-2 p-2.5 h-full ${mode === 'textarea' ? 'flex-col' : 'flex-row'}`}
         >
           {mode === 'input' ? (
             // make the focus color better
@@ -112,7 +112,7 @@ export function InlineEdit({
       ) : (
         <div
           onClick={handleClick}
-          className="flex cursor-pointer items-center rounded-md px-3 py-1.5 hover:bg-muted/50"
+          className={`hover:bg-muted/50 ${mode === 'textarea' ? ' h-full items-start flex-none px-4 py-2 rounded-md ' : 'flex cursor-pointer items-center px-3 py-1.5 '}`}
         >
           <span
             className={cn(

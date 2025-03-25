@@ -63,6 +63,7 @@ export const useCharacters = () => {
 
     characters.push(newCharacter);
     setCharacters([...characters]);
+    setCharactersGlobal([...characters]);
     setActiveID(newCharacter.id);
 
     toast.success('Character added successfully');
@@ -75,9 +76,9 @@ export const useCharacters = () => {
       setError('Failed to delete character. Please try again later.');
       return;
     }
-    setCharacters((prevCharacters) =>
-      prevCharacters.filter((character) => character.id !== characterID)
-    );
+    const remainingCharacters = characters.filter((character) => character.id !== characterID);
+    setCharacters(remainingCharacters);
+    setCharactersGlobal(remainingCharacters);
     toast.success('Character deleted successfully');
   };
 
@@ -91,6 +92,7 @@ export const useCharacters = () => {
     const index = characters.findIndex((c) => c.id === character.id);
     characters[index] = character;
     setCharacters([...characters]);
+    setCharactersGlobal([...characters]);
     toast.success('Character modified successfully');
   };
 

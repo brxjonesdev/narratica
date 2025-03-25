@@ -24,9 +24,26 @@ export function useManuscript() {
                     title: 'Scene 1',
                     order: 1,
                     content: 'This is the content of the scene',
-                    characters: [],
-                    locations: [],
-                    labels: [],
+                    characters: [
+                      {
+                        id: 'harmony-cobel',
+                        narrative: '57832327-c949-4968-af7d-45e737fhdjdjd874j4',
+                        name: 'Harmony Cobel',
+                        subname: 'The controlling overseer of severed lives.',
+                      },
+                    ],
+                    locations: [
+                      {
+                        id: '57832327-c949-4968-af7d-45e737fhdjdjd874j4',
+                        narrative: '57832327-c949-4968-af7d-45e737fhdjdjd874j4',
+                        name: 'The Severed Lands',
+                        subname: 'A desolate place where lives are severed from their purpose.',
+                        details: 'A barren landscape filled with remnants of lost lives and forgotten dreams.',
+                        description: 'A hauntingly beautiful yet tragic place, where the echoes of severed lives linger in the air.',
+                      },
+                    ],
+                    summary: 'This is a summary of the scene', // Added summary for quick reference
+                 
                   },
                 ],
               },
@@ -44,7 +61,8 @@ export function useManuscript() {
                     content: 'This is the content of the scene',
                     characters: [],
                     locations: [],
-                    labels: [],
+                    summary: 'This is a summary of the scene', // Added summary for quick reference
+         
                   },
                   {
                     id: '57832327-c949-4968-af7d-45e737fhdj874j4',
@@ -53,15 +71,11 @@ export function useManuscript() {
                     order: 2,
                     content: 'This is the content of the scene',
                     characters: [
-                      {
-                        id: 'harmony-cobel',
-                        narrative: '57832327-c949-4968-af7d-45e737fhdjdjd874j4',
-                        name: 'Harmony Cobel',
-                        subname: 'The controlling overseer of severed lives.',
-                      },
+                    
                     ],
                     locations: [],
-                    labels: [],
+                    summary: 'This is a summary of the scene', // Added summary for quick reference
+           
                   },
                 ],
               },

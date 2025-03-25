@@ -22,10 +22,10 @@ export type Scene = {
   chapterID: string;
   title: string;
   order: number;
+  summary: string; // Summary of the scene for quick reference
   content: string; // Markdown content of the book for draft
   characters: Partial<Character>[];
   locations: Location[];
-  labels: string[];
 };
 
 export type Outline = {
