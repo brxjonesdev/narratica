@@ -1,6 +1,6 @@
 'use client';
 import { InlineEdit } from './inline-edit';
-import { Button } from '@/presentation/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { Plus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

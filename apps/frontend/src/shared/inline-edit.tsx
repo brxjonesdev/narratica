@@ -3,8 +3,8 @@
 import type React from 'react';
 
 import { useState, useRef, useEffect } from 'react';
-import { Input } from '@/presentation/components/ui/input';
-import { Textarea } from '@/presentation/components/ui/textarea';
+import { Input } from '@/shared/ui/input';
+import { Textarea } from '@/shared/ui/textarea';
 import { Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
