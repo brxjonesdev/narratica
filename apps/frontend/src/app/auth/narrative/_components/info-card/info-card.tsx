@@ -25,7 +25,7 @@ export default function InfoCard() {
   }
 
   return (
-    <section className="w-full bg-white/5 h-full flex flex-col items-center justify-center rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative my-2">
+    <section className="w-full bg-white/5 h-full flex flex-col items-center justify-center rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative m-2">
       <div className="flex items-center justify-between h-full w-full">
         <div className="space-y-1 px-4">
           <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-lg">

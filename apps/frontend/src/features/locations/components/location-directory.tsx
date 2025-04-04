@@ -10,11 +10,11 @@ import {
   SidebarMenuItem,
 } from '@/shared/ui/sidebar';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/shared/ui/dropdown-menu';
-import { useLocations } from '@/presentation/stores/hooks/use-locations';
+import { useLocations } from '@/features/locations/hooks/use-locations';
 import LocationView from './view-location';
 import { Plus } from 'lucide-react';
 
-export function LocationDirectory() {
+export function Locations() {
   const { locations, handleLocationSelect, activeID, handleLocationChange, addLocation } =
     useLocations();
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
-import './globals.css';
+import '@/app/globals.css';
 
 const figtree = Figtree({
   variable: '--font-figtree',

@@ -100,7 +100,7 @@ export default function Characters() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       side="right"
-                      className="w-[500px] overflow-y-auto h-[90vh] font-figtree my-10 flex flex-col bg-white/5 "
+                      className="w-[500px] overflow-y-auto h-[90vh] font-figtree my-10 flex flex-col bg-background rounded-lg shadow-lg"
                       sideOffset={30}
                       onClick={(e) => {
                         e.stopPropagation();

@@ -1,8 +1,6 @@
-import { Location } from '@/domain/entities/Location';
-import { InlineEdit } from '@/shared/shared/inline-edit';
+import { Location } from '@/features/locations/types/Location';
+import { InlineEdit } from '@/shared/inline-edit';
 import { CardHeader, CardContent } from '@/shared/ui/card';
-import { Separator } from '@radix-ui/react-separator';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
 import { Delete } from 'lucide-react';
 import React from 'react';
 import { Button } from '@/shared/ui/button';

@@ -8,30 +8,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
 import DeleteDialog from './delete';
-
-export const UPDATE_NARRATIVE = `
-mutation UpdateNarrative($where: NarrativeWhere!, $update: NarrativeUpdateInput!) {
-  updateNarratives(where: $where, update: $update) {
-    narratives {
-      name
-      tagline
-      blurb
-      updatedAt
-    }
-  }
-}
-`;
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { updateNarrativeMetadata } from '@/features/narratives/services/updateNarrativeMetadata';
+import { removeNarrative } from '@/features/narratives/services/removeNarrative';
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
-  }),
-  tagline: z.string().min(2, {
-    message: 'Tagline must be at least 2 characters.',
-  }),
-  blurb: z.string().min(10, {
-    message: 'Blurb must be at least 10 characters.',
-  }),
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  tagline: z.string().min(2, { message: 'Tagline must be at least 2 characters.' }),
+  blurb: z.string().min(10, { message: 'Blurb must be at least 10 characters.' }),
 });
 
 export default function EditMetadata({
@@ -45,6 +30,7 @@ export default function EditMetadata({
 }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,51 +41,34 @@ export default function EditMetadata({
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/graphql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: UPDATE_NARRATIVE,
-          variables: {
-            where: {
-              narrativeID: id,
-            },
-            update: {
-              name: values.name,
-              tagline: values.tagline,
-              blurb: values.blurb,
-              updatedAt: new Date().toISOString(),
-            },
-          },
-        }),
-      });
-      const data = await response.json();
-      console.log('Update response:', data);
+      await updateNarrativeMetadata(id, values);
     } catch (error) {
       console.error('Failed to update metadata:', error);
-      // You could add an error notification here
     } finally {
       setIsSubmitting(false);
       closeModal();
     }
-  }
+  };
 
-  async function handleDelete() {
+  const handleDelete = async () => {
     try {
-      // Here you would make an API call to delete the data
-      // Example: await deleteMetadata(id)
-      console.log('Deleting metadata with ID:', id);
-      // You could add a success notification here or redirect
+      const result = await removeNarrative(id);
+      if (!result.ok){
+        toast.error('Failed to delete narrative');
+        return;
+      }
+      toast.success('Narrative deleted successfully');
+      router.push('/');
+      
     } catch (error) {
       console.error('Failed to delete metadata:', error);
-      // You could add an error notification here
     } finally {
       setIsDeleteDialogOpen(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">

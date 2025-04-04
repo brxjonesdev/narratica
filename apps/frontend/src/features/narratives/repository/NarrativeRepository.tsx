@@ -1,5 +1,6 @@
 import { Narrative } from '../types/Narrative';
 import { GraphQLFetcher } from '@/lib/fetcher';
+
 interface NarrativeRepository {
   fetchUserNarratives: (userId: string) => Promise<Narrative[]>;
   addNewNarrative: (
@@ -7,6 +8,11 @@ interface NarrativeRepository {
     narrative: Narrative
   ) => Promise<{ ok: boolean; data: Narrative | null }>;
   fetchNarrativeDetails: (narrativeID: string) => Promise<Narrative | null>;
+  editNarrativeMetadata: (
+    narrativeID: string,
+    updates: Partial<Narrative>
+  ) => Promise<{ ok: boolean; data: Narrative | null }>;
+  deleteNarrative: (narrativeID: string) => Promise<{ ok: boolean; data: Narrative | null }>;
 }
 
 export const narrativeRepository: NarrativeRepository = {
@@ -44,18 +50,18 @@ export const narrativeRepository: NarrativeRepository = {
 
   async addNewNarrative(id: string, narrative: Narrative) {
     const CREATE_NARRATIVE = `
-  mutation CreateNarratives($input: [NarrativeCreateInput!]!) {
-    createNarratives(input: $input) {
-      narratives {
-        narrativeID
-        userID
-        tagline
-        blurb
-        name
+      mutation CreateNarratives($input: [NarrativeCreateInput!]!) {
+        createNarratives(input: $input) {
+          narratives {
+            narrativeID
+            userID
+            tagline
+            blurb
+            name
+          }
+        }
       }
-    }
-  }
-  `;
+    `;
     try {
       const response: { data?: { createNarratives?: { narratives: Narrative[] } } } =
         await GraphQLFetcher(CREATE_NARRATIVE, {
@@ -107,5 +113,40 @@ export const narrativeRepository: NarrativeRepository = {
       console.error('Error fetching narrative details:', error);
       return null;
     }
+  },
+
+  async editNarrativeMetadata(narrativeID: string, updates: Partial<Narrative>) {
+    const UPDATE_NARRATIVE = `
+      mutation UpdateNarrative($where: NarrativeWhere!, $update: NarrativeUpdateInput!) {
+        updateNarratives(where: $where, update: $update) {
+          narratives {
+            narrativeID
+            name
+            tagline
+            blurb
+            updatedAt
+          }
+        }
+      }
+    `;
+    try {
+      const response: { data?: { updateNarratives?: { narratives: Narrative[] } } } =
+        await GraphQLFetcher(UPDATE_NARRATIVE, {
+          where: { narrativeID_EQ: narrativeID },
+          update: updates,
+        });
+
+      return {
+        ok: true,
+        data: response?.data?.updateNarratives?.narratives[0] ?? null,
+      };
+    } catch (error) {
+      console.error('Failed to update narrative metadata:', error);
+      return { ok: false, data: null };
+    }
+  },
+
+  async deleteNarrative(narrativeID: string) {
+    return {ok: true, data: null};
   }
 };

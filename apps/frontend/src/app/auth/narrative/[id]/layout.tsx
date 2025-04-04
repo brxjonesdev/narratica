@@ -9,15 +9,15 @@ import {
 } from '@/shared/ui/sidebar';
 import { NarrativeStoreProvider } from '@/shared/stores/narrative-store-provider';
 import { useMediaQuery } from 'react-responsive';
-import InfoCard from '@/features/narratives/components/narrative/info-card/info-card';
-import CharacterDirectory from '@/features/characters/components/characters';
+import InfoCard from '@/app/narrative/_components/info-card/info-card';
+import Characters from '@/features/characters/components/characters';
 import { Button } from '@/shared/ui/button';
 import { BookOpen, FileText } from 'lucide-react';
 import Notebook from '@/features/notebook/notebook';
-import { LocationDirectory } from '@/features/locations/components/location-directory';
+import { Locations } from '@/features/locations/components/location-directory';
 
 export default function NarrativeLayout({ children }: { children: React.ReactNode }) {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+
   return (
     <main className="font-figtree">
       <NarrativeStoreProvider>
@@ -34,14 +34,10 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
             <SidebarHeader className="border-b h-32 flex items-center justify-center px-4 ">
               <InfoCard />
             </SidebarHeader>
-            <CharacterDirectory />
+            <Characters />
             <SidebarRail />
           </Sidebar>
-          {/* {!isMobile ? (
-            <SidebarInset>{children}</SidebarInset>
-          ) : (
-            <SidebarInset>{children}</SidebarInset>
-          )}
+          <SidebarInset>{children}</SidebarInset>
           <Sidebar className="transition-all duration-300 ease-in-out " side="right" style={{}}>
             <SidebarHeader className="border-b h-full max-h-32 flex flex-col">
               <div className="h-16 flex items-center justify-center bg-slate-400/5 rounded-xl">
@@ -62,9 +58,9 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
               </div>
             </SidebarHeader>
 
-            <LocationDirectory />
+            <Locations />
             <SidebarRail />
-          </Sidebar> */}
+          </Sidebar>
         </SidebarProvider>
       </NarrativeStoreProvider>
     </main>

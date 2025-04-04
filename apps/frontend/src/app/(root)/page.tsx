@@ -1,6 +1,6 @@
-import Dashboard from '@/features/narratives/components/dashboard/dashboard';
+import Dashboard from '@/app/(root)/components/dashboard/dashboard';
 import { createClient } from '@/lib/utils/server';
-import LandingPage from '@/features/narratives/components/landing/landing';
+import LandingPage from '@/app/(root)/components/landing/landing';
 
 export default async function Page() {
   const supabase = await createClient();

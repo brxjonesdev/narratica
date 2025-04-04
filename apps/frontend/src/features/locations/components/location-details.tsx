@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useState, useRef } from 'react';
-import type { Location } from '@/domain/entities/Location';
+import type { Location } from '@/features/locations/types/Location';
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
 import ReactMarkdown from 'react-markdown';
