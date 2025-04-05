@@ -1,6 +1,6 @@
 'use client';
 import { PlusCircle, PlusCircleIcon } from 'lucide-react';
-import type { Act, Chapter, Outline, Scene } from '@/features/manuscript/types/Outline';
+import type { Act, Chapter, Outline, Scene } from '@/features/outline/types/Outline';
 import {
   Accordion,
   AccordionContent,
@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import type { Character } from '@/features/characters/types/Character';
-import type { Location } from '@/features/locations/types/Location';
+import type { NarrativeLocation } from '@/features/locations/types/Location';
 import { Separator } from '@/shared/ui/separator';
 
 export default function OutlineDirectory({
@@ -29,7 +29,7 @@ export default function OutlineDirectory({
 }: {
   story: Outline;
   characters: Character[];
-  locations: Location[];
+  locations: NarrativeLocation[];
 }) {
   return (
     <section className="flex-1 bg-black/10 text-gray-300 rounded-xl space-y-4">

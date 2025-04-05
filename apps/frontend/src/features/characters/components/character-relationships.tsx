@@ -21,7 +21,7 @@ import {
   Relationship,
   relationshipLabels,
   RelationshipType,
-} from '@/features/relationships/types/Relationship';
+} from '@/features/characters/types/Relationship';
 import { Delete, UserPlus } from 'lucide-react';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import { Label } from '@/shared/ui/label';

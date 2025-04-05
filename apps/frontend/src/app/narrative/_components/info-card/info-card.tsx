@@ -12,7 +12,7 @@ import { useParams } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { MoreVerticalIcon } from 'lucide-react';
 import Metadata from './details';
-import useNarrativeDetails from '@/features/narratives/hooks/use-narrativeDetails';
+import useNarrativeDetails from '@/features/narratives/hooks/use-narrative-details';
 import Loading from '@/shared/loading';
 
 export default function InfoCard() {

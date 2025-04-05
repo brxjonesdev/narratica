@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Delete } from 'lucide-react';
 import CharacterDetails from '@/features/characters/components/character-details';
 import CharacterRelationships from '@/features/characters/components/character-relationships';
-import { Relationship } from '@/features/relationships/types/Relationship';
+import { Relationship } from '@/features/characters/types/Relationship';
 
 export default function CharacterView({
   availableCharacters,

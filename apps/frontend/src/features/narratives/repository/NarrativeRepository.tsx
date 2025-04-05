@@ -1,50 +1,45 @@
 import { Narrative } from '../types/Narrative';
 import { GraphQLFetcher } from '@/lib/fetcher';
+import { Result, ok, err } from '@/shared/types/result';
 
 interface NarrativeRepository {
-  fetchUserNarratives: (userId: string) => Promise<Narrative[]>;
-  addNewNarrative: (
-    id: string,
-    narrative: Narrative
-  ) => Promise<{ ok: boolean; data: Narrative | null }>;
-  fetchNarrativeDetails: (narrativeID: string) => Promise<Narrative | null>;
+  fetchUserNarratives: (userId: string) => Promise<Result<Narrative[], string>>;
+  addNewNarrative: (id: string, narrative: Narrative) => Promise<Result<Narrative, string>>;
+  fetchNarrativeDetails: (narrativeID: string) => Promise<Result<Narrative, string>>;
   editNarrativeMetadata: (
     narrativeID: string,
     updates: Partial<Narrative>
-  ) => Promise<{ ok: boolean; data: Narrative | null }>;
-  deleteNarrative: (narrativeID: string) => Promise<{ ok: boolean; data: Narrative | null }>;
+  ) => Promise<Result<Narrative, string>>;
+  deleteNarrative: (narrativeID: string) => Promise<Result<null, string>>;
 }
 
 export const narrativeRepository: NarrativeRepository = {
   async fetchUserNarratives(userId: string) {
     const GET_USER_NARRATIVES = `
-        query Narratives($where: NarrativeWhere) {
-          narratives(where: $where) {
-            userID
-            updatedAt
-            tagline
-            narrativeID
-            name
-            createdAt
-            blurb
-          }
+      query Narratives($where: NarrativeWhere) {
+        narratives(where: $where) {
+          userID
+          updatedAt
+          tagline
+          narrativeID
+          name
+          createdAt
+          blurb
         }
-      `;
+      }
+    `;
 
     try {
       const response: { data?: { narratives?: Narrative[] } } = await GraphQLFetcher(
         GET_USER_NARRATIVES,
-        {
-          where: {
-            userID_EQ: userId,
-          },
-        }
+        { where: { userID_EQ: userId } }
       );
 
-      return response?.data?.narratives ?? [];
-    } catch (error) {
-      console.error('Failed to fetch user narratives:', error);
-      return [];
+      const narratives = response?.data?.narratives ?? [];
+      return ok(narratives);
+    } catch (error: string | unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return err(`Failed to fetch narratives: ${errorMessage}`);
     }
   },
 
@@ -75,43 +70,48 @@ export const narrativeRepository: NarrativeRepository = {
           ],
         });
 
-      return {
-        ok: true,
-        data: response?.data?.createNarratives?.narratives[0] ?? null,
-      };
+      const created = response?.data?.createNarratives?.narratives[0];
+      if (!created) return err('Narrative was not created.');
+      return ok(created);
     } catch (error) {
-      console.error('Failed to create narrative:', error);
-      return { ok: false, data: null };
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return err(`Failed to create narrative: ${errorMessage}`);
     }
   },
 
-  async fetchNarrativeDetails(narrativeID: string): Promise<Narrative | null> {
+  async fetchNarrativeDetails(narrativeID: string) {
+    const GET_NARRATIVE_DETAILS = `
+      query Narratives($where: NarrativeWhere) {
+        narratives(where: $where) {
+          name
+          tagline
+          blurb
+          updatedAt
+        }
+      }
+    `;
+
     try {
       const response = await fetch('/api/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          query: `
-            query Narratives($where: NarrativeWhere) {
-              narratives(where: $where) {
-                name
-                tagline
-                blurb
-                updatedAt
-              }
-            }
-          `,
+          query: GET_NARRATIVE_DETAILS,
           variables: { where: { narrativeID_EQ: narrativeID } },
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to fetch narrative details.');
+      if (!response.ok) return err('Network error while fetching narrative details.');
 
-      const data: { data: { narratives: Narrative[] } } = await response.json();
-      return data.data.narratives[0] ?? null;
+      const data: { data?: { narratives?: Narrative[] } } = await response.json();
+      const narrative = data?.data?.narratives?.[0];
+
+      if (!narrative) return err('Narrative not found.');
+      console.log('narrative', narrative);
+      return ok(narrative);
     } catch (error) {
-      console.error('Error fetching narrative details:', error);
-      return null;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return err(`Failed to fetch narrative details: ${errorMessage}`);
     }
   },
 
@@ -129,6 +129,7 @@ export const narrativeRepository: NarrativeRepository = {
         }
       }
     `;
+
     try {
       const response: { data?: { updateNarratives?: { narratives: Narrative[] } } } =
         await GraphQLFetcher(UPDATE_NARRATIVE, {
@@ -136,17 +137,35 @@ export const narrativeRepository: NarrativeRepository = {
           update: updates,
         });
 
-      return {
-        ok: true,
-        data: response?.data?.updateNarratives?.narratives[0] ?? null,
-      };
+      const updated = response?.data?.updateNarratives?.narratives[0];
+      if (!updated) return err('No narrative was updated.');
+      return ok(updated);
     } catch (error) {
-      console.error('Failed to update narrative metadata:', error);
-      return { ok: false, data: null };
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return err(`Failed to update narrative: ${errorMessage}`);
     }
   },
 
   async deleteNarrative(narrativeID: string) {
-    return {ok: true, data: null};
-  }
+    const DELETE_NARRATIVE = `
+      mutation DeleteNarrative($where: NarrativeWhere) {
+        deleteNarratives(where: $where) {
+          nodesDeleted
+        }
+      }
+    `;
+
+    // needs to delete all the narrative's data
+
+    try {
+      await GraphQLFetcher(DELETE_NARRATIVE, {
+        where: { narrativeID_EQ: narrativeID },
+      });
+
+      return ok(null); // success, nothing to return
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return err(`Failed to delete narrative: ${errorMessage}`);
+    }
+  },
 };

@@ -1,6 +1,6 @@
 import { Character } from '@/features/characters/types/Character';
-import { Outline } from '@/features/manuscript/types/Outline';
-import { Location } from '@/features/locations/types/Location';
+import { Outline } from '@/features/outline/types/Outline';
+import { NarrativeLocation} from '@/features/locations/types/Location';
 import React from 'react';
 import { InlineEdit } from '@/shared/inline-edit';
 import { Card, CardFooter, CardHeader } from '@/shared/ui/card';
@@ -23,7 +23,7 @@ export default function Draft({
 }: {
   story: Outline;
   characters: Character[];
-  locations: Location[];
+  locations: NarrativeLocation[];
 }) {
   return (
     <section className="flex flex-1 flex-col gap-4 p-1 bg-black/5 rounded-xl">

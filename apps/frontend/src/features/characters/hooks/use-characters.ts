@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Character, createNewCharacter } from '@/features/characters/types/Character';
 import React, { useCallback } from 'react';
-import { useAuth } from '@/shared/hooks/use-user';
 import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useNarrativeStore } from '@/shared/stores/narrative-store-provider';
@@ -15,30 +15,26 @@ export const useCharacters = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [activeID, setActiveID] = React.useState<string | null>(null);
-  const { user, loading: authLoading } = useAuth();
   const { id } = useParams();
 
+ 
 
   const fetchNarrativesCharacters = useCallback(async (narrativeID: string) => {
-    if (!user?.id) return;
-    try {
-      setLoading(true);
-      const characters = await fetchCharacters(narrativeID);
-      setCharacters(characters ?? []);
-      setCharactersGlobal(characters ?? []);
-    } catch (error) {
-      toast.error(`Failed to fetch characters:`);
-      setError('Failed to fetch characters.' + error);
-    } finally {
-      setLoading(false);
+    setLoading(true);
+    const result = await fetchCharacters(narrativeID);
+    console.log('result', result);
+    if(!result.ok){
+      setError('Failed to fetch characters. Please try again later.');
+      return;
     }
-  }, [setCharactersGlobal, user?.id]);
+    setCharacters(result.data);
+    setCharactersGlobal(result.data);
+    setLoading(false);
+  }, []);
 
   React.useEffect(() => {
-    if (!user?.id) return;
     fetchNarrativesCharacters(id as string);
-
-  }, [authLoading, fetchNarrativesCharacters, id, loading, user?.id]);
+  }, []);
 
 
   const addCharacter = async () => {

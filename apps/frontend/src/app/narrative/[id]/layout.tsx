@@ -8,13 +8,12 @@ import {
   SidebarRail,
 } from '@/shared/ui/sidebar';
 import { NarrativeStoreProvider } from '@/shared/stores/narrative-store-provider';
-import { useMediaQuery } from 'react-responsive';
 import InfoCard from '@/app/narrative/_components/info-card/info-card';
 import Characters from '@/features/characters/components/characters';
 import { Button } from '@/shared/ui/button';
 import { BookOpen, FileText } from 'lucide-react';
-import Notebook from '@/features/notebook/notebook';
-import { Locations } from '@/features/locations/components/location-directory';
+import Notebook from '@/app/narrative/_components/notebook/notebook';
+import { Locations } from '@/features/locations/components/locations';
 
 export default function NarrativeLayout({ children }: { children: React.ReactNode }) {
 
@@ -31,15 +30,17 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
           defaultOpen={true}
         >
           <Sidebar className="transition-all duration-300 ease-in-out">
-            <SidebarHeader className="border-b h-32 flex items-center justify-center px-4 ">
+            <SidebarHeader className="border-b min-h-32 max-h-32 flex items-center justify-center px-4 ">
               <InfoCard />
             </SidebarHeader>
             <Characters />
             <SidebarRail />
           </Sidebar>
-          <SidebarInset>{children}</SidebarInset>
+          <SidebarInset>
+            {children}
+          </SidebarInset>
           <Sidebar className="transition-all duration-300 ease-in-out " side="right" style={{}}>
-            <SidebarHeader className="border-b h-full max-h-32 flex flex-col">
+            <SidebarHeader className="border-b h-full min-h-32 max-h-32 flex flex-col">
               <div className="h-16 flex items-center justify-center bg-slate-400/5 rounded-xl">
                 <p className="text-2xl text-center font-semibold tracking-wider">Narratica</p>
               </div>

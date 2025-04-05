@@ -13,19 +13,24 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/shared
 import { useLocations } from '@/features/locations/hooks/use-locations';
 import LocationView from './view-location';
 import { Plus } from 'lucide-react';
+import LocationsError from './error';
 
 export function Locations() {
-  const { locations, handleLocationSelect, activeID, handleLocationChange, addLocation } =
+  const { locations, handleLocationSelect, activeID, handleLocationChange, addLocation, error } =
     useLocations();
 
   if (!locations) {
     return null;
   }
 
+  if (error){
+    return <LocationsError error={error} />
+  }
+
   return (
-    <SidebarContent className="p-1">
-      <SidebarGroup>
-        <SidebarGroupLabel className="text-base font-semibold">Locations</SidebarGroupLabel>
+    <SidebarContent className="p-2 flex flex-col  h-full ">
+      <SidebarGroup className='flex-1 items-start justify-start '>
+        <SidebarGroupLabel className="text-base font-semibold mb-3">Locations</SidebarGroupLabel>
         <SidebarGroupAction
           className="hover:bg-primary/10 hover:text-primary"
           onClick={() => {
@@ -34,8 +39,8 @@ export function Locations() {
         >
           <Plus /> <span className="sr-only">Add Character</span>
         </SidebarGroupAction>
-        <SidebarGroupContent>
-          <SidebarMenu>
+        <SidebarGroupContent className='flex-1'>
+          <SidebarMenu className='h-full'>
             {locations.length > 0 ? (
               locations.map((location) => (
                 <SidebarMenuItem
@@ -43,7 +48,7 @@ export function Locations() {
                   className="my-1 hover:bg-primary/5 rounded-md py-1.5"
                 >
                   <SidebarMenuButton
-                    className="p-4 py-5"
+                    className="p-4 py-8 bg-white/5 rounded-md hover:bg-primary/10"
                     onClick={() => handleLocationSelect(location.id)}
                   >
                     <div className="flex items-center gap-3 w-full py-2 justify-center">
@@ -52,7 +57,7 @@ export function Locations() {
                           <span className="font-medium truncate text-md">{location.name}</span>
                         </div>
                         <span className="text-xs text-muted-foreground truncate tracking-wider font-semibold">
-                          {location.subname}
+                          {location.subname || 'No subname'}
                         </span>
                       </div>
                     </div>
@@ -79,7 +84,7 @@ export function Locations() {
                 </SidebarMenuItem>
               ))
             ) : (
-              <div className="my-2 flex flex-col items-center justify-center w-full flex-1 bg-white/10 rounded-xl min-h-[80vh]">
+              <div className="my-2 flex flex-col items-center justify-center w-full flex-1 bg-white/5 rounded-xl min-h-96">
                 <span className="text-sm text-muted-foreground">No locations found.</span>
               </div>
             )}

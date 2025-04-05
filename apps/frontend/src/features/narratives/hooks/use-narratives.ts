@@ -8,6 +8,7 @@ import { fetchUserNarratives } from '../services/fetchUsersNarratives';
 export const useUserNarratives = () => {
   const [narratives, setNarratives] = useState<Narrative[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { user, loading: authLoading } = useAuth();
 
   const fetchNarratives = useCallback(async () => {
@@ -15,9 +16,13 @@ export const useUserNarratives = () => {
 
     try {
       setLoading(true);
-      const narratives = await fetchUserNarratives(user.id);
-      setNarratives(narratives ?? []);
-      console.log('fetched narratives:', narratives);
+      const result = await fetchUserNarratives(user.id);
+      setLoading(false);
+      if (!result.ok) {
+        setError(result.error as string);
+        return;
+      }
+      setNarratives(result.data);
     } catch (error) {
       toast.error(`Failed to fetch narratives:`);
       console.log(error);
@@ -35,5 +40,5 @@ export const useUserNarratives = () => {
     setNarratives((prev) => [newNarrative, ...prev]);
   };
 
-  return { narratives, loading, addNarrative, refetch: fetchNarratives };
+  return { narratives, loading, addNarrative, refetch: fetchNarratives, error };
 };

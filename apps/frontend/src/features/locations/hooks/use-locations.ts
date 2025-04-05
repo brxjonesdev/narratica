@@ -1,99 +1,68 @@
-import { useEffect, useState } from 'react';
-import { Location } from '@/features/locations/types/Location';
+import { useCallback, useEffect, useState } from 'react';
+import { createNewLocation, NarrativeLocation } from '@/features/locations/types/Location';
 import { useNarrativeStore } from '@/shared/stores/narrative-store-provider';
-import { nanoid } from 'nanoid';
+import { useParams } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { fetchNarrativeLocations } from '../services/fetchNarrativeLocations';
+import { addLocationToNarrative } from '../services/addLocationToNarrative';
 
 export const useLocations = () => {
   const { setLocationsGlobal } = useNarrativeStore((store) => store);
-  const [locations, setLocations] = useState<Location[] | null>([]);
+  const [locations, setLocations] = useState<NarrativeLocation[] | null>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeID, setActiveID] = useState<string | null>(null);
+  const { id } = useParams();
 
-  useEffect(() => {
-    const locations = [
-      {
-        id: '1',
-        name: 'Location 1',
-        subname: 'Subname',
-        narrative: 'Narrative',
-        description: 'Description',
-        details: 'Details',
-      },
-      {
-        id: '2',
-        name: 'Location 2',
-        subname: 'Subname',
-        narrative: 'Narrative',
-        description: 'Description',
-        details: 'Details',
-      },
-      {
-        id: '3',
-        name: 'Location 3',
-        subname: 'Subname',
-        narrative: 'Narrative',
-        description: 'Description',
-        details: 'Details',
-      },
-    ];
-    setLoading(false);
-    setLocations(locations);
-    setLocationsGlobal(locations);
-  }, [setLocationsGlobal]);
+  const fetchLocations = useCallback( async (id: string)=> {
+    try {
+      setLoading(true);
+      const result = await fetchNarrativeLocations(id);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setLocations(result.data);
+      setLocationsGlobal(result.data);
+    }
+    catch (error) {
+      setError('Failed to fetch locations.' + error);
+    }
+    finally {
+      setLoading(false);
+    }
+  },[setLocationsGlobal]);
+  useEffect(()=> {
+    fetchLocations(id as string);
+  }, [fetchLocations, id])
 
-  const handleLocationSelect = (id: string | null) => {
-    setActiveID(id);
-  };
-
-  const handleLocationChange = async (locationID: string, updatedLocation: Location) => {
-    if (!locations) {
-      setError('Locations not found');
+  const addLocation = async () => {
+    const newLocation = createNewLocation(id as string);
+    const result = await addLocationToNarrative(id as string, newLocation);
+    if (result.error){
+      toast.error('Failed to add location. Please try again later.');
       return;
     }
-
-    const newLocation = await modifyLocationByID({ locationID, updatedLocation });
-    if (!newLocation) {
-      setError('Failed to update location. Please try again later.');
-      return;
-    }
-
-    const locationIndex = locations.findIndex((location) => location.id === locationID);
-    if (locationIndex === -1) {
-      setError('Location not found');
-      return;
-    }
-
-    console.log(`Updating location with ID: ${locationID}`);
-    locations[locationIndex] = updatedLocation;
-    setLocations([...locations]);
-  };
-
-  const addLocation = () => {
-    const newLocation: Location = {
-      id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}`,
-      name: 'New Location',
-      subname: 'Subname',
-      narrative: 'Narrative',
-      description: 'Description',
-      details: 'Details',
-    };
-
-    setLocations((prevLocations) =>
-      prevLocations ? [...prevLocations, newLocation] : [newLocation]
-    );
-    setLocationsGlobal([...(locations || []), newLocation]);
+    setLocations([...(locations ?? []), newLocation]);
+    setLocationsGlobal([...locations ?? [], newLocation]);
     setActiveID(newLocation.id);
-  };
+    toast.success('Location added successfully');
+  }
+
+  const modifyLocation = async (location: NarrativeLocation) => {
+    
+  }
+
+  const deleteLocation = async (locationID: string) => {}
 
   return {
     locations,
     loading,
     error,
-    activeID,
-    handleLocationSelect,
-    handleLocationChange,
     addLocation,
+    modifyLocation,
+    deleteLocation,
+    activeID,
     setActiveID,
   };
 };

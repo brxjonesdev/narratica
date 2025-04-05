@@ -17,6 +17,7 @@ import Loading from '@/shared/loading';
 import CharacterView from './view-character';
 import { Character } from '@/features/characters/types/Character';
 import { useCharacters } from '@/features/characters/hooks/use-characters';
+import CharacterError from './characters-error';
 
 export default function Characters() {
   const {
@@ -29,19 +30,11 @@ export default function Characters() {
     deleteCharacter,
     modifyCharacter,
   } = useCharacters();
-
-  console.log(
-    'characters',
-    characters
-    
-  )
-
-
   if (loading) return <Loading message="Getting your characters!" />;
-  if (error) return <div className="">Error loading characters {error}</div>;
+  if (error) return <CharacterError error={error} />;
   return (
-    <SidebarContent className="p-2">
-      <SidebarGroup>
+    <SidebarContent className="p-2 flex flex-col  h-full ">
+      <SidebarGroup className='flex-1 items-start justify-start '>
         <SidebarGroupLabel className="text-base font-semibold">Characters</SidebarGroupLabel>
         <SidebarGroupAction
           className="hover:bg-primary/10 hover:text-primary"
@@ -52,16 +45,16 @@ export default function Characters() {
           <Plus /> <span className="sr-only">Add Character</span>
         </SidebarGroupAction>
         <Separator className="my-1.5" />
-        <SidebarGroupContent>
-          <SidebarMenu>
+        <SidebarGroupContent className='flex-1'>
+          <SidebarMenu className='h-full'>
             {characters?.length > 0 ? (
               characters.map((character) => (
                 <SidebarMenuItem
                   key={character.id}
-                  className="my-1 hover:bg-primary/5 rounded-md py-1.5 "
+                  className="my-1  rounded-md py-1.5 "
                 >
                   <SidebarMenuButton
-                    className="p-4 py-5"
+                    className="p-4 py-8 bg-white/5 hover:bg-white/10"
                     onClick={
                       activeID === character.id
                         ? () => {
@@ -83,7 +76,7 @@ export default function Characters() {
                           )}
                         </div>
                         <span className="text-xs text-muted-foreground truncate tracking-wider font-semibold">
-                          {character.subname}
+                          {character.subname || 'No subname'}
                         </span>
                       </div>
                     </div>
@@ -119,9 +112,9 @@ export default function Characters() {
                 </SidebarMenuItem>
               ))
             ) : (
-              <div className="my-2 flex flex-col items-center justify-center w-full flex-1  bg-white/5 rounded-xl min-h-96">
+              <div className="my-2 flex flex-col items-center justify-center w-full flex-1  bg-white/5 rounded-xl ">
                 <span className="text-sm text-muted-foreground">No characters found.</span>
-                {/* Explain how to add one */}
+                <span className="text-sm text-muted-foreground">Click the + button to add one. </span>
               </div>
             )}
           </SidebarMenu>

@@ -1,5 +1,5 @@
-import NarraticaHeader from '@/features/narratives/components/landing/header';
-import NarraticaHero from '@/features/narratives/components/landing/hero';
+import NarraticaHeader from '@/app/(root)/components/landing/header';
+import NarraticaHero from '@/app/(root)/components/landing/hero';
 
 export default function LandingPage() {
   return (

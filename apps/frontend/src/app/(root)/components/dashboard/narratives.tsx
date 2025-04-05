@@ -7,7 +7,7 @@ import Loading from '@/shared/loading';
 import AddNarrative from './add-narrative-btn';
 
 export default function Narratives() {
-  const MAX_NARRATIVES = 8;
+  const MAX_NARRATIVES = 6;
   const { narratives, addNarrative, loading } = useUserNarratives();
 
   return (
@@ -30,7 +30,7 @@ export default function Narratives() {
         {loading ? (
           <Loading message="Loading narratives..." color="bg-white/10" />
         ) : narratives.length > 0 ? (
-          <div className=" grid md:grid-cols-3 md:grid-rows-2 auto-rows-[250px] w-full gap-2">
+          <div className=" grid md:grid-cols-3 md:grid-rows-2 auto-rows-[200px] w-full gap-2">
             {narratives.map((narrative) => (
               <NarrativeCard key={narrative.narrativeID} {...narrative} />
             ))}
