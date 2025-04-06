@@ -11,25 +11,45 @@ import {
 } from '@/shared/ui/sidebar';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/shared/ui/dropdown-menu';
 import { useLocations } from '@/features/locations/hooks/use-locations';
-import LocationView from './view-location';
-import { Plus } from 'lucide-react';
+import { Delete, Plus } from 'lucide-react';
 import LocationsError from './error';
+import Loading from '@/shared/loading';
+import { CardContent, CardHeader } from '@/shared/ui/card';
+import { InlineEdit } from '@/shared/inline-edit';
+import { Button } from '@/shared/ui/button';
+import LocationDetails from './location-details';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/alert-dialog";
+
 
 export function Locations() {
-  const { locations, handleLocationSelect, activeID, handleLocationChange, addLocation, error } =
+  const { locations, handleLocationSelect, activeID, modifyLocation, addLocation, error, loading, deleteLocation } =
     useLocations();
 
   if (!locations) {
     return null;
   }
 
-  if (error){
-    return <LocationsError error={error} />
+  if (loading) {
+    return <Loading message="Loading locations..." />;
+  }
+
+  if (error) {
+    return <LocationsError error={error} />;
   }
 
   return (
     <SidebarContent className="p-2 flex flex-col  h-full ">
-      <SidebarGroup className='flex-1 items-start justify-start '>
+      <SidebarGroup className="flex-1 items-start justify-start ">
         <SidebarGroupLabel className="text-base font-semibold mb-3">Locations</SidebarGroupLabel>
         <SidebarGroupAction
           className="hover:bg-primary/10 hover:text-primary"
@@ -39,14 +59,11 @@ export function Locations() {
         >
           <Plus /> <span className="sr-only">Add Character</span>
         </SidebarGroupAction>
-        <SidebarGroupContent className='flex-1'>
-          <SidebarMenu className='h-full'>
+        <SidebarGroupContent className="flex-1">
+          <SidebarMenu className="h-full">
             {locations.length > 0 ? (
               locations.map((location) => (
-                <SidebarMenuItem
-                  key={location.id}
-                  className="my-1 hover:bg-primary/5 rounded-md py-1.5"
-                >
+                <SidebarMenuItem key={location.id} className="my-1  rounded-md py-1.5">
                   <SidebarMenuButton
                     className="p-4 py-8 bg-white/5 rounded-md hover:bg-primary/10"
                     onClick={() => handleLocationSelect(location.id)}
@@ -78,7 +95,66 @@ export function Locations() {
                       sideOffset={290}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <LocationView location={location} handleChange={handleLocationChange} />
+                      <CardHeader className="w-full flex items-start flex-col gap-2 h-fit">
+                        <div className="flex justify-between items-center w-full">
+                          <div className="w-full">
+                            <div className="flex items-baseline w-full">
+                              <div className="flex flex-col">
+                                <InlineEdit
+                                  value={location.name}
+                                  onChange={(value) =>
+                                    modifyLocation({ ...location, name: value })
+                                  }
+                                  fontSize="2xl"
+                                  weight="bold"
+                                />
+                                <InlineEdit
+                                  value={location.subname}
+                                  onChange={(value) =>
+                                    modifyLocation({ ...location, subname: value })
+                                  }
+                                  fontSize="xs"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button
+      className="hover:bg-red-600/60"
+      variant="ghost"
+      size="icon"
+    >
+      <Delete />
+    </Button>
+  </AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you sure you want to delete {location.name}?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. This will permanently delete {location.name} from your narrative.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction
+      className=' hover:bg-red-600/80'
+      onClick={() => deleteLocation(location.id)}>
+        Delete
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+
+                        </div>
+                      </CardHeader>
+
+                      <CardContent className="flex-1 flex ">
+                        <LocationDetails location={location} onUpdate={
+                         modifyLocation
+                        } />
+                      </CardContent>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </SidebarMenuItem>

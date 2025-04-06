@@ -17,13 +17,10 @@ export const useCharacters = () => {
   const [activeID, setActiveID] = React.useState<string | null>(null);
   const { id } = useParams();
 
- 
-
   const fetchNarrativesCharacters = useCallback(async (narrativeID: string) => {
     setLoading(true);
     const result = await fetchCharacters(narrativeID);
-    console.log('result', result);
-    if(!result.ok){
+    if (!result.ok) {
       setError('Failed to fetch characters. Please try again later.');
       return;
     }
@@ -36,47 +33,74 @@ export const useCharacters = () => {
     fetchNarrativesCharacters(id as string);
   }, []);
 
-
   const addCharacter = async () => {
     const newCharacter = createNewCharacter(id as string);
-    const result = await addNewCharacter(id as string, newCharacter);
-    if (result.ok === false) {
-      setError('Failed to add character. Please try again later.');
-      return;
-    }
+    console.log(newCharacter, 'horrrrrn');
+
     setCharacters([...characters, newCharacter]);
     setCharactersGlobal([...characters, newCharacter]);
     setActiveID(newCharacter.id);
-    toast.success('Character added successfully');
-  } 
 
+    try {
+      const result = await addNewCharacter(id as string, newCharacter);
+      if (result.ok === false) {
+        setError('Failed to add character. Please try again later.');
+        setCharacters(characters);
+        setCharactersGlobal(characters);
+        return;
+      }
+      toast.success('Character added successfully');
+    } catch (error) {
+      setError('An unexpected error occurred. Please try again later.' + error);
+      setCharacters(characters);
+      setCharactersGlobal(characters);
+    }
+  };
 
   const modifyCharacter = async (character: Character) => {
-    const result = await modifyCharacterByID(character.id, character);
-    if (result.ok === false) {
-      setError('Failed to modify character. Please try again later.');
-      toast.error('Failed to modify character. Please try again later.');
-      return;
-    }
     const index = characters.findIndex((c) => c.id === character.id);
+    // const originalCharacter = characters[index];
     characters[index] = character;
     setCharacters([...characters]);
     setCharactersGlobal([...characters]);
-    toast.success('Character modified successfully');
-  }
 
+    try {
+      const result = await modifyCharacterByID(character.id, character);
+      if (result.ok === false) {
+        setError('Failed to modify character. Please try again later.');
+        setCharacters(characters);
+        setCharactersGlobal(characters);
+        toast.error('Failed to modify character. Please try again later.');
+        return;
+      }
+    } catch (error) {
+      setError('An unexpected error occurred. Please try again later.' + error);
+      setCharacters(characters);
+      setCharactersGlobal(characters);
+      toast.error('An unexpected error occurred. Please try again later.');
+    }
+  };
 
   const deleteCharacter = async (characterID: string) => {
-    const result = await deleteCharacterByID(characterID);
-    if(result.ok === false) {
-      setError('Failed to delete character. Please try again later.');
-      toast.error('Failed to delete character. Please try again later.');
-      return;
-    }
     const remainingCharacters = characters.filter((character) => character.id !== characterID);
     setCharacters(remainingCharacters);
-    toast.success('Character deleted successfully');
-  }
+
+    try {
+      const result = await deleteCharacterByID(characterID);
+      if (result.ok === false) {
+        setError('Failed to delete character. Please try again later.');
+        setCharacters(characters);
+        toast.error('Failed to delete character. Please try again later.');
+        return;
+      }
+
+      toast.success('Character deleted successfully');
+    } catch (error) {
+      setError('An unexpected error occurred. Please try again later. + ' + error);
+      setCharacters(characters);
+      toast.error('An unexpected error occurred. Please try again later.');
+    }
+  };
 
   return {
     characters,
@@ -89,9 +113,3 @@ export const useCharacters = () => {
     modifyCharacter,
   };
 };
-
-
-
-
-
-

@@ -1,12 +1,23 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Button } from "@/shared/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog"
-import { NotebookPen, Save } from "lucide-react"
-import { useToast } from "@/shared/hooks/use-toast"
-import ReactMarkdown from "react-markdown"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
+import { useState, useEffect } from 'react';
+import { Button } from '@/shared/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import { NotebookPen, Save } from 'lucide-react';
+import { useToast } from '@/shared/hooks/use-toast';
+import ReactMarkdown from 'react-markdown';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,146 +27,146 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/ui/alert-dialog"
-import { Input } from "@/shared/ui/input"
-import { MoreVertical, Trash, Edit, FileText } from "lucide-react"
+} from '@/shared/ui/alert-dialog';
+import { Input } from '@/shared/ui/input';
+import { MoreVertical, Trash, Edit, FileText } from 'lucide-react';
 
 export default function MarkdownNotebook() {
-  const [notes, setNotes] = useState<{ [key: string]: string }>({})
-  const [currentNote, setCurrentNote] = useState("")
-  const [editMode, setEditMode] = useState(true)
-  const [currentNoteId, setCurrentNoteId] = useState<string | null>(null)
-  const { toast } = useToast()
+  const [notes, setNotes] = useState<{ [key: string]: string }>({});
+  const [currentNote, setCurrentNote] = useState('');
+  const [editMode, setEditMode] = useState(true);
+  const [currentNoteId, setCurrentNoteId] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
-  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false)
-  const [newNoteTitle, setNewNoteTitle] = useState("")
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [newNoteTitle, setNewNoteTitle] = useState('');
 
   // Load notes from localStorage on component mount
   useEffect(() => {
-    const savedNotes = localStorage.getItem("markdown-notes")
+    const savedNotes = localStorage.getItem('markdown-notes');
     if (savedNotes) {
-      setNotes(JSON.parse(savedNotes))
+      setNotes(JSON.parse(savedNotes));
     }
-  }, [])
+  }, []);
 
   const saveNote = () => {
-    if (!currentNote.trim()) return
+    if (!currentNote.trim()) return;
 
-    const noteId = currentNoteId || `note-${Date.now()}`
+    const noteId = currentNoteId || `note-${Date.now()}`;
     const updatedNotes = {
       ...notes,
       [noteId]: currentNote,
-    }
+    };
 
-    setNotes(updatedNotes)
-    setCurrentNoteId(noteId)
+    setNotes(updatedNotes);
+    setCurrentNoteId(noteId);
 
     // Save to localStorage
-    localStorage.setItem("markdown-notes", JSON.stringify(updatedNotes))
+    localStorage.setItem('markdown-notes', JSON.stringify(updatedNotes));
 
     toast({
-      title: "Note saved",
-      description: "Your note has been saved successfully.",
-    })
-  }
+      title: 'Note saved',
+      description: 'Your note has been saved successfully.',
+    });
+  };
 
   const createNewNote = () => {
-    setCurrentNote("")
-    setCurrentNoteId(null)
-    setEditMode(true)
-  }
+    setCurrentNote('');
+    setCurrentNoteId(null);
+    setEditMode(true);
+  };
 
   const selectNote = (id: string) => {
-    setCurrentNote(notes[id])
-    setCurrentNoteId(id)
-    setEditMode(false)
-  }
+    setCurrentNote(notes[id]);
+    setCurrentNoteId(id);
+    setEditMode(false);
+  };
 
   const toggleEditMode = () => {
-    setEditMode(!editMode)
-  }
+    setEditMode(!editMode);
+  };
 
   const getNoteTitle = (content: string) => {
-    const firstLine = content.split("\n")[0].replace(/^#+ /, "")
+    const firstLine = content.split('\n')[0].replace(/^#+ /, '');
     if (firstLine.length > 0) {
-      return firstLine.length > 30 ? firstLine.substring(0, 30) + "..." : firstLine
+      return firstLine.length > 30 ? firstLine.substring(0, 30) + '...' : firstLine;
     }
-    return content.length > 30 ? content.substring(0, 30) + "..." : content || "Untitled"
-  }
+    return content.length > 30 ? content.substring(0, 30) + '...' : content || 'Untitled';
+  };
 
   const deleteNote = (id: string) => {
-    setNoteToDelete(id)
-    setIsDeleteDialogOpen(true)
-  }
+    setNoteToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
 
   const confirmDelete = () => {
     if (noteToDelete) {
-      const updatedNotes = { ...notes }
-      delete updatedNotes[noteToDelete]
+      const updatedNotes = { ...notes };
+      delete updatedNotes[noteToDelete];
 
-      setNotes(updatedNotes)
-      localStorage.setItem("markdown-notes", JSON.stringify(updatedNotes))
+      setNotes(updatedNotes);
+      localStorage.setItem('markdown-notes', JSON.stringify(updatedNotes));
 
       if (currentNoteId === noteToDelete) {
-        setCurrentNote("")
-        setCurrentNoteId(null)
-        setEditMode(true)
+        setCurrentNote('');
+        setCurrentNoteId(null);
+        setEditMode(true);
       }
 
-      setIsDeleteDialogOpen(false)
-      setNoteToDelete(null)
+      setIsDeleteDialogOpen(false);
+      setNoteToDelete(null);
 
       toast({
-        title: "Note deleted",
-        description: "Your note has been deleted successfully.",
-      })
+        title: 'Note deleted',
+        description: 'Your note has been deleted successfully.',
+      });
     }
-  }
+  };
 
   const startRenameNote = (id: string) => {
-    const noteTitle = getNoteTitle(notes[id])
-    setNewNoteTitle(noteTitle)
-    setNoteToDelete(id) // Reusing this state to track which note to rename
-    setIsRenameDialogOpen(true)
-  }
+    const noteTitle = getNoteTitle(notes[id]);
+    setNewNoteTitle(noteTitle);
+    setNoteToDelete(id); // Reusing this state to track which note to rename
+    setIsRenameDialogOpen(true);
+  };
 
   const confirmRename = () => {
     if (noteToDelete && newNoteTitle.trim()) {
-      const noteContent = notes[noteToDelete]
+      const noteContent = notes[noteToDelete];
 
       // If the first line is a markdown heading, replace it
-      const lines = noteContent.split("\n")
-      if (lines[0].startsWith("#")) {
-        lines[0] = `# ${newNoteTitle}`
+      const lines = noteContent.split('\n');
+      if (lines[0].startsWith('#')) {
+        lines[0] = `# ${newNoteTitle}`;
       } else {
         // Otherwise, add a heading at the beginning
-        lines.unshift(`# ${newNoteTitle}`)
+        lines.unshift(`# ${newNoteTitle}`);
       }
 
-      const updatedContent = lines.join("\n")
+      const updatedContent = lines.join('\n');
       const updatedNotes = {
         ...notes,
         [noteToDelete]: updatedContent,
-      }
+      };
 
-      setNotes(updatedNotes)
-      localStorage.setItem("markdown-notes", JSON.stringify(updatedNotes))
+      setNotes(updatedNotes);
+      localStorage.setItem('markdown-notes', JSON.stringify(updatedNotes));
 
       if (currentNoteId === noteToDelete) {
-        setCurrentNote(updatedContent)
+        setCurrentNote(updatedContent);
       }
 
-      setIsRenameDialogOpen(false)
-      setNoteToDelete(null)
+      setIsRenameDialogOpen(false);
+      setNoteToDelete(null);
 
       toast({
-        title: "Note renamed",
-        description: "Your note has been renamed successfully.",
-      })
+        title: 'Note renamed',
+        description: 'Your note has been renamed successfully.',
+      });
     }
-  }
+  };
 
   return (
     <Dialog>
@@ -181,10 +192,13 @@ export default function MarkdownNotebook() {
                 <div
                   key={noteId}
                   className={`p-2 rounded flex items-center justify-between hover:bg-muted ${
-                    currentNoteId === noteId ? "bg-muted" : ""
+                    currentNoteId === noteId ? 'bg-muted' : ''
                   }`}
                 >
-                  <div className="flex-1 cursor-pointer truncate" onClick={() => selectNote(noteId)}>
+                  <div
+                    className="flex-1 cursor-pointer truncate"
+                    onClick={() => selectNote(noteId)}
+                  >
                     {getNoteTitle(notes[noteId])}
                   </div>
                   <DropdownMenu>
@@ -235,7 +249,7 @@ export default function MarkdownNotebook() {
 
             <div className="flex justify-between mt-4">
               <Button variant="outline" onClick={toggleEditMode}>
-                {editMode ? "Preview" : "Edit"}
+                {editMode ? 'Preview' : 'Edit'}
               </Button>
 
               <Button onClick={saveNote} disabled={!currentNote.trim()}>
@@ -288,6 +302,5 @@ export default function MarkdownNotebook() {
         </AlertDialogContent>
       </AlertDialog>
     </Dialog>
-  )
+  );
 }
-

@@ -16,7 +16,6 @@ import Notebook from '@/app/narrative/_components/notebook/notebook';
 import { Locations } from '@/features/locations/components/locations';
 
 export default function NarrativeLayout({ children }: { children: React.ReactNode }) {
-
   return (
     <main className="font-figtree">
       <NarrativeStoreProvider>
@@ -36,9 +35,7 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
             <Characters />
             <SidebarRail />
           </Sidebar>
-          <SidebarInset>
-            {children}
-          </SidebarInset>
+          <SidebarInset>{children}</SidebarInset>
           <Sidebar className="transition-all duration-300 ease-in-out " side="right" style={{}}>
             <SidebarHeader className="border-b h-full min-h-32 max-h-32 flex flex-col">
               <div className="h-16 flex items-center justify-center bg-slate-400/5 rounded-xl">
@@ -47,14 +44,14 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
               <div className="p-3 rounded-lg shadow-sm border flex h-16">
                 <div className="flex gap-2 justify-between items-center w-full">
                   <Notebook />
-            <Button size="sm" variant="outline">
-              <BookOpen className="h-4 w-4" />
-              Preview
-            </Button>
-            <Button size="sm" variant="outline">
-              <FileText className="h-4 w-4 " />
-              Export
-            </Button>
+                  <Button size="sm" variant="outline">
+                    <BookOpen className="h-4 w-4" />
+                    Preview
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <FileText className="h-4 w-4 " />
+                    Export
+                  </Button>
                 </div>
               </div>
             </SidebarHeader>

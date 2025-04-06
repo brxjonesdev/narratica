@@ -24,8 +24,8 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
         >
           {character.isAlive ? 'Alive' : 'Deceased'}
           <Checkbox
-            checked={character.isAlive}
-            onCheckedChange={(checked) => onChange('isAlive', checked)}
+            checked={character.isAlive ?? false}
+            onCheckedChange={(checked) => onChange('isAlive', checked ?? false)}
           />
         </div>
       </div>
@@ -33,7 +33,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       {/* Aliases */}
       <div className="text-sm">
         <InlineEditableList
-          items={character.alias as string[]}
+          items={character.alias ?? []}
           onChange={(items) => onChange('alias', items)}
           title="Also Known As"
           addButtonText="Add new alias"
@@ -44,7 +44,10 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       {/* Alignment */}
       <div className="text-sm flex items-center gap-2 justify-between">
         <Label className="font-semibold">Alignment:</Label>
-        <Select value={character.alignment} onValueChange={(value) => onChange('alignment', value)}>
+        <Select
+          value={character.alignment ?? ''}
+          onValueChange={(value) => onChange('alignment', value)}
+        >
           <SelectTrigger className="w-1/2 mr-2">
             <SelectValue placeholder="Select alignment" />
           </SelectTrigger>
@@ -65,7 +68,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       {/* Role */}
       <div className="flex items-center text-sm gap-2 justify-between">
         <Label className="font-semibold">Role:</Label>
-        <Select value={character.role} onValueChange={(value) => onChange('role', value)}>
+        <Select value={character.role ?? ''} onValueChange={(value) => onChange('role', value)}>
           <SelectTrigger className="w-1/2 mr-2">
             <SelectValue placeholder="Select role" />
           </SelectTrigger>
@@ -96,7 +99,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       <div>
         <Label className="font-semibold">Description</Label>
         <InlineEdit
-          value={character.description || ''}
+          value={character.description ?? ''}
           onChange={(value) => onChange('description', value)}
           fontSize="sm"
           mode="textarea"
@@ -110,7 +113,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       <div>
         <Label className="font-semibold">Personality</Label>
         <InlineEdit
-          value={character.personality || ''}
+          value={character.personality ?? ''}
           onChange={(value) => onChange('personality', value)}
           fontSize="sm"
           mode="textarea"
@@ -124,7 +127,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       <div>
         <Label className="font-semibold">Appearance</Label>
         <InlineEdit
-          value={character.appearance || ''}
+          value={character.appearance ?? ''}
           onChange={(value) => onChange('appearance', value)}
           fontSize="sm"
           mode="textarea"
@@ -141,7 +144,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             </Label>
             <Input
               id="age"
-              value={character.age || ''}
+              value={character.age ?? ''}
               onChange={(e) => onChange('age', e.target.value)}
               className="flex-grow"
             />
@@ -152,7 +155,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             </Label>
             <Input
               id="height"
-              value={character.height || ''}
+              value={character.height ?? ''}
               onChange={(e) => onChange('height', e.target.value)}
               className="flex-grow"
             />
@@ -163,7 +166,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             </Label>
             <Input
               id="weight"
-              value={character.weight || ''}
+              value={character.weight ?? ''}
               onChange={(e) => onChange('weight', e.target.value)}
               className="flex-grow"
             />
@@ -174,7 +177,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             </Label>
             <Input
               id="eyeColor"
-              value={character.eyeColor || ''}
+              value={character.eyeColor ?? ''}
               onChange={(e) => onChange('eyeColor', e.target.value)}
               className="flex-grow"
             />
@@ -185,7 +188,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             </Label>
             <Input
               id="hairColor"
-              value={character.hairColor || ''}
+              value={character.hairColor ?? ''}
               onChange={(e) => onChange('hairColor', e.target.value)}
               className="flex-grow"
             />
@@ -196,7 +199,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             </Label>
             <Input
               id="skinColor"
-              value={character.skinColor || ''}
+              value={character.skinColor ?? ''}
               onChange={(e) => onChange('skinColor', e.target.value)}
               className="flex-grow"
             />
@@ -213,7 +216,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             Strengths
           </Label>
           <InlineEditableList
-            items={character.strengths || []}
+            items={character.strengths ?? []}
             onChange={(items) => onChange('strengths', items)}
             addButtonText="Add strength"
             placeholder="Enter a strength"
@@ -224,7 +227,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             Weaknesses
           </Label>
           <InlineEditableList
-            items={character.weaknesses || []}
+            items={character.weaknesses ?? []}
             onChange={(items) => onChange('weaknesses', items)}
             addButtonText="Add weakness"
             placeholder="Enter a weakness"
@@ -235,7 +238,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             Fears
           </Label>
           <InlineEditableList
-            items={character.fears || []}
+            items={character.fears ?? []}
             onChange={(items) => onChange('fears', items)}
             addButtonText="Add fear"
             placeholder="Enter a fear"
@@ -246,7 +249,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             Motivations
           </Label>
           <InlineEditableList
-            items={character.motivations || []}
+            items={character.motivations ?? []}
             onChange={(items) => onChange('motivations', items)}
             addButtonText="Add motivation"
             placeholder="Enter a motivation"
@@ -257,7 +260,7 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             Goals
           </Label>
           <InlineEditableList
-            items={character.goals || []}
+            items={character.goals ?? []}
             onChange={(items) => onChange('goals', items)}
             addButtonText="Add goal"
             placeholder="Enter a goal"

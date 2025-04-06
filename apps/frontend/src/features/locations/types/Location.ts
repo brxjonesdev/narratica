@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
 export type NarrativeLocation = {
   id: string;
@@ -14,11 +14,11 @@ export type NarrativeLocation = {
 export function createNewLocation(narrativeID: string): NarrativeLocation {
   return {
     id: `location-${nanoid(7)}-${nanoid(7)}-${nanoid(7)}`,
-    name: "New Location",
-    subname: "",
+    name: 'New Location',
+    subname: '',
     narrative: narrativeID,
-    description: "",
-    details: "",
+    description: '',
+    details: '',
     createdAt: new Date().toISOString(),
   };
 }

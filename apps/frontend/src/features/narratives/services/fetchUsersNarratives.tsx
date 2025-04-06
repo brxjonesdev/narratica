@@ -5,11 +5,11 @@ import { Narrative } from '../types/Narrative';
 
 export async function fetchUserNarratives(userId: string): Promise<Result<Narrative[], string>> {
   const result = await narrativeRepository.fetchUserNarratives(userId);
-  if (!result.ok){
+  if (!result.ok) {
     return {
       ok: false,
       error: result.error,
-    }
+    };
   } else {
     // sort narratives by updatedAt
     result.data.sort((a: { updatedAt: string }, b: { updatedAt: string }) => {
@@ -18,8 +18,6 @@ export async function fetchUserNarratives(userId: string): Promise<Result<Narrat
     return {
       ok: true,
       data: result.data,
-    }
+    };
   }
-  
 }
-

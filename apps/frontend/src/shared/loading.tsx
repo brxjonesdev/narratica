@@ -9,7 +9,11 @@ interface LoadingProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export default function Loading({ message = 'Loading...', color = 'primary', size = "md" }: LoadingProps) {
+export default function Loading({
+  message = 'Loading...',
+  color = 'primary',
+  size = 'md',
+}: LoadingProps) {
   const [progress, setProgress] = useState(0);
 
   // Simulate progress for visual feedback
@@ -35,7 +39,9 @@ export default function Loading({ message = 'Loading...', color = 'primary', siz
       aria-live="polite"
     >
       {/* Circular loader */}
-      <div className={`relative w-16 h-16 ${size === 'sm' ? 'w-4 h-4' : size === 'lg' ? 'w-24 h-24' : ''}`}>
+      <div
+        className={`relative w-16 h-16 ${size === 'sm' ? 'w-4 h-4' : size === 'lg' ? 'w-24 h-24' : ''}`}
+      >
         {/* Background circle */}
         <motion.div className={`absolute inset-0 rounded-full border-4 border-muted opacity-30`} />
 

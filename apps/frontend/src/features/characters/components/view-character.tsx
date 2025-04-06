@@ -4,6 +4,17 @@ import { Button } from '@/shared/ui/button';
 import { CardHeader, CardContent } from '@/shared/ui/card';
 import { Separator } from '@/shared/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/shared/ui/alert-dialog';
 
 import { Delete } from 'lucide-react';
 import CharacterDetails from '@/features/characters/components/character-details';
@@ -66,16 +77,34 @@ export default function CharacterView({
             />
           </div>
 
-          <Button
-            className="hover:bg-red-600/60"
-            variant={'ghost'}
-            size={'icon'}
-            onClick={() => {
-              onDelete(character.id);
-            }}
-          >
-            <Delete />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="p-0">
+                <Delete className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="font-figtree w-fit">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-xl">
+                  Are you sure you want to delete {character.name.split(' ')[0]}?
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-sm">
+                  This action cannot be undone. This will permanently delete this character.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    onDelete(character.id);
+                  }}
+                  className="hover:bg-red-500 transition-colors ease-in-out duration-200"
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardHeader>
 

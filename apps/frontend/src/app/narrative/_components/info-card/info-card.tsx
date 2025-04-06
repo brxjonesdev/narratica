@@ -19,9 +19,11 @@ export default function InfoCard() {
   const { id } = useParams();
   const { info, setIsModalOpen, isModalOpen } = useNarrativeDetails(id);
   if (!info) {
-    return <div className='max-h-[300px] flex items-center justify-center'>
-      <Loading size='sm' />
-    </div>;
+    return (
+      <div className="max-h-[300px] flex items-center justify-center">
+        <Loading size="sm" />
+      </div>
+    );
   }
 
   return (

@@ -1,6 +1,6 @@
 import { Character } from '@/features/characters/types/Character';
 import { Outline } from '@/features/outline/types/Outline';
-import { NarrativeLocation} from '@/features/locations/types/Location';
+import { NarrativeLocation } from '@/features/locations/types/Location';
 import React from 'react';
 import { InlineEdit } from '@/shared/inline-edit';
 import { Card, CardFooter, CardHeader } from '@/shared/ui/card';
@@ -12,9 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/shared/ui/dropdown-menu';
-import { PlusCircleIcon,} from 'lucide-react';
+import { PlusCircleIcon } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
-
 
 export default function Draft({
   story,

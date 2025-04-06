@@ -1,8 +1,11 @@
-import { Location } from "../types/Location";
+import { NarrativeLocation } from '../types/Location';
+import { locationsRepository } from '@/features/locations/repository/LocationsRepository';
+import { err, ok } from '@/shared/types/result';
 
-export function addLocationToNarrative(narrativeID: string, location: Location) {
-    return {
-        ok: true,
-        error: null,
-    };
+export async function addLocationToNarrative(newLocation: NarrativeLocation) {
+  const result = await locationsRepository.addLocationToNarrative(newLocation);
+  if (!result.ok) {
+    return err(result.error);
+  }
+  return ok(result.data);
 }

@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { fetchNarrativeLocations } from '../services/fetchNarrativeLocations';
 import { addLocationToNarrative } from '../services/addLocationToNarrative';
+import { deleteNarrativeLocation } from '../services/deleteLocation';
+import { modifyNarrativeLocation } from '../services/modifyNarrativeLocation';
 
 export const useLocations = () => {
   const { setLocationsGlobal } = useNarrativeStore((store) => store);
@@ -14,46 +16,80 @@ export const useLocations = () => {
   const [activeID, setActiveID] = useState<string | null>(null);
   const { id } = useParams();
 
-  const fetchLocations = useCallback( async (id: string)=> {
-    try {
-      setLoading(true);
-      const result = await fetchNarrativeLocations(id);
-      if (!result.ok) {
-        setError(result.error);
-        return;
+  const fetchLocations = useCallback(
+    async (id: string) => {
+      try {
+        setLoading(true);
+        const result = await fetchNarrativeLocations(id);
+        console.log('Locations:', result);
+        if (!result.ok) {
+          setError(result.error);
+          return;
+        }
+        setLocations(result.data);
+        setLocationsGlobal(result.data);
+      } catch (error) {
+        setError('Failed to fetch locations.' + error);
+      } finally {
+        setLoading(false);
       }
-      setLocations(result.data);
-      setLocationsGlobal(result.data);
-    }
-    catch (error) {
-      setError('Failed to fetch locations.' + error);
-    }
-    finally {
-      setLoading(false);
-    }
-  },[setLocationsGlobal]);
-  useEffect(()=> {
+    },
+    [setLocationsGlobal]
+  );
+  useEffect(() => {
     fetchLocations(id as string);
-  }, [fetchLocations, id])
+  }, [fetchLocations, id]);
 
   const addLocation = async () => {
     const newLocation = createNewLocation(id as string);
-    const result = await addLocationToNarrative(id as string, newLocation);
-    if (result.error){
-      toast.error('Failed to add location. Please try again later.');
+    setLocations((prev) => (prev ? [...prev, newLocation] : [newLocation]));
+    setActiveID(newLocation.id);
+
+    const result = await addLocationToNarrative(newLocation);
+
+    if (!result.ok) {
+      setLocations((prev) =>
+        prev ? prev.filter((location) => location.id !== newLocation.id) : []
+      );
+      setActiveID(null);
+      toast.error(result.error);
       return;
     }
-    setLocations([...(locations ?? []), newLocation]);
-    setLocationsGlobal([...locations ?? [], newLocation]);
-    setActiveID(newLocation.id);
-    toast.success('Location added successfully');
-  }
+  };
 
   const modifyLocation = async (location: NarrativeLocation) => {
-    
-  }
+    console.log('Location:', location);
+    const updatedLocation = locations?.find((loc) => loc.id === location.id);
+    setLocations((prev) =>
+      prev ? prev.map((loc) => (loc.id === location.id ? location : loc)) : []
+    );
 
-  const deleteLocation = async (locationID: string) => {}
+    const result = await modifyNarrativeLocation(location);
+    if (!result.ok) {
+      setLocations((prev) =>
+        prev ? prev.map((loc) => (loc.id === location.id ? updatedLocation! : loc)) : []
+      );
+      toast.error(result.error);
+      return;
+    }
+  };
+
+  const deleteLocation = async (locationID: string) => {
+    const deletedLocation = locations?.find((location) => location.id === locationID);
+    setLocations((prev) => (prev ? prev.filter((location) => location.id !== locationID) : []));
+    setActiveID(null);
+
+    const result = await deleteNarrativeLocation(locationID);
+    if (!result.ok) {
+      setLocations((prev) => (prev ? [...(prev as NarrativeLocation[]), deletedLocation!] : []));
+      toast.error(result.error);
+      return;
+    }
+  };
+
+  const handleLocationSelect = (locationID: string | null) => {
+    setActiveID(locationID);
+  };
 
   return {
     locations,
@@ -64,5 +100,6 @@ export const useLocations = () => {
     deleteLocation,
     activeID,
     setActiveID,
+    handleLocationSelect,
   };
 };

@@ -56,13 +56,12 @@ export default function EditMetadata({
   const handleDelete = async () => {
     try {
       const result = await removeNarrative(id);
-      if (!result.ok){
+      if (!result.ok) {
         toast.error('Failed to delete narrative');
         return;
       }
       toast.success('Narrative deleted successfully');
       router.push('/');
-      
     } catch (error) {
       console.error('Failed to delete metadata:', error);
     } finally {

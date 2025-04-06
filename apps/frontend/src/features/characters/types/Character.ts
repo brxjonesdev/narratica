@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
 export type Character = {
   id: string;
@@ -85,17 +85,19 @@ export type Relationship = {
   description?: string;
 };
 
-export function createNewCharacter(userID: string){
+export function createNewCharacter(userID: string): Character {
   if (!userID) {
     throw new Error('User ID is required');
   }
   return {
-    id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}}`,
+    id: `${nanoid(10)}-${nanoid(5)}-${nanoid(10)}-${nanoid(8)}`,
     narrative: userID,
     name: 'New Character',
     subname: 'No Subname',
+    alignment: 'lawful-good',
+    role: 'protagonist',
     isAlive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  }
+  };
 }

@@ -10,7 +10,7 @@ import { Save, X } from 'lucide-react';
 
 interface LocationDetailsProps {
   location: Location;
-  onUpdate: (id: string, updatedLocation: Location) => void;
+  onUpdate: (location: Location) => void;
 }
 
 export default function LocationDetails({ location, onUpdate }: LocationDetailsProps) {
@@ -24,9 +24,7 @@ export default function LocationDetails({ location, onUpdate }: LocationDetailsP
 
   const handleSave = () => {
     setIsEditing(false);
-    onUpdate(location.id, { ...location, details: content });
-    console.log('location', location);
-    console.log('content', content);
+    onUpdate({ ...location, details: content });
   };
 
   const handleCancel = () => {

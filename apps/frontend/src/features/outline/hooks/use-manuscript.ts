@@ -1,11 +1,15 @@
-import { Outline } from '@/domain/entities/Outline';
+import { Outline } from '@/features//outline/types/Outline';
 import { useCallback, useEffect, useState } from 'react';
 
 export function useManuscript() {
-  const [story, setStory] = useState<Outline>({});
+  const [story, setStory] = useState<Outline | null>({
+    id: 'xhbxa',
+    narrativeID: 'sjnknak',
+    acts: [],
+  });
 
   const fetchNarrativePlot = useCallback(async () => {}, []);
-  useEffect(()=>{
+  useEffect(() => {
     fetchNarrativePlot();
   }, [fetchNarrativePlot]);
 

@@ -15,7 +15,7 @@ export default function useNarrativeDetails(narrativeID: string | string[] | und
 
   const fetchNarrative = useCallback(async () => {
     const result = await getNarrativeDetails(narrativeID as string);
-    if(!result.ok){
+    if (!result.ok) {
       return err(result.error);
     }
     setInfo(result.data);
