@@ -12,7 +12,6 @@ import {
 interface CharacterRepository {
   fetchCharacters: (narrativeID: string) => Promise<Result<Character[], string>>;
   addNewCharacter: (
-    narrativeID: string,
     character: Character
   ) => Promise<Result<Character, string>>;
   modifyCharacterByID: (
@@ -70,7 +69,7 @@ export const characterRepository: CharacterRepository = {
     }
   },
 
-  async addNewCharacter(narrativeID: string, character: Character) {
+  async addNewCharacter( character: Character) {
     const ADD_CHARACTER = `
     mutation Mutation($input: [CharacterCreateInput!]!) {
   createCharacters(input: $input) {

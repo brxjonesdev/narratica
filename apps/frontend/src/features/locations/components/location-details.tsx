@@ -2,15 +2,15 @@
 
 import type React from 'react';
 import { useState, useRef } from 'react';
-import type { Location } from '@/features/locations/types/Location';
+import { NarrativeLocation } from '../types/Location';
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
 import ReactMarkdown from 'react-markdown';
 import { Save, X } from 'lucide-react';
 
 interface LocationDetailsProps {
-  location: Location;
-  onUpdate: (location: Location) => void;
+  location: NarrativeLocation;
+  onUpdate: (location: NarrativeLocation) => void;
 }
 
 export default function LocationDetails({ location, onUpdate }: LocationDetailsProps) {
