@@ -57,7 +57,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${figtree.variable} antialiased flex flex-col h-dvh overflow-x-hidden`}>
         <Toaster position="bottom-right" reverseOrder={false} />
         {children}

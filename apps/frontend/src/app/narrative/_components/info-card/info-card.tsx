@@ -27,14 +27,13 @@ export default function InfoCard() {
   }
 
   return (
-    <section className="w-full bg-white/5 h-full flex flex-col items-center justify-center rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative m-2">
-      <div className="flex items-center justify-between h-full w-full">
-        <div className="space-y-1 px-4">
-          <p className="font-semibold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis text-lg">
-            {info.name}
-          </p>
+    <section className="w-full bg-white/5 h-full flex flex-col rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative overflow-hidden">
+      <div className="flex flex-col h-full w-full p-4">
+        <div className="space-y-2">
+          <h2 className="font-semibold tracking-wide text-lg">{info.name}</h2>
 
           <p className="text-xs text-muted-foreground tracking-wide">{info.tagline}</p>
+
         </div>
 
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -45,16 +44,24 @@ export default function InfoCard() {
                 <span className="sr-only">Edit</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-xl font-figtree">
+            <DialogContent className="max-w-xl">
               <DialogHeader>
                 <DialogTitle>Edit Project</DialogTitle>
                 <DialogDescription>Make changes to your project or delete it.</DialogDescription>
               </DialogHeader>
-              <Metadata info={info} id={id} closeModal={() => setIsModalOpen(false)} />
+              <Metadata
+                info={{
+                  name: info.name || 'Untitled',
+                  tagline: info.tagline || 'No tagline available',
+                  blurb: info.blurb || 'No blurb available',
+                }}
+                id={id}
+                closeModal={() => setIsModalOpen(false)}
+              />
             </DialogContent>
           </Dialog>
         </div>
       </div>
     </section>
-  );
+  )
 }

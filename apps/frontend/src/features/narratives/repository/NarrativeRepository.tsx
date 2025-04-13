@@ -45,17 +45,19 @@ export const narrativeRepository: NarrativeRepository = {
 
   async addNewNarrative(id: string, narrative: Narrative) {
     const CREATE_NARRATIVE = `
-      mutation CreateNarratives($input: [NarrativeCreateInput!]!) {
-        createNarratives(input: $input) {
-          narratives {
-            narrativeID
-            userID
-            tagline
-            blurb
-            name
-          }
-        }
-      }
+     mutation Mutation($input: [NarrativeCreateInput!]!) {
+  createNarratives(input: $input) {
+    narratives {
+      userID
+      narrativeID
+      name
+      tagline
+      blurb
+      createdAt
+      updatedAt
+    }
+  }
+}
     `;
     try {
       const response: { data?: { createNarratives?: { narratives: Narrative[] } } } =
@@ -63,17 +65,22 @@ export const narrativeRepository: NarrativeRepository = {
           input: [
             {
               userID: id,
+              narrativeID: narrative.narrativeID,
               tagline: narrative.tagline,
               blurb: narrative.blurb,
               name: narrative.name,
+              updatedAt: narrative.updatedAt,
+              createdAt: narrative.createdAt,
             },
           ],
         });
+        console.log('response', response);
 
       const created = response?.data?.createNarratives?.narratives[0];
       if (!created) return err('Narrative was not created.');
       return ok(created);
     } catch (error) {
+      console.log('error', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return err(`Failed to create narrative: ${errorMessage}`);
     }

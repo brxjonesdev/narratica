@@ -15,7 +15,6 @@ import { Button } from '@/shared/ui/button';
 import { BookOpen, FileText, Home } from 'lucide-react';
 import Notebook from '@/app/narrative/_components/notebook/notebook';
 import { Locations } from '@/features/locations/components/locations';
-import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Separator } from '@/shared/ui/separator';
 import Link from 'next/link';
 
@@ -33,7 +32,7 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
           defaultOpen={true}
         >
           <Sidebar className="transition-all duration-300 ease-in-out">
-            <SidebarHeader className="border-b min-h-32 max-h-32 flex items-center justify-center px-4 ">
+            <SidebarHeader className="border-b min-h-32 max-h-32 flex items-center justify-center">
               <InfoCard />
             </SidebarHeader>
             <Characters />
@@ -42,7 +41,6 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
 
 
           <SidebarInset>
-          <Tabs defaultValue="outline" className="w-full h-full flex flex-col">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b justify-between pr-4 sticky top-0 bg-background z-10">
         <div className="flex items-center gap-2 px-3">
           <SidebarTrigger />
@@ -52,19 +50,12 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
               <Home />
             </Button>
           </Link>
-          <Separator orientation="vertical" className="h-4" />
-          <TabsList className="font-figtree w-[400px]">
-            <TabsTrigger value="outline" className="w-full tracking-wider">
-              Outline
-            </TabsTrigger>
-            <TabsTrigger value="draft" className="w-full tracking-wider">
-              Draft
-            </TabsTrigger>
-          </TabsList>
+          {/* <Separator orientation="vertical" className="h-4" /> */}
+         
         </div>
       </header>
       {children}
-    </Tabs>
+  
             </SidebarInset>
 
 

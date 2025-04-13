@@ -15,9 +15,9 @@ export default function NarrativeCard({ tagline, blurb, name, narrativeID }: Nar
           <CardDescription>{tagline}</CardDescription>
         </CardHeader>
         <Separator />
-        <CardContent className="flex flex-col flex-1 bg-white/5 rounded-lg m-4 px-2">
-          <p className="text-sm text-muted-foreground py-2 px-0">
-            {blurb.length > 100 ? `${blurb.substring(0, 120)}...` : blurb}
+        <CardContent className="flex flex-col flex-1 bg-white/5 rounded-lg m-0 px-5 justify-center items-center">
+          <p className="text-sm text-muted-foreground  px-0">
+            {blurb.length > 200 ? `${blurb.substring(0, 250)}...` : blurb}
           </p>
         </CardContent>
       </Card>

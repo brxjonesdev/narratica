@@ -77,7 +77,7 @@ export function InlineEdit({
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
-              className={cn(`py-1 text-${fontSize}`, inputClassName)}
+              className={cn(`px-2 py-1  text-${fontSize}`, inputClassName)}
               placeholder={placeholder}
             />
           ) : (
@@ -92,7 +92,7 @@ export function InlineEdit({
               rows={rows}
             />
           )}
-          <div className={`flex items-center gap-1 `}>
+          <div className={`flex items-center gap-0.5 `}>
             <button
               onClick={handleSave}
               className="rounded-full p-1 text-green-600 hover:bg-green-100"
@@ -112,7 +112,7 @@ export function InlineEdit({
       ) : (
         <div
           onClick={handleClick}
-          className={`hover:bg-muted/50 ${mode === 'textarea' ? ' h-full items-start flex-none px-4 py-2 rounded-md ' : 'flex cursor-pointer items-center px-3 py-1.5 '}`}
+          className={`hover:bg-muted/50 ${mode === 'textarea' ? ' h-full items-start flex-none px-4 py-2 rounded-md ' : 'flex cursor-pointer items-center px-2 py-1 rounded '}`}
         >
           <span
             className={cn(

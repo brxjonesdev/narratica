@@ -19,7 +19,7 @@ export async function addNewCharacter(
     return err('Character ID is required');
   }
 
-  const response = await characterRepository.addNewCharacter(narrativeID, newCharacter);
+  const response = await characterRepository.addNewCharacter(newCharacter);
   if (!response.ok) {
     return err(response.error);
   }

@@ -48,7 +48,9 @@ export default function NarrativeForm({ onAddNarrative, closeForm }: NarrativeFo
       setLoading(false);
       return;
     }
+    console.log('values', values);
     const newNarrative = createNewNarrative(user.id, values);
+    console.log('newNarrative', newNarrative);
 
     const result = await addNewNarrative(user.id, newNarrative);
     if (!result.ok) {
