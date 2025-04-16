@@ -8,10 +8,10 @@ interface OutlineRepository {
     getPlot : (narrativeID: string) => Promise<Result<Outline, string>>;
     addNewAct: (narrativeID: string, act: Act) => Promise<Result<{ ok: boolean }, string>>;
     modifyActByID: (actID: string, act: Partial<Act>) => Promise<Result<{ ok: boolean }, string>>;
-    deleteActByID: (actID: string) => Promise<Result<{ ok: boolean }, string>>;
+    deleteActByID: (actID: string, chapters: string[], scenes: string[]) => Promise<Result<{ ok: boolean }, string>>;
     addNewChapter: (narrativeID: string, chapter: Chapter) => Promise<Result<{ ok: boolean }, string>>;
     modifyChapterByID: (chapterID: string, chapter: Partial<Chapter>) => Promise<Result<{ ok: boolean }, string>>;
-    deleteChapterByID: (chapterID: string) => Promise<Result<{ ok: boolean }, string>>;
+    deleteChapterByID: (chapterID: string, scenes: string[]) => Promise<Result<{ ok: boolean }, string>>;
     addNewScene: (narrativeID: string, scene: Scene) => Promise<Result<{ ok: boolean }, string>>;
     modifySceneByID: (sceneID: string, scene: Partial<Scene>) => Promise<Result<{ ok: boolean }, string>>;
     deleteSceneByID: (sceneID: string) => Promise<Result<{ ok: boolean }, string>>;
@@ -224,8 +224,49 @@ export const outlineRepository: OutlineRepository = {
      }
     },
 
-    async deleteActByID(actID: string) {
-        const DELETE_ACT = ``
+    async deleteActByID(actID: string, chapters: string[], scenes: string[]) {
+        const DELETE_ACT = `mutation Mutation($where: ActWhere, $delete: ActDeleteInput) {
+  deleteActs(where: $where, delete: $delete) {
+    nodesDeleted
+  }
+}
+`;
+
+try {
+  const response = await GraphQLFetcher<{ data: { deleteActs: { nodesDeleted: number } } }>(DELETE_ACT, {
+    where: {
+      id_EQ: actID
+    },
+    delete: {
+      chapters: [
+        {
+          where: {
+            node: {
+              id_IN: chapters
+            }
+          },
+          delete: {
+            scenes: [
+              {
+                where: {
+                  node: {
+                    id_IN: scenes
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  });
+  if (!response.data?.deleteActs) {
+    return err("Failed to delete act");
+  }
+  return ok({ ok: true }); 
+} catch (error) {
+  return err("Failed to delete act: " + error);
+}
     },
 
     async addNewChapter(actID: string, chapter: Chapter) {
@@ -297,9 +338,42 @@ catch (error) {
   return err("Failed to update chapter: " + error);
 }
     },
+    async deleteChapterByID(chapterID: string, scenes: string[]) {
+      const DELETE_CHAPTER = `mutation DeleteChapters($where: ChapterWhere, $delete: ChapterDeleteInput) {
+    deleteChapters(where: $where, delete: $delete) {
+    nodesDeleted
+    relationshipsDeleted
+    }
+  }`;
 
-    async deleteChapterByID(chapterID: string) {
-        const DELETE_CHAPTER = ``
+      try {
+        const response = await GraphQLFetcher<{
+          data: { deleteChapters: { nodesDeleted: number; relationshipsDeleted: number } };
+        }>(DELETE_CHAPTER, {
+          where: {
+            id_EQ: chapterID,
+          },
+          delete: {
+            scenes: [
+              {
+                where: {
+                  node: {
+                    id_IN: scenes,
+                  },
+                },
+              },
+            ],
+          },
+        });
+
+        if (!response.data?.deleteChapters) {
+          return err("Failed to delete chapter");
+        }
+
+        return ok({ ok: true });
+      } catch (error) {
+        return err("Failed to delete chapter: " + error);
+      }
     },
 
     async addNewScene(chapterID: string, scene: Scene) {
@@ -384,7 +458,27 @@ return ok({ok: true})
     
 
     async deleteSceneByID(sceneID: string) {
-        const DELETE_SCENE = ``
+        const DELETE_SCENE = `mutation DeleteScenes($where: SceneWhere) {
+  deleteScenes(where: $where) {
+    nodesDeleted
+  }
+}`
+
+try{
+  const response = await GraphQLFetcher<{ data: { deleteScenes: { nodesDeleted: number } } }>(DELETE_SCENE, {
+    where: {
+      id_EQ: sceneID
+    }
+  });
+
+  if (!response.data?.deleteScenes) {
+    return err("Failed to delete scene");
+  }
+
+  return ok({ ok: true });
+} catch (error) {
+  return err("Failed to delete scene: " + error);
+}
     },
 
     async addCharacterToScene(sceneID: string, character: Partial<Character>) {

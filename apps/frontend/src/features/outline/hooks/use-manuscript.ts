@@ -41,7 +41,7 @@ export type ManuscriptActions = {
   chapters: {
     add: (index: number, actID: string) => Promise<void>
     edit: (chapterID: string, editedChapter: Partial<Chapter>) => Promise<void>
-    delete: (chapterID: string) => Promise<void>
+    delete: (chapterID: string, scenes: string[]) => Promise<void>
   }
   scenes: {
     add: (index: number, chapterID: string) => Promise<void>
@@ -155,7 +155,8 @@ export function useManuscript() {
         acts: prev.acts.filter((act) => act.id !== deletedAct?.id),
       }
     })
-    const result = await deleteActFromOutline(id as string, actID)
+    const result = await deleteActFromOutline(id as string, actID, deletedAct?.chapters.map((chapter) => chapter.id) || [],
+      deletedAct?.chapters.flatMap((chapter) => chapter.scenes.map((scene) => scene.id)) || [])
     if (!result.ok) {
       setError(result.error as string)
       setStory((prev) => {
@@ -259,7 +260,7 @@ export function useManuscript() {
     toast.success("Chapter updated successfully")
     return
   }
-  const deleteChapter = async (chapterID: string) => {
+  const deleteChapter = async (chapterID: string, scenes: string[]) => {
     const deletedChapter = story?.acts
       .flatMap((act) => act.chapters)
       .find((chapter) => chapter.id === chapterID)
@@ -276,7 +277,7 @@ export function useManuscript() {
         acts: updatedActs,
       }
     })
-    const result = await deleteChapterFromAct(id as string, chapterID)
+    const result = await deleteChapterFromAct(id as string, chapterID, scenes)
     if (!result.ok) {
       setError(result.error as string)
       setStory((prev) => {

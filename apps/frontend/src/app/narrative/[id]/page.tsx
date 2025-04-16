@@ -121,12 +121,12 @@ export default function NarrativeOutline() {
                           <Trash2 size={16} />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="bg-gray-800 border-gray-700 text-white">
+                      <DialogContent className=" text-white font-figtree">
                         <DialogHeader>
                           <DialogTitle>Delete Act</DialogTitle>
                           <DialogDescription className="text-gray-400">
-                            Are you sure you want to delete Act {act.order + 1}: {act.title}? This action cannot be
-                            undone.
+                            Are you sure you want to delete Act {act.order + 1}: {act.title}? <br/>
+                            This will delete all associated chapters and scenes, and this action cannot be undone.
                           </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>
@@ -186,12 +186,12 @@ export default function NarrativeOutline() {
                                   <Trash2 size={16} />
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="bg-gray-800 border-gray-700 text-white">
+                              <DialogContent className=" text-white font-figtree">
                                 <DialogHeader>
                                   <DialogTitle>Delete Chapter</DialogTitle>
                                   <DialogDescription className="text-gray-400">
-                                    Are you sure you want to delete Chapter {chapter.order + 1}: {chapter.title}? This
-                                    action cannot be undone.
+                                    Are you sure you want to delete Chapter {chapter.order + 1}: {chapter.title}? <br/> This
+                                    action cannot be undone. This will also delete all associated scenes as well.
                                   </DialogDescription>
                                 </DialogHeader>
                                 <DialogFooter>
@@ -200,7 +200,7 @@ export default function NarrativeOutline() {
                                   </Button>
                                   <Button
                                     variant="destructive"
-                                    onClick={() => chapters.delete(chapter.id)}
+                                    onClick={() => chapters.delete(chapter.id, chapter.scenes.map((s) => s.id))}
                                     className="bg-red-600 hover:bg-red-700"
                                   >
                                     Delete
@@ -242,12 +242,12 @@ export default function NarrativeOutline() {
                                         <Trash2 size={16} />
                                       </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="bg-gray-800 border-gray-700 text-white">
+                                    <DialogContent className=" text-white font-figtree">
                                       <DialogHeader>
                                         <DialogTitle>Delete Scene</DialogTitle>
                                         <DialogDescription className="text-gray-400">
-                                          Are you sure you want to delete Scene {scene.order + 1}: {scene.title}? This
-                                          action cannot be undone.
+                                          Are you sure you want to delete Scene {scene.order + 1}: {scene.title}? <br/>
+                                          This action cannot be undone.
                                         </DialogDescription>
                                       </DialogHeader>
                                       <DialogFooter>
