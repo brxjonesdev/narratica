@@ -6,7 +6,7 @@ import MobileView from "@/app/narrative/[id]/components/mobile-view"
 import Loading from "@/shared/loading"
 import OutlineError from "@/features/outline/components/error"
 import { Button } from "@/shared/ui/button"
-import { PlusCircle, View } from "lucide-react"
+import { PlusCircle, View, X } from "lucide-react"
 import EmptyOutline from "@/features/outline/components/empty-outline"
 import {
   Dialog,
@@ -30,7 +30,6 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu"
 import { Separator } from "@/shared/ui/separator"
-import Delete from "@/features/outline/components/delete"
 import { Label } from "@/shared/ui/label"
 
 export default function NarrativeOutline() {
@@ -55,14 +54,10 @@ export default function NarrativeOutline() {
     return <OutlineError message={error} />
   }
 
-
-
-  if (!story || story === undefined) {
-    return <EmptyOutline addInitialAct={acts.add}/>;
+  if (!story || story === undefined || (Array.isArray(story) && story.length === 0)) {
+    // If there are no acts, show the empty outline component
+    return <EmptyOutline addInitialAct={acts.add} />
   }
-
-
-  
 
   return (
     <section className="flex flex-1 flex-col gap-4 px-6 py-4 rounded-xl font-figtree">
@@ -75,7 +70,7 @@ export default function NarrativeOutline() {
               className="bg-black/30 text-white/80 hover:bg-black/40"
               variant="outline"
               onClick={() => {
-                acts.add(story.acts.length)
+                acts.add(story?.acts?.length ?? 0)
               }}
             >
               <PlusCircle size={18} className="" />
@@ -92,255 +87,343 @@ export default function NarrativeOutline() {
         </div>
 
         <div className="space-y-6">
-          {story && story.acts && story.acts.map((act: Act) => (
-            <Card key={act.id} className="bg-black/20 border-gray-700">
-              <CardHeader className="p-3.5 flex flex-row justify-between items-baseline">
-                <div>
-                <div className="flex flex-row items-baseline gap-1">
-                  <Label className="text-xs text-gray-400">Act {act.order + 1}:</Label>
-                  <InlineEdit
-                    value={act.title}
-                    onChange={(value) => {
-                      acts.edit(act.id, { title: value} )
-                    }}
-                    fontSize="md"
-                            weight="bolder"
-                    />
-                </div>
-               </div>
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    className="bg-black/30 text-white/80 hover:bg-black/40"
-                    variant="outline"
-                    onClick={() => chapters.add(act.chapters.length, act.id)}
-                  >
-                    <PlusCircle size={16} />
-                    Add Chapter
-                  </Button>
-                  <Delete func={() => acts.delete(act.id)}>
-                      <Trash2 size={16} />
-                  </Delete>
-                </div>
-              </CardHeader>
-
-              <Separator className="bg-gray-700" />
-
-              <CardContent className="pt-4 space-y-4">
-                {act.chapters.map((chapter: Chapter) => (
-                  <Card key={chapter.id} className="bg-black/10 border-gray-700">
-                    <CardHeader className="py-3 px-2">
-                      <div className="flex justify-between items-center">
-                      <div className="">
-                          <div className="flex items-baseline">
-                            <Label className="text-xs text-gray-400">
-                            Chapter {chapter.order + 1}:
-                          </Label>
-                          <InlineEdit
-                            value={chapter.title}
-                            onChange={(value) => {
-                              chapters.edit(chapter.id, { title: value  })
-                            }}
-                            fontSize="md"
-                            weight="bolder"
-                          />
-                          </div>
-                         
-                        </div>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            className="bg-black/30 text-white/80 hover:bg-black/40"
-                            variant="outline"
-                            onClick={() => scenes.add(chapter.scenes.length, chapter.id)}
-                          >
-                            <PlusCircle size={16} />
-                            Add Scene
+          {story &&
+            story.acts &&
+            story.acts.map((act: Act) => (
+              <Card key={act.id} className="bg-black/20 border-gray-700">
+                <CardHeader className="p-3.5 flex flex-row justify-between items-baseline">
+                  <div>
+                    <div className="flex flex-row items-baseline gap-1">
+                      <Label className="text-xs text-gray-400">Act {act.order + 1}:</Label>
+                      <InlineEdit
+                        value={act.title}
+                        onChange={(value) => {
+                          acts.edit(act.id, { title: value }, act)
+                        }}
+                        fontSize="md"
+                        weight="bolder"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      className="bg-black/30 text-white/80 hover:bg-black/40"
+                      variant="outline"
+                      onClick={() => chapters.add(act.chapters.length, act.id)}
+                    >
+                      <PlusCircle size={16} />
+                      Add Chapter
+                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button size="sm" className="bg-black/30 text-white/80 hover:bg-black/40" variant="outline">
+                          <Trash2 size={16} />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="bg-gray-800 border-gray-700 text-white">
+                        <DialogHeader>
+                          <DialogTitle>Delete Act</DialogTitle>
+                          <DialogDescription className="text-gray-400">
+                            Are you sure you want to delete Act {act.order + 1}: {act.title}? This action cannot be
+                            undone.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button variant="outline" onClick={() => {}}>
+                            Cancel
                           </Button>
-                          <Delete func={() => {
-                            console.log(chapter.id)
-                            chapters.delete(chapter.id)
-                          }}>
-                              <Trash2 size={16} />
-                          </Delete>
+                          <Button
+                            variant="destructive"
+                            onClick={() => acts.delete(act.id)}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            Delete
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardHeader>
 
-                        
+                <Separator className="bg-gray-700" />
+
+                <CardContent className="pt-4 space-y-4">
+                  {act.chapters.map((chapter: Chapter) => (
+                    <Card key={chapter.id} className="bg-black/10 border-gray-700">
+                      <CardHeader className="py-3 px-2">
+                        <div className="flex justify-between items-center">
+                          <div className="">
+                            <div className="flex items-baseline">
+                              <Label className="text-xs text-gray-400">Chapter {chapter.order + 1}:</Label>
+                              <InlineEdit
+                                value={chapter.title}
+                                onChange={(value) => {
+                                  chapters.edit(chapter.id, { title: value })
+                                }}
+                                fontSize="md"
+                                weight="bolder"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              className="bg-black/30 text-white/80 hover:bg-black/40"
+                              variant="outline"
+                              onClick={() => scenes.add(chapter.scenes.length, chapter.id)}
+                            >
+                              <PlusCircle size={16} />
+                              Add Scene
+                            </Button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  className="bg-black/30 text-white/80 hover:bg-black/40"
+                                  variant="outline"
+                                >
+                                  <Trash2 size={16} />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="bg-gray-800 border-gray-700 text-white">
+                                <DialogHeader>
+                                  <DialogTitle>Delete Chapter</DialogTitle>
+                                  <DialogDescription className="text-gray-400">
+                                    Are you sure you want to delete Chapter {chapter.order + 1}: {chapter.title}? This
+                                    action cannot be undone.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                  <Button variant="outline" onClick={() => {}}>
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    variant="destructive"
+                                    onClick={() => chapters.delete(chapter.id)}
+                                    className="bg-red-600 hover:bg-red-700"
+                                  >
+                                    Delete
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
+                          </div>
                         </div>
-                      </div>
-                    </CardHeader>
+                      </CardHeader>
 
-                    <Separator className="bg-gray-700" />
+                      <Separator className="bg-gray-700" />
 
-                    <CardContent className="pt-4 space-y-3">
-                      {chapter.scenes.map((scene: Scene) => (
-                        <Card key={scene.id} className="bg-black/5 border-gray-800">
-                          <CardHeader className="p-3">
-                            <div className="flex justify-between items-center">
-                              <div className="flex flex-row items-baseline gap-1">
-                            <Label className="text-xs text-gray-400">Scene {scene.order + 1}:</Label>
-                            <InlineEdit
-                              value={scene.title}
-                              onChange={(value) => {
-                                scenes.edit(scene.id, { title: value })
-                              }}
-                              fontSize="md"
-                            weight="bolder"
-                            />
+                      <CardContent className="pt-4 space-y-3">
+                        {chapter.scenes.map((scene: Scene) => (
+                          <Card key={scene.id} className="bg-black/5 border-gray-800">
+                            <CardHeader className="p-3">
+                              <div className="flex justify-between items-center">
+                                <div className="flex flex-row items-baseline gap-1">
+                                  <Label className="text-xs text-gray-400">Scene {scene.order + 1}:</Label>
+                                  <InlineEdit
+                                    value={scene.title}
+                                    onChange={(value) => {
+                                      scenes.edit(scene.id, { title: value })
+                                    }}
+                                    fontSize="md"
+                                    weight="bolder"
+                                  />
+                                </div>
+
+                                <div>
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <Button
+                                        size="sm"
+                                        className="bg-black/30 text-white/80 hover:bg-black/40"
+                                        variant="outline"
+                                      >
+                                        <Trash2 size={16} />
+                                      </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="bg-gray-800 border-gray-700 text-white">
+                                      <DialogHeader>
+                                        <DialogTitle>Delete Scene</DialogTitle>
+                                        <DialogDescription className="text-gray-400">
+                                          Are you sure you want to delete Scene {scene.order + 1}: {scene.title}? This
+                                          action cannot be undone.
+                                        </DialogDescription>
+                                      </DialogHeader>
+                                      <DialogFooter>
+                                        <Button variant="outline" onClick={() => {}}>
+                                          Cancel
+                                        </Button>
+                                        <Button
+                                          variant="destructive"
+                                          onClick={() => scenes.delete(scene.id)}
+                                          className="bg-red-600 hover:bg-red-700"
+                                        >
+                                          Delete
+                                        </Button>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
+                                </div>
                               </div>
-                            
+                            </CardHeader>
+                            <CardContent>
+                              <InlineEdit
+                                value={scene.summary}
+                                onChange={(value) => {
+                                  scenes.edit(scene.id, { summary: value })
+                                }}
+                                rows={6}
+                                fontSize="sm"
+                                weight="normal"
+                                mode="textarea"
+                              />
 
-                            <div>
-                            <Delete func={() => {
-                              console.log(scene.id)
-                              scenes.delete(scene.id)
-                            }}>
-                              <Trash2 size={16} />
-                            </Delete>
-                            </div>
-                            </div>
-                            
-
-                            
-                          </CardHeader>
-                          <CardContent>
-                          <InlineEdit
-                              value={scene.summary}
-                              onChange={(value) => {
-                                scenes.edit(scene.id, { summary: value })
-                              }}
-                              rows={6}
-                              fontSize="sm"
-                              weight="normal"
-                              mode="textarea"
-                            />
-
-                            <div className="pt-2 space-y-2">
-                              {scene.characters.length > 0 && (
-                                <div>
-                                  <h4 className="text-xs font-semibold text-gray-400 mb-1">Characters:</h4>
-                                  <div className="flex flex-wrap gap-1">
-                                    {scene.characters.map((character) => (
-                                      <span
-                                        key={character.id}
-                                        className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-black/20 text-white/90"
-                                      >
-                                        {character.name}
-                                      </span>
-                                    ))}
+                              <div className="pt-2 space-y-2">
+                                {scene.characters.length > 0 && (
+                                  <div>
+                                    <h4 className="text-xs font-semibold text-gray-400 mb-1">Characters:</h4>
+                                    <div className="flex flex-wrap gap-1">
+                                      {scene.characters.map((character) => (
+                                        <span
+                                          key={character.id}
+                                          className="group relative inline-flex items-center px-2 pr-6 py-1 rounded-md text-xs bg-black/20 text-white/90"
+                                        >
+                                          {character.name}
+                                          <span
+                                            className="absolute right-1.5 top-1/2 -translate-y-1/2 hidden group-hover:inline-flex items-center justify-center cursor-pointer"
+                                            onClick={() => scenes.characters.remove(scene.id, character.id)}
+                                          >
+                                            <X className="h-3 w-3" />
+                                          </span>
+                                        </span>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
+                                )}
 
-                              {scene.locations.length > 0 && (
-                                <div>
-                                  <h4 className="text-xs font-semibold text-gray-400 mb-1">Locations:</h4>
-                                  <div className="flex flex-wrap gap-1">
-                                    {scene.locations.map((location) => (
-                                      <span
-                                        key={location.id}
-                                        className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-black/20 text-white/90"
-                                      >
-                                        {location.name}
-                                      </span>
-                                    ))}
+                                {scene.locations.length > 0 && (
+                                  <div>
+                                    <h4 className="text-xs font-semibold text-gray-400 mb-1">Locations:</h4>
+                                    <div className="flex flex-wrap gap-1">
+                                      {scene.locations.map((location) => (
+                                        <span
+                                          key={location.id}
+                                          className="group relative inline-flex items-center px-2 pr-6 py-1 rounded-md text-xs bg-black/20 text-white/90"
+                                        >
+                                          {location.name}
+                                          <span
+                                            className="absolute right-1.5 top-1/2 -translate-y-1/2 hidden group-hover:inline-flex items-center justify-center cursor-pointer"
+                                            onClick={() => scenes.locations.remove(scene.id, location.id)}
+                                          >
+                                            <X className="h-3 w-3" />
+                                          </span>
+                                        </span>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
-                          </CardContent>
+                                )}
+                              </div>
+                            </CardContent>
 
-                          <CardFooter className="flex gap-2 p-3 pt-0">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button size="sm" className="py-1 h-fit" variant="outline">
-                                  <PlusCircleIcon className="mr-1 h-4 w-4" />
-                                  Characters
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="font-figtree bg-gray-800 border-gray-700">
-                                <DropdownMenuLabel>Add Character to {scene.title}</DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-gray-700" />
-                                {characters
-                                  .filter((character) => {
-                                    return !scene.characters.some((c) => c.id === character.id)
-                                  })
-                                  .map((character) => (
-                                    <DropdownMenuItem
-                                      key={character.id}
-                                      onClick={() => {
-                                        scenes.characters.add(scene.id, character)
-                                      }}
-                                      className="hover:bg-gray-700"
-                                    >
-                                      <PlusCircleIcon className="mr-2 h-4 w-4" />
-                                      {character.name}
-                                    </DropdownMenuItem>
-                                  ))
-                                  .concat(
-                                    characters.filter((character) => {
+                            <CardFooter className="flex gap-2 p-3 pt-0">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button size="sm" className="py-1 h-fit" variant="outline">
+                                    <PlusCircleIcon className="mr-1 h-4 w-4" />
+                                    Characters
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="font-figtree bg-gray-800 border-gray-700">
+                                  <DropdownMenuLabel>Add Character to {scene.title}</DropdownMenuLabel>
+                                  <DropdownMenuSeparator className="bg-gray-700" />
+                                  {characters
+                                    .filter((character) => {
                                       return !scene.characters.some((c) => c.id === character.id)
-                                    }
-                                  ).length === 0
-                                      ? [
-                                          <DropdownMenuItem disabled className="text-gray-500" key="no-more-characters">
-                                            No more characters available
-                                          </DropdownMenuItem>
-                                        ]
-                                      : []
-                                  )
-                                  }
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button size="sm" className="py-1 h-fit" variant="outline">
-                                  <PlusCircleIcon className="mr-1 h-4 w-4" />
-                                  Locations
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="font-figtree bg-gray-800 border-gray-700">
-                                <DropdownMenuLabel>Where does {scene.title} take place?</DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-gray-700" />
-                                {locations.length > 0 &&
-                                  locations
-                                    .filter((location) => {
-                                      return !scene.locations.some((c) => c.id === location.id)
                                     })
-                                    .map((location) => (
+                                    .map((character) => (
                                       <DropdownMenuItem
-                                        key={location.id}
+                                        key={character.id}
                                         onClick={() => {
-                                          scenes.locations.add(scene.id, location)
+                                          scenes.characters.add(scene.id, character)
                                         }}
                                         className="hover:bg-gray-700"
                                       >
                                         <PlusCircleIcon className="mr-2 h-4 w-4" />
-                                        {location.name}
+                                        {character.name}
                                       </DropdownMenuItem>
                                     ))
                                     .concat(
-                                      locations.filter((location) => {
-                                        return !scene.locations.some((c) => c.id === location.id)
+                                      characters.filter((character) => {
+                                        return !scene.characters.some((c) => c.id === character.id)
                                       }).length === 0
                                         ? [
-                                            <DropdownMenuItem disabled className="text-gray-500" key="no-more-locations">
-                                              No more locations available
-                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                              disabled
+                                              className="text-gray-500"
+                                              key="no-more-characters"
+                                            >
+                                              No more characters available
+                                            </DropdownMenuItem>,
                                           ]
-                                        : []
+                                        : [],
                                     )}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </CardFooter>
-                        </Card>
-                      ))}
-                    </CardContent>
-                  </Card>
-                ))}
-              </CardContent>
-            </Card>
-          ))}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button size="sm" className="py-1 h-fit" variant="outline">
+                                    <PlusCircleIcon className="mr-1 h-4 w-4" />
+                                    Locations
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="font-figtree bg-gray-800 border-gray-700">
+                                  <DropdownMenuLabel>Where does {scene.title} take place?</DropdownMenuLabel>
+                                  <DropdownMenuSeparator className="bg-gray-700" />
+                                  {locations.length > 0 &&
+                                    locations
+                                      .filter((location) => {
+                                        return !scene.locations.some((c) => c.id === location.id)
+                                      })
+                                      .map((location) => (
+                                        <DropdownMenuItem
+                                          key={location.id}
+                                          onClick={() => {
+                                            scenes.locations.add(scene.id, location)
+                                          }}
+                                          className="hover:bg-gray-700"
+                                        >
+                                          <PlusCircleIcon className="mr-2 h-4 w-4" />
+                                          {location.name}
+                                        </DropdownMenuItem>
+                                      ))
+                                      .concat(
+                                        locations.filter((location) => {
+                                          return !scene.locations.some((c) => c.id === location.id)
+                                        }).length === 0
+                                          ? [
+                                              <DropdownMenuItem
+                                                disabled
+                                                className="text-gray-500"
+                                                key="no-more-locations"
+                                              >
+                                                No more locations available
+                                              </DropdownMenuItem>,
+                                            ]
+                                          : [],
+                                      )}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </CardFooter>
+                          </Card>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
         </div>
       </section>
     </section>

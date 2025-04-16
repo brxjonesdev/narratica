@@ -5,14 +5,14 @@ import { GraphQLFetcher } from "@/lib/fetcher";
 import { NarrativeLocation } from "@/features/locations/types/Location";
 
 interface OutlineRepository {
-    getPlot : (narrativeID: string) => Promise<Result<Outline[], string>>;
-    addNewAct: (narrativeID: string, act: Act) => Promise<Result<Act, string>>;
+    getPlot : (narrativeID: string) => Promise<Result<Outline, string>>;
+    addNewAct: (narrativeID: string, act: Act) => Promise<Result<{ ok: boolean }, string>>;
     modifyActByID: (actID: string, act: Partial<Act>) => Promise<Result<{ ok: boolean }, string>>;
     deleteActByID: (actID: string) => Promise<Result<{ ok: boolean }, string>>;
-    addNewChapter: (narrativeID: string, chapter: Chapter) => Promise<Result<Chapter, string>>;
+    addNewChapter: (narrativeID: string, chapter: Chapter) => Promise<Result<{ ok: boolean }, string>>;
     modifyChapterByID: (chapterID: string, chapter: Partial<Chapter>) => Promise<Result<{ ok: boolean }, string>>;
     deleteChapterByID: (chapterID: string) => Promise<Result<{ ok: boolean }, string>>;
-    addNewScene: (narrativeID: string, scene: Scene) => Promise<Result<Scene, string>>;
+    addNewScene: (narrativeID: string, scene: Scene) => Promise<Result<{ ok: boolean }, string>>;
     modifySceneByID: (sceneID: string, scene: Partial<Scene>) => Promise<Result<{ ok: boolean }, string>>;
     deleteSceneByID: (sceneID: string) => Promise<Result<{ ok: boolean }, string>>;
     addCharacterToScene: (sceneID: string, character: Partial<Character>) => Promise<Result<{ ok: boolean }, string>>;
@@ -24,9 +24,8 @@ interface OutlineRepository {
 export const outlineRepository: OutlineRepository = {
 
     async getPlot(narrativeID: string) {
-        const FETCH_PLOT = `
-       query Query($where: OutlineWhere) {
-  outlines(where: $where) {
+        const FETCH_PLOT = `query Outlines($where: OutlineWhere, $limit: Int) {
+  outlines(where: $where, limit: $limit) {
     id
     narrativeID
     acts {
@@ -44,10 +43,12 @@ export const outlineRepository: OutlineRepository = {
           summary
           content
           characters {
+            id
             name
             subname
           }
           locations {
+            id
             subname
             name
           }
@@ -57,13 +58,14 @@ export const outlineRepository: OutlineRepository = {
   }
 }`
         try{
-            const response = await GraphQLFetcher<{ data: { outlines: Outline[] } }>(FETCH_PLOT, { where: {
+            const response = await GraphQLFetcher<{ data: { outlines: Outline[]} }>(FETCH_PLOT, { where: {
                 narrativeID_EQ: narrativeID,
-            }});
+            },
+            limit: 1 });
             console.log(response, "response")
             const plot = response.data?.outlines;
             console.log(plot, "plot");
-            return ok(plot);
+            return ok(plot[0]);
         } catch (error) {
             return err("Failed to fetch plot" + error);
         }
@@ -80,27 +82,31 @@ export const outlineRepository: OutlineRepository = {
       `;
     
       const INIT_OUTLINE = `
-         mutation InitOutline($input: [OutlineCreateInput!]!) {
-          createOutlines(input: $input) {
-            outlines {
-              id
-              narrativeID
-              acts {
-                id
-              }
-            }
-          }
-        }
+         mutation Mutation($input: [OutlineCreateInput!]!) {
+  createOutlines(input: $input) {
+    info {
+      nodesCreated
+    }
+    outlines {
+      id
+      narrativeID
+      acts {
+        id
+        outlineID
+      }
+    }
+  }
+}
       `;
     
       const CREATE_ACT = `
-        mutation Mutation($where: OutlineWhere, $update: OutlineUpdateInput) {
-          updateOutlines(where: $where, update: $update) {
-            info {
-              nodesCreated
-            }
-          }
-        }
+       mutation Mutation($where: OutlineWhere, $update: OutlineUpdateInput) {
+  updateOutlines(where: $where, update: $update) {
+    info {
+      nodesCreated
+    }
+  }
+}
       `;
     
       try {
@@ -151,18 +157,23 @@ export const outlineRepository: OutlineRepository = {
         // Add the new act to the outline
         console.log('Adding new act:', act);
     
-        const { data: actData } = await GraphQLFetcher<{ data: { createAct: Act } }>(
+        const response = await GraphQLFetcher<{ data: { updateOutlines: { info: { nodesCreated: number } } } }>(
           CREATE_ACT,
           {
             where: {
-              narrativeID_EQ: narrativeID
+              narrativeID_EQ: narrativeID,
             },
             update: {
               acts: [
                 {
                   create: [
                     {
-                      node: act
+                      node: {
+                        id: act.id,
+                        title: act.title,
+                        order: act.order,
+                    
+                      }
                     }
                   ]
                 }
@@ -170,63 +181,380 @@ export const outlineRepository: OutlineRepository = {
             }
           }
         );
+
+        if (!response.data?.updateOutlines) {
+          return err("Failed to update outline with new act");
+        }
     
-        console.log('Act creation response:', actData);
-    
-        return ok(actData.createAct);
+        return ok({ok: true});
       } catch (error) {
         console.error('Error while adding new act:', error);
         return err("Failed to fetch plot: " + error);
       }
-    }
+    } 
     ,
       
     async modifyActByID(actID: string, act: Partial<Act>) {
-        const UPDATE_ACT = ``
+      console.log("Modifying act with ID:", actID, "with data:", act);
+        const UPDATE_ACT = `
+  mutation Mutation($where: ActWhere, $update: ActUpdateInput) {
+  updateActs(where: $where, update: $update) {
+    info {
+      nodesCreated
+    }
+  }
+}
+        `
+     try{
+      const response = await GraphQLFetcher<{ data: { updateActs: { info: { nodesCreated: number } } } }>(UPDATE_ACT, {
+        where: {
+          id_EQ: actID
+        },
+        update: {    
+          title_SET: act?.title,
+        }
+      });
+      if(!response.data?.updateActs) {
+        return err("Failed to update act");
+      }
+      return ok({ok: true});
+     }
+     catch (error) {
+        return err("Failed to update act: " + error);
+     }
     },
 
     async deleteActByID(actID: string) {
         const DELETE_ACT = ``
     },
 
-    async addNewChapter(narrativeID: string, chapter: Chapter) {
-        const CREATE_CHAPTER = ``
-    },
+    async addNewChapter(actID: string, chapter: Chapter) {
+        const CREATE_CHAPTER = `
+        mutation addChapter($where: ActWhere, $update: ActUpdateInput) {
+  updateActs(where: $where, update: $update) {
+    info {
+      nodesCreated
+    }
+  }
+}
+        `
+
+    const response = await GraphQLFetcher<{ data: { updateActs: { info: { nodesCreated: number } } } }>(CREATE_CHAPTER, {
+        where: {
+          id_EQ: actID
+        },
+        update: {
+          chapters: [
+            {
+              create: [
+                {
+                  node: {
+                    id: chapter.id,
+                    title: chapter.title,
+                    order: chapter.order,
+                  }
+                }
+              ]
+            }
+          ]
+        }
+    });
+
+    if (!response.data?.updateActs) {
+        return err("Failed to create chapter");
+    }
+    return ok({ok: true})
+  },
 
     async modifyChapterByID(chapterID: string, chapter: Partial<Chapter>) {
-        const UPDATE_CHAPTER = ``
+        const UPDATE_CHAPTER = `
+        mutation UpdateChapters($where: ChapterWhere, $update: ChapterUpdateInput) {
+  updateChapters(where: $where, update: $update) {
+    info {
+      nodesCreated
+    }
+  }
+}`
+
+try{
+const response = await GraphQLFetcher<{
+  data: { updateChapters: { info: { nodesCreated: number } } }
+}>(UPDATE_CHAPTER, {
+    where: {
+      id_EQ: chapterID
+    },
+    update: {
+    title_SET: chapter?.title,
+  }
+  });
+  if(!response.data?.updateChapters) {
+    return err("Failed to update chapter");
+  }
+
+  return ok({ok: true});
+}
+catch (error) {
+  return err("Failed to update chapter: " + error);
+}
     },
 
     async deleteChapterByID(chapterID: string) {
         const DELETE_CHAPTER = ``
     },
 
-    async addNewScene(narrativeID: string, scene: Scene) {
-        const CREATE_SCENE = ``
+    async addNewScene(chapterID: string, scene: Scene) {
+        const CREATE_SCENE = `
+        mutation UpdateChapters($where: ChapterWhere, $update: ChapterUpdateInput) {
+  updateChapters(where: $where, update: $update) {
+    info {
+      nodesCreated
+    }
+  }
+}`
+console.log("Adding new scene to chapter with ID:", chapterID, "with data:", scene);
+
+const response = await GraphQLFetcher<{ data: { updateChapters: { info: { nodesCreated: number } } } }>(CREATE_SCENE, {
+  where: {
+    id_EQ: chapterID
+  },
+  update: {
+    scenes: [
+      {
+        create: [
+          {
+            node: {
+              id: scene.id,
+              title: scene.title,
+              order: scene.order,
+              summary: scene?.summary || "",
+              content: scene?.content || "",
+            }
+          }
+        ]
+      }
+    ]
+  }
+});
+
+console.log(response, "response from addNewScene");
+
+if(!response.data?.updateChapters) {
+    return err("Failed to create scene");
+}
+return ok({ok: true})
     },
 
     async modifySceneByID(sceneID: string, scene: Partial<Scene>) {
-        const UPDATE_SCENE = ``
+      const UPDATE_SCENE = `mutation Mutation($where: SceneWhere, $update: SceneUpdateInput) {
+        updateScenes(where: $where, update: $update) {
+          info {
+            nodesCreated
+          }
+        }
+      }`;
+    
+      // Build update object dynamically
+      const update: Record<string, unknown> = {};
+      if (scene.title !== undefined) update.title_SET = scene.title;
+      if (scene.summary !== undefined) update.summary_SET = scene.summary;
+      if (scene.content !== undefined) update.content_SET = scene.content;
+    
+      if (Object.keys(update).length === 0) {
+        return err("No valid fields to update");
+      }
+    
+      try {
+        const response = await GraphQLFetcher<{ data: { updateScenes: { info: { nodesCreated: number } } } }>(
+          UPDATE_SCENE,
+          {
+            where: { id_EQ: sceneID },
+            update,
+          }
+        );
+    
+        if (!response.data?.updateScenes) {
+          return err("Failed to update scene");
+        }
+    
+        return ok({ ok: true });
+      } catch (error) {
+        return err("Failed to update scene: " + error);
+      }
     },
+    
 
     async deleteSceneByID(sceneID: string) {
         const DELETE_SCENE = ``
     },
 
     async addCharacterToScene(sceneID: string, character: Partial<Character>) {
-        const ADD_CHARACTER_TO_SCENE = ``
+        const ADD_CHARACTER_TO_SCENE = `
+        mutation Mutation($where: SceneWhere, $update: SceneUpdateInput) {
+  updateScenes(where: $where, update: $update) {
+    info {
+      relationshipsCreated
+    }
+  }
+}`
+
+try {
+  const response = await GraphQLFetcher<{ data: { updateScenes: { info: { relationshipsCreated: number } } } }>(ADD_CHARACTER_TO_SCENE, {
+    where: {
+      id_EQ: sceneID
+    },
+    update: {
+      characters: [
+        {
+          connect: [
+            {
+              where: {
+                node: {
+                  id_EQ: character.id
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  });
+
+  if (!response.data?.updateScenes) {
+    return err("Failed to add character to scene");
+  }
+  return ok({ ok: true });
+}
+catch (error) {
+  return err("Failed to add character to scene: " + error);
+}
     },
 
     async removeCharacterFromScene(sceneID: string, characterID: string) {
-        const REMOVE_CHARACTER_FROM_SCENE = ``
+        const REMOVE_CHARACTER_FROM_SCENE = `mutation UpdateScenes($where: SceneWhere, $update: SceneUpdateInput) {
+  updateScenes(where: $where, update: $update) {
+    info {
+      relationshipsDeleted
+    }
+  }
+}`
+
+      try {
+        const response = await GraphQLFetcher<{ data: { updateScenes: { info: { relationshipsDeleted: number } } } }>(REMOVE_CHARACTER_FROM_SCENE, {
+            where: {
+                id_EQ: sceneID
+            },
+            update: {
+                characters: [
+                    {
+                        disconnect: [
+                            {
+                                where: {
+                                    node: {
+                                        id_EQ: characterID
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        if (!response.data?.updateScenes) {
+            return err("Failed to remove character from scene");
+        }
+        return ok({ ok: true });
+      }
+      catch (error) {
+        return err("Failed to remove character from scene: " + error);
+      }
+    
     },
 
-    async addLocationToScene(sceneID: string, location: Location) {
-        const ADD_LOCATION_TO_SCENE = ``
+    async addLocationToScene(sceneID: string, location: Partial<NarrativeLocation>) {
+        const ADD_LOCATION_TO_SCENE = `mutation UpdateScenes($where: SceneWhere, $update: SceneUpdateInput) {
+  updateScenes(where: $where, update: $update) {
+    info {
+      relationshipsCreated
+    }
+  }
+}`;
+
+        try {
+            const response = await GraphQLFetcher<{ data: { updateScenes: { info: { relationshipsCreated: number } } } }>(
+                ADD_LOCATION_TO_SCENE,
+                {
+                    where: {
+                        id_EQ: sceneID,
+                    },
+                    update: {
+                        locations: [
+                            {
+                                connect: [
+                                    {
+                                        where: {
+                                            node: {
+                                                id_EQ: location.id,
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                }
+            );
+            console.log(response, "response from addLocationToScene");
+            if (!response.data?.updateScenes) {
+                return err("Failed to add location to scene");
+            }
+            return ok({ ok: true });
+        } catch (error) {
+            return err("Failed to add location to scene: " + error);
+        }
     },
 
     async removeLocationFromScene(sceneID: string, locationID: string) {
-        const REMOVE_LOCATION_FROM_SCENE = ``
+        const REMOVE_LOCATION_FROM_SCENE = `mutation UpdateScenes($where: SceneWhere, $update: SceneUpdateInput) {
+  updateScenes(where: $where, update: $update) {
+    info {
+      relationshipsDeleted
+    }
+  }
+}`;
+
+        try {
+            const response = await GraphQLFetcher<{ data: { updateScenes: { info: { relationshipsDeleted: number } } } }>(
+                REMOVE_LOCATION_FROM_SCENE,
+                {
+                    where: {
+                        id_EQ: sceneID,
+                    },
+                    update: {
+                        locations: [
+                            {
+                                disconnect: [
+                                    {
+                                        where: {
+                                            node: {
+                                                id_EQ: locationID,
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                }
+            );
+
+            if (!response.data?.updateScenes) {
+                return err("Failed to remove location from scene");
+            }
+            return ok({ ok: true });
+        } catch (error: unknown) {
+            return err("Failed to remove location from scene: " + error);
+        }
     },
 
 

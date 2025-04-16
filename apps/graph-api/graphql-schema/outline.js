@@ -1,26 +1,26 @@
 const outline = `
-type Outline @node{
-  id: ID! 
+type Outline @node {
+  id: ID!
   narrativeID: String!
   acts: [Act!]! @relationship(type: "HAS_ACT", direction: OUT)
 }
 
-type Act @node{
-  id: ID! 
+type Act @node {
+  id: ID!
   title: String!
   order: Int!
   chapters: [Chapter!]! @relationship(type: "HAS_CHAPTER", direction: OUT)
 }
 
-type Chapter @node{
-  id: ID! 
+type Chapter @node {
+  id: ID!
   title: String!
   order: Int!
   scenes: [Scene!]! @relationship(type: "HAS_SCENE", direction: OUT)
 }
 
-type Scene @node{
-  id: ID! 
+type Scene @node {
+  id: ID!
   title: String!
   order: Int!
   summary: String!

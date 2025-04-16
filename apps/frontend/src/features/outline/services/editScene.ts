@@ -6,7 +6,7 @@ export default async function editSceneInChapter(id: string, sceneID: string, ed
    if (!id) return err('narrativeID is required');
     if (!sceneID) return err('sceneID is required');
     if (!editedScene) return err('editedScene is required');
-    if (!editedScene.title) return err('scene title is required');
+    
 
     const result = await outlineRepository.modifySceneByID(sceneID, editedScene);
     if (!result.ok) return err(result.error);

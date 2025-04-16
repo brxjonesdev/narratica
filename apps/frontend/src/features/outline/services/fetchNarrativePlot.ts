@@ -7,5 +7,5 @@ export async function fetchNarrativePlot(narrativeID: string): Promise<Result<Ou
     if (!result.ok) {
         return { ok: false, error: result.error };
     }
-    return { ok: true, data: result.data[0] };
+    return { ok: true, data: result.data };
 }

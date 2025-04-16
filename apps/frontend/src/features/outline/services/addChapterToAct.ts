@@ -8,7 +8,7 @@ export default async function addChapterToAct(id: string, actID: string, chapter
     if (!chapter) return err('chapter is required');
     if(!chapter.title) return err('chapter title is required');
 
-    const result = await outlineRepository.addNewChapter(id, chapter);
+    const result = await outlineRepository.addNewChapter(actID, chapter);
     if (!result.ok) return err(result.error);
     return ok(result.data);
 }

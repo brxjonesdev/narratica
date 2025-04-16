@@ -8,6 +8,8 @@ import { addLocationToNarrative } from '../services/addLocationToNarrative';
 import { deleteNarrativeLocation } from '../services/deleteLocation';
 import { modifyNarrativeLocation } from '../services/modifyNarrativeLocation';
 
+
+
 export const useLocations = () => {
   const { setLocationsGlobal } = useNarrativeStore((store) => store);
   const [locations, setLocations] = useState<NarrativeLocation[] | null>([]);
@@ -43,6 +45,7 @@ export const useLocations = () => {
   const addLocation = async () => {
     const newLocation = createNewLocation(id as string);
     setLocations((prev) => (prev ? [...prev, newLocation] : [newLocation]));
+    setLocationsGlobal(locations ? [...locations, newLocation] : [newLocation]);
     setActiveID(newLocation.id);
 
     const result = await addLocationToNarrative(newLocation);
@@ -51,6 +54,8 @@ export const useLocations = () => {
       setLocations((prev) =>
         prev ? prev.filter((location) => location.id !== newLocation.id) : []
       );
+
+      
       setActiveID(null);
       toast.error(result.error);
       return;

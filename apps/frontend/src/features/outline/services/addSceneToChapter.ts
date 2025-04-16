@@ -8,7 +8,7 @@ export default async function  addSceneToChapter(id: string, chapterID: string, 
     if (!chapterID) return err('chapterID is required');
     if (!newScene) return err('newScene is required');
 
-    const result = await outlineRepository.addNewScene(id, newScene);
+    const result = await outlineRepository.addNewScene(chapterID, newScene);
     if (!result.ok) return err(result.error);
     return ok(result.data);
 }

@@ -35,7 +35,7 @@ export type ManuscriptActions = {
   error: string | null
   acts: {
     add: (index: number) => Promise<void>
-    edit: (actID: string, editedAct: Partial<Act>) => Promise<void>
+    edit: (actID: string, editedAct: Partial<Act>, original: Act) => Promise<void>
     delete: (actID: string) => Promise<void>
   }
   chapters: {
@@ -49,11 +49,11 @@ export type ManuscriptActions = {
     delete: (sceneID: string) => Promise<void>
     characters: {
       add: (sceneID: string, character: Partial<Character>) => Promise<void>
-      remove: (characterID: string) => Promise<void>
+      remove: ( sceneID:string, characterID: string) => Promise<void>
     }
     locations: {
       add: (sceneID: string, location: Partial<NarrativeLocation>) => Promise<void>
-      remove: (locationID: string) => Promise<void>
+      remove: (sceneID:string,  locationID: string) => Promise<void>
     }
   }
 }
@@ -74,7 +74,6 @@ export function useManuscript() {
 
         return;
       }
-  
       setStory(response.data as Outline)
       setLoading(false)
     }
@@ -521,7 +520,7 @@ export function useManuscript() {
     toast.success("Character added successfully")
     return
   }
-  const removeCharacter= async (characterID: string) => {
+  const removeCharacter= async (sceneID: string, characterID: string) => {
     const deletedCharacter = story?.acts
       .flatMap((act) => act.chapters)
       .flatMap((chapter) => chapter.scenes)
@@ -551,7 +550,7 @@ export function useManuscript() {
         acts: updatedActs,
       }
     })
-    const result = await removeCharacterFromScene(id as string, characterID)
+    const result = await removeCharacterFromScene(sceneID, characterID)
     if (!result.ok) {
       setError(result.error as string)
       setStory((prev) => {
@@ -645,7 +644,7 @@ export function useManuscript() {
     toast.success("Location added successfully")
     return
   }
-  const removeLocation = async (locationID: string) => {
+  const removeLocation = async (sceneID: string, locationID: string) => {
     const deletedLocation = story?.acts
       .flatMap((act) => act.chapters)
       .flatMap((chapter) => chapter.scenes)
@@ -674,7 +673,7 @@ export function useManuscript() {
         acts: updatedActs,
       }
     })
-    const result = await removeLocationFromScene(id as string, locationID)
+    const result = await removeLocationFromScene(sceneID, locationID)
     if (!result.ok) {
       setError(result.error as string)
       setStory((prev) => {
