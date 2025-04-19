@@ -12,13 +12,15 @@ import { NarrativeStoreProvider } from '@/shared/stores/narrative-store-provider
 import InfoCard from '@/app/narrative/_components/info-card/info-card';
 import Characters from '@/features/characters/components/characters';
 import { Button } from '@/shared/ui/button';
-import { BookOpen, FileText, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
 import Notebook from '@/app/narrative/_components/notebook/notebook';
 import { Locations } from '@/features/locations/components/locations';
 import { Separator } from '@/shared/ui/separator';
 import Link from 'next/link';
 
 export default function NarrativeLayout({ children }: { children: React.ReactNode }) {
+
+
   return (
     <main className="font-figtree">
       <NarrativeStoreProvider>
@@ -41,7 +43,7 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
 
 
           <SidebarInset>
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b justify-between pr-4 sticky top-0 bg-background z-10">
+      <header className="h-16 shrink-0 items-center gap-2 border-b justify-between pr-4 sticky top-0 bg-background z-10 hidden lg:flex">
         <div className="flex items-center gap-2 px-3">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
@@ -64,19 +66,7 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
               <div className="h-16 flex items-center justify-center bg-slate-400/5 rounded-xl">
                 <p className="text-2xl text-center font-semibold tracking-wider">Narratica</p>
               </div>
-              <div className="p-3 rounded-lg shadow-sm border flex h-16">
-                <div className="flex gap-2 justify-between items-center w-full">
-                  <Notebook />
-                  <Button size="sm" variant="outline">
-                    <BookOpen className="h-4 w-4" />
-                    Preview
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    <FileText className="h-4 w-4 " />
-                    Export
-                  </Button>
-                </div>
-              </div>
+              <Notebook />
             </SidebarHeader>
 
             <Locations />

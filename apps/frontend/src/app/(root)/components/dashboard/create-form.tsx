@@ -12,6 +12,7 @@ import { createNewNarrative, Narrative } from '@/features/narratives/types/Narra
 import { useAuth } from '@/shared/hooks/use-user';
 import React from 'react';
 import { addNewNarrative } from '@/features/narratives/services/createNewNarrative';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, 'name is required').max(100, 'name must be 100 characters or less'),
@@ -30,6 +31,7 @@ export default function NarrativeForm({ onAddNarrative, closeForm }: NarrativeFo
   const { user } = useAuth();
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,9 +50,7 @@ export default function NarrativeForm({ onAddNarrative, closeForm }: NarrativeFo
       setLoading(false);
       return;
     }
-    console.log('values', values);
     const newNarrative = createNewNarrative(user.id, values);
-    console.log('newNarrative', newNarrative);
 
     const result = await addNewNarrative(user.id, newNarrative);
     if (!result.ok) {
@@ -58,10 +58,7 @@ export default function NarrativeForm({ onAddNarrative, closeForm }: NarrativeFo
       setLoading(false);
       return;
     }
-    toast('Narrative created successfully', { icon: '🎉' });
-    onAddNarrative(newNarrative);
-    closeForm();
-    setLoading(false);
+    router.push(`/narrative/${newNarrative.narrativeID}`);
   }
 
   return (

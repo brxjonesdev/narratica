@@ -8,6 +8,7 @@ import {
   type Act,
   Scene,
   Chapter,
+  createNewOutline,
 } from "@/features//outline/types/Outline"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -59,10 +60,15 @@ export type ManuscriptActions = {
 }
 
 export function useManuscript() {
-  const [story, setStory] = useState<Outline | null>(null); // Initialize as null
+  const { id } = useParams()
+  const [story, setStory] = useState<Outline | null>({
+    id: null,
+    narrativeID: id as string,
+    acts: [],
+  }); // Initialize as null
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const { id } = useParams()
+  
 
   useEffect(() => {
     const fetchStory = async (narrativeID: string) => {
@@ -82,20 +88,39 @@ export function useManuscript() {
 
   // Act-related functions
   const addAct = async (index: number) => {
-    console.log("Adding act", story);
-  
-    if (!story) return; // Prevent adding if story is null
-  
-    const newAct = createNewAct(`New Act`, index);
-  
-    // adding new act to the local state
+    const newAct = createNewAct("New Act", index);
+    if (!story) {
+      const newOutline = createNewOutline(id as string);
+      setStory(newOutline);
+      setStory((prev) => {
+        if (!prev) return prev; // safety
+        return {
+          ...prev,
+          acts: [...(prev.acts || []), newAct],
+        };
+      });
+      const result2 = await addActToOutline(id as string, newAct);
+      if (!result2.ok) {
+        setError(result2.error as string);
+        setStory((prev) => {
+          if (!prev) return prev; // safety
+          return {
+            ...prev,
+            acts: prev.acts.filter((act) => act.id !== newAct.id),
+          };
+        });
+      return;
+
+    }
+    toast.success("Outline created successfully");
+  }else{
     setStory((prev) => {
-      if (!prev) return null;
+      if (!prev) return null
       return {
         ...prev,
-        acts: prev.acts ? [...prev.acts, newAct] : [newAct]
-      };
-    });
+        acts: [...(prev.acts || []), newAct],
+      }
+    })
     const result = await addActToOutline(id as string, newAct)
     if (!result.ok) {
       setError(result.error as string)
@@ -105,14 +130,20 @@ export function useManuscript() {
           ...prev,
           acts: prev.acts.filter((act) => act.id !== newAct.id),
         }
-      }
-      )
+      })
       return
     }
     toast.success("Act added successfully")
-    return
+  };
+}
+  
 
-  }
+
+
+
+
+
+
   const editAct = async (actID: string, editedAct: Partial<Act>, original: Act) => {
     setStory((prev) => {
       if (!prev) return null
@@ -707,6 +738,7 @@ export function useManuscript() {
 
   }
 
+ 
   return {
     story,
     loading,

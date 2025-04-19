@@ -155,18 +155,57 @@ export const narrativeRepository: NarrativeRepository = {
 
   async deleteNarrative(narrativeID: string) {
     const DELETE_NARRATIVE = `
-      mutation DeleteNarrative($where: NarrativeWhere) {
-        deleteNarratives(where: $where) {
-          nodesDeleted
-        }
-      }
+    mutation Mutation($where: NarrativeWhere, $deleteOutlinesWhere2: OutlineWhere, $delete: OutlineDeleteInput, $deleteCharactersWhere2: CharacterWhere, $deleteLocationsWhere2: LocationWhere) {
+  deleteNarratives(where: $where) {
+    nodesDeleted
+  }
+  deleteOutlines(where: $deleteOutlinesWhere2, delete: $delete) {
+    nodesDeleted
+  }
+  deleteCharacters(where: $deleteCharactersWhere2) {
+    nodesDeleted
+  }
+  deleteLocations(where: $deleteLocationsWhere2) {
+    nodesDeleted
+  }
+}
     `;
 
     // needs to delete all the narrative's data
 
     try {
       await GraphQLFetcher(DELETE_NARRATIVE, {
-        where: { narrativeID_EQ: narrativeID },
+        where: {
+          narrativeID_EQ: narrativeID
+        },
+        deleteOutlinesWhere2: {
+          narrativeID_EQ: narrativeID
+        },
+        delete: {
+          acts: [
+            {
+              delete: {
+                chapters: [
+                  {
+                    delete: {
+                      scenes: [
+                        {
+                          delete: null
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        deleteCharactersWhere2: {
+          narrative_EQ: narrativeID
+        },
+        deleteLocationsWhere2: {
+          narrative_EQ: narrativeID
+        }
       });
 
       return ok(null); // success, nothing to return

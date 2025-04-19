@@ -43,7 +43,6 @@ export default function MarkdownNotebook() {
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState('');
 
-  // Load notes from localStorage on component mount
   useEffect(() => {
     const savedNotes = localStorage.getItem('markdown-notes');
     if (savedNotes) {
@@ -171,7 +170,7 @@ export default function MarkdownNotebook() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button  variant="outline" className='h-16'>
           <NotebookPen className="h-4 w-4 " />
           Notes
         </Button>

@@ -31,17 +31,41 @@ import {
 } from "@/shared/ui/dropdown-menu"
 import { Separator } from "@/shared/ui/separator"
 import { Label } from "@/shared/ui/label"
+import React from "react"
 
 export default function NarrativeOutline() {
   const { locations, characters } = useNarrativeStore((store) => store)
-  const isMobile = useMediaQuery({ maxWidth: 1080 })
+  const isMobile = useMediaQuery({ minWidth: 0, maxWidth: 767 })
   const { story, acts, chapters, scenes, loading, error }: ManuscriptActions = useManuscript()
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // Adjust duration as needed
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background z-50">
+        <Loading message="Loading your story..." />
+      </div>
+    );
+  }
 
   if (isMobile) {
     return (
       <MobileView>
-        <div>Hello</div>
-      </MobileView>
+  <section className="flex flex-col items-center justify-center h-screen px-4 text-center">
+    <h2 className="text-xl font-semibold mb-4">Best Viewed on Desktop or Tablet</h2>
+    <p className="text-base text-gray-600">
+      This app is designed for larger screens and doesn’t currently support mobile view.
+      For the best experience, please use a desktop or tablet.
+    </p>
+  </section>
+</MobileView>
+
     )
   }
 
@@ -54,10 +78,14 @@ export default function NarrativeOutline() {
     return <OutlineError message={error} />
   }
 
-  if (!story || story === undefined || (Array.isArray(story) && story.length === 0)) {
+  console.log("Story:", story)
+
+  if (story === undefined) {
     // If there are no acts, show the empty outline component
     return <EmptyOutline addInitialAct={acts.add} />
   }
+
+
 
   return (
     <section className="flex flex-1 flex-col gap-4 px-6 py-4 rounded-xl font-figtree">
@@ -76,19 +104,12 @@ export default function NarrativeOutline() {
               <PlusCircle size={18} className="" />
               Add Act
             </Button>
-            <Button size="sm" className="bg-black/30 text-white/80 hover:bg-black/40" variant="outline">
-              <View />
-              Preview
-            </Button>
-            <Button size="sm" className="bg-black/30 text-white/80 hover:bg-black/40" variant="outline">
-              Export
-            </Button>
+
           </div>
         </div>
 
         <div className="space-y-6">
-          {story &&
-            story.acts &&
+          {
             story.acts.map((act: Act) => (
               <Card key={act.id} className="bg-black/20 border-gray-700">
                 <CardHeader className="p-3.5 flex flex-row justify-between items-baseline">

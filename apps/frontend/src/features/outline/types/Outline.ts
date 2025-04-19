@@ -29,7 +29,7 @@ export type Scene = {
 };
 
 export type Outline = {
-  id: string;
+  id: string | null; // Outline ID, can be null for new outlines
   narrativeID: string;
   acts: Act[];
 };

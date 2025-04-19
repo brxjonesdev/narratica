@@ -92,7 +92,6 @@ export const outlineRepository: OutlineRepository = {
       narrativeID
       acts {
         id
-        outlineID
       }
     }
   }
@@ -156,6 +155,7 @@ export const outlineRepository: OutlineRepository = {
     
         // Add the new act to the outline
         console.log('Adding new act:', act);
+
     
         const response = await GraphQLFetcher<{ data: { updateOutlines: { info: { nodesCreated: number } } } }>(
           CREATE_ACT,
