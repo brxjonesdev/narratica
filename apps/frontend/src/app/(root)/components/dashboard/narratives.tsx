@@ -8,7 +8,7 @@ import AddNarrative from './add-narrative-btn';
 
 export default function Narratives() {
   const MAX_NARRATIVES = 6;
-  const { narratives, addNarrative, loading } = useUserNarratives();
+  const { narratives, loading } = useUserNarratives();
 
   return (
     <section className="mt-4 flex-1 flex flex-col gap-4">
@@ -21,7 +21,6 @@ export default function Narratives() {
         </div>
         <div>
           <AddNarrative
-            onAddNarrative={addNarrative}
             isMaxedOut={narratives.length > MAX_NARRATIVES}
           />
         </div>

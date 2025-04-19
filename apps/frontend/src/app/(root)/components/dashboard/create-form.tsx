@@ -6,9 +6,8 @@ import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
-import toast from 'react-hot-toast';
 import { Card, CardContent, CardFooter } from '@/shared/ui/card';
-import { createNewNarrative, Narrative } from '@/features/narratives/types/Narrative';
+import { createNewNarrative } from '@/features/narratives/types/Narrative';
 import { useAuth } from '@/shared/hooks/use-user';
 import React from 'react';
 import { addNewNarrative } from '@/features/narratives/services/createNewNarrative';
@@ -22,12 +21,8 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface NarrativeFormProps {
-  onAddNarrative: (narrative: Narrative) => void;
-  closeForm: () => void;
-}
 
-export default function NarrativeForm({ onAddNarrative, closeForm }: NarrativeFormProps) {
+export default function NarrativeForm() {
   const { user } = useAuth();
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);

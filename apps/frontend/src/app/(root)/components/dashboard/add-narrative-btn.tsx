@@ -11,13 +11,12 @@ import { Separator } from '@/shared/ui/separator';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import NarrativeForm from './create-form';
-import { Narrative } from '@/features/narratives/types/Narrative';
+
 
 interface AddNarrativeProps {
-  onAddNarrative: (narrative: Narrative) => void;
   isMaxedOut?: boolean;
 }
-export default function AddNarrativeBtn({ onAddNarrative, isMaxedOut }: AddNarrativeProps) {
+export default function AddNarrativeBtn({ isMaxedOut }: AddNarrativeProps) {
   const [formOpen, setFormOpen] = React.useState(false);
   return (
     <Dialog open={formOpen} onOpenChange={setFormOpen}>
@@ -41,10 +40,6 @@ export default function AddNarrativeBtn({ onAddNarrative, isMaxedOut }: AddNarra
         </DialogHeader>
         <Separator />
         <NarrativeForm
-          onAddNarrative={onAddNarrative}
-          closeForm={() => {
-            setFormOpen(false);
-          }}
         />
       </DialogContent>
     </Dialog>

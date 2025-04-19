@@ -14,6 +14,7 @@ import { MoreVerticalIcon } from 'lucide-react';
 import Metadata from './details';
 import useNarrativeDetails from '@/features/narratives/hooks/use-narrative-details';
 import Loading from '@/shared/loading';
+import EditMetadata from './edit';
 
 export default function InfoCard() {
   const { id } = useParams();
@@ -27,7 +28,7 @@ export default function InfoCard() {
   }
 
   return (
-    <section className="w-full bg-white/5 h-full flex flex-col rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative overflow-hidden">
+    <section className="font-figtree w-full bg-white/5 h-full flex flex-col rounded-md border border-muted/20 shadow-sm shadow-black/5 group relative overflow-hidden">
       <div className="flex flex-col h-full w-full p-4">
         <div className="space-y-2">
           <h2 className="font-semibold tracking-wide text-lg">{info.name}</h2>
@@ -44,20 +45,20 @@ export default function InfoCard() {
                 <span className="sr-only">Edit</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-xl">
+            <DialogContent className="max-w-xl font-figtree">
               <DialogHeader>
                 <DialogTitle>Edit Project</DialogTitle>
                 <DialogDescription>Make changes to your project or delete it.</DialogDescription>
               </DialogHeader>
-              <Metadata
-                info={{
-                  name: info.name || 'Untitled',
-                  tagline: info.tagline || 'No tagline available',
-                  blurb: info.blurb || 'No blurb available',
-                }}
-                id={id}
-                closeModal={() => setIsModalOpen(false)}
-              />
+              <EditMetadata info={{
+                name: info.name || '',
+                tagline: info.tagline || '',
+                blurb: info.blurb || ''
+              }} id={id} closeModal={
+                () => {
+                  setIsModalOpen(false);
+                }
+              } />
             </DialogContent>
           </Dialog>
         </div>
