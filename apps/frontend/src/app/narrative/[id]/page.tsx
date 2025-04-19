@@ -355,7 +355,7 @@ export default function NarrativeOutline() {
                                     Characters
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="font-figtree bg-gray-800 border-gray-700">
+                                <DropdownMenuContent className="font-figtree bg-gray-400 border-gray-700">
                                   <DropdownMenuLabel>Add Character to {scene.title}</DropdownMenuLabel>
                                   <DropdownMenuSeparator className="bg-gray-700" />
                                   {characters
@@ -381,7 +381,7 @@ export default function NarrativeOutline() {
                                         ? [
                                             <DropdownMenuItem
                                               disabled
-                                              className="text-gray-500"
+                                              className="text-cyan-100"
                                               key="no-more-characters"
                                             >
                                               No more characters available
@@ -399,10 +399,10 @@ export default function NarrativeOutline() {
                                     Locations
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="font-figtree bg-gray-800 border-gray-700">
+                                <DropdownMenuContent className="font-figtree bg-gray-400 border-gray-700">
                                   <DropdownMenuLabel>Where does {scene.title} take place?</DropdownMenuLabel>
                                   <DropdownMenuSeparator className="bg-gray-700" />
-                                  {locations.length > 0 &&
+                                  {
                                     locations
                                       .filter((location) => {
                                         return !scene.locations.some((c) => c.id === location.id)
@@ -426,7 +426,7 @@ export default function NarrativeOutline() {
                                           ? [
                                               <DropdownMenuItem
                                                 disabled
-                                                className="text-gray-500"
+                                                className="text-cyan-100"
                                                 key="no-more-locations"
                                               >
                                                 No more locations available

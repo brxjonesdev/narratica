@@ -59,37 +59,50 @@ export const useCharacters = () => {
 
   const modifyCharacter = async (character: Character) => {
     const index = characters.findIndex((c) => c.id === character.id);
-    // const originalCharacter = characters[index];
-    characters[index] = character;
-    setCharacters([...characters]);
-    setCharactersGlobal([...characters]);
-
+    if (index === -1) return;
+  
+    const updatedCharacters = [...characters];
+    const originalCharacter = updatedCharacters[index];
+    updatedCharacters[index] = character;
+  
+    // Optimistic update
+    setCharacters(updatedCharacters);
+    setCharactersGlobal(updatedCharacters);
+  
     try {
       const result = await modifyCharacterByID(character.id, character);
       if (result.ok === false) {
+        // Revert if failed
+        updatedCharacters[index] = originalCharacter;
+        setCharacters([...updatedCharacters]);
+        setCharactersGlobal([...updatedCharacters]);
         setError('Failed to modify character. Please try again later.');
-        setCharacters(characters);
-        setCharactersGlobal(characters);
         toast.error('Failed to modify character. Please try again later.');
-        return;
       }
     } catch (error) {
+      // Revert if error
+      updatedCharacters[index] = originalCharacter;
+      setCharacters([...updatedCharacters]);
+      setCharactersGlobal([...updatedCharacters]);
       setError('An unexpected error occurred. Please try again later.' + error);
-      setCharacters(characters);
-      setCharactersGlobal(characters);
       toast.error('An unexpected error occurred. Please try again later.');
     }
   };
+  
 
   const deleteCharacter = async (characterID: string) => {
     const remainingCharacters = characters.filter((character) => character.id !== characterID);
     setCharacters(remainingCharacters);
+    setCharactersGlobal(remainingCharacters);
+    setActiveID(null);
+
 
     try {
       const result = await deleteCharacterByID(characterID);
       if (result.ok === false) {
         setError('Failed to delete character. Please try again later.');
         setCharacters(characters);
+        setCharactersGlobal(characters);
         toast.error('Failed to delete character. Please try again later.');
         return;
       }

@@ -29,6 +29,7 @@ import removeCharacterFromScene from "../services/removeCharacterFromScene"
 import addLocationToScene from "../services/addLocationToScene"
 import removeLocationFromScene from "../services/removeLocationFromScene"
 import { fetchNarrativePlot } from "../services/fetchNarrativePlot"
+import { useNarrativeStore } from "@/shared/stores/narrative-store-provider"
 
 export type ManuscriptActions = {
   story: Outline
@@ -68,6 +69,7 @@ export function useManuscript() {
   }); // Initialize as null
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const {characters, locations } = useNarrativeStore((store) => store);
   
 
   useEffect(() => {
@@ -85,6 +87,42 @@ export function useManuscript() {
     }
     fetchStory(id as string)
   }, [id])
+
+
+
+  useEffect(() => {
+    if (!story) return;
+  
+    setStory((prev) => {
+      if (!prev) return null;
+  
+      const updatedActs = prev.acts.map((act) => ({
+        ...act,
+        chapters: act.chapters.map((chapter) => ({
+          ...chapter,
+          scenes: chapter.scenes.map((scene) => {
+            const updatedCharacters = scene.characters
+              .map((char) => characters.find((c) => c.id === char.id))
+              .filter((char): char is Character => Boolean(char)); // Ensure type safety
+            
+            const updatedLocations = scene.locations
+              .map((loc) => locations.find((l) => l.id === loc.id))
+              .filter((loc): loc is NarrativeLocation => Boolean(loc)); // Ensure type safety
+  
+            return {
+              ...scene,
+              characters: updatedCharacters,
+              locations: updatedLocations,
+            };
+          }),
+        })),
+      }));
+  
+      return { ...prev, acts: updatedActs };
+    });
+  }, [characters, locations]);
+  
+  
 
   // Act-related functions
   const addAct = async (index: number) => {

@@ -63,34 +63,62 @@ export const useLocations = () => {
   };
 
   const modifyLocation = async (location: NarrativeLocation) => {
-    console.log('Location:', location);
-    const updatedLocation = locations?.find((loc) => loc.id === location.id);
-    setLocations((prev) =>
-      prev ? prev.map((loc) => (loc.id === location.id ? location : loc)) : []
-    );
-
-    const result = await modifyNarrativeLocation(location);
-    if (!result.ok) {
-      setLocations((prev) =>
-        prev ? prev.map((loc) => (loc.id === location.id ? updatedLocation! : loc)) : []
-      );
-      toast.error(result.error);
-      return;
+    if (!locations) return;
+  
+    const index = locations.findIndex((loc) => loc.id === location.id);
+    if (index === -1) return;
+  
+    const originalLocation = locations[index];
+    const updatedLocations = [...locations];
+    updatedLocations[index] = location;
+  
+    // Optimistically update
+    setLocations(updatedLocations);
+    setLocationsGlobal(updatedLocations);
+  
+    try {
+      const result = await modifyNarrativeLocation(location);
+      if (!result.ok) {
+        // Revert on failure
+        updatedLocations[index] = originalLocation;
+        setLocations([...updatedLocations]);
+        setLocationsGlobal([...updatedLocations]);
+        toast.error(result.error || 'Failed to modify location. Please try again later.');
+      }
+    } catch (error) {
+      // Revert on error
+      updatedLocations[index] = originalLocation;
+      setLocations([...updatedLocations]);
+      setLocationsGlobal([...updatedLocations]);
+      toast.error('An unexpected error occurred. Please try again later.' + error);
     }
   };
+  
 
   const deleteLocation = async (locationID: string) => {
-    const deletedLocation = locations?.find((location) => location.id === locationID);
-    setLocations((prev) => (prev ? prev.filter((location) => location.id !== locationID) : []));
+    if (!locations) return;
+  
+    const originalLocations = [...locations];
+    const remainingLocations = originalLocations.filter((location) => location.id !== locationID);
+  
+    setLocations(remainingLocations.length ? remainingLocations : null);
+    setLocationsGlobal(remainingLocations);
     setActiveID(null);
-
-    const result = await deleteNarrativeLocation(locationID);
-    if (!result.ok) {
-      setLocations((prev) => (prev ? [...(prev as NarrativeLocation[]), deletedLocation!] : []));
-      toast.error(result.error);
-      return;
+  
+    try {
+      const result = await deleteNarrativeLocation(locationID);
+      if (!result.ok) {
+        setLocations(originalLocations);
+        setLocationsGlobal(originalLocations);
+        toast.error(result.error || 'Failed to delete location. Please try again later.');
+      }
+    } catch (error) {
+      setLocations(originalLocations);
+      setLocationsGlobal(originalLocations);
+      toast.error('An unexpected error occurred. Please try again later.' + error);
     }
   };
+  
 
   const handleLocationSelect = (locationID: string | null) => {
     setActiveID(locationID);
