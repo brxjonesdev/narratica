@@ -5,6 +5,7 @@ type Character @node {
 
   # Basic Details
   name: String!
+  subname: String
   alias: [String]
   description: String
   backstory: String
@@ -33,23 +34,28 @@ type Character @node {
   isActiveInStory: Boolean
   alignment: String # Good, Neutral, Evil, etc.
   archetype: String # Hero, Mentor, Shadow, etc.
-  
+
   # Meta Data
   createdAt: DateTime
   updatedAt: DateTime
 
- # Relationships
- 
-  allies: [Character!]! @relationship(type: "ALLIED_WITH", direction: OUT)
-  enemies: [Character!]! @relationship(type: "ENEMY_OF", direction: OUT)
-  mentors: [Character!]! @relationship(type: "MENTORED_BY", direction: OUT)
-  mentees: [Character!]! @relationship(type: "MENTORS", direction: OUT)
-  loveInterests: [Character!]! @relationship(type: "LOVE_INTEREST", direction: OUT)
-  family: [Character!]! @relationship(type: "FAMILY", direction: OUT)
-  friends: [Character!]! @relationship(type: "FRIENDS_WITH", direction: OUT)
-  rivals: [Character!]! @relationship(type: "RIVAL", direction: OUT)
-
+  # Relationships
+  allies: [CharacterWithDesc!]! @relationship(type: "ALLIED_WITH", direction: OUT)
+  enemies: [CharacterWithDesc!]! @relationship(type: "ENEMY_OF", direction: OUT)
+  mentors: [CharacterWithDesc!]! @relationship(type: "MENTORED_BY", direction: OUT)
+  mentees: [CharacterWithDesc!]! @relationship(type: "MENTORS", direction: OUT)
+  loveInterests: [CharacterWithDesc!]! @relationship(type: "LOVE_INTEREST", direction: OUT)
+  family: [CharacterWithDesc!]! @relationship(type: "FAMILY", direction: OUT)
+  friends: [CharacterWithDesc!]! @relationship(type: "FRIENDS_WITH", direction: OUT)
+  rivals: [CharacterWithDesc!]! @relationship(type: "RIVAL", direction: OUT)
 }
+
+# New type to hold the relationship description
+type CharacterWithDesc {
+  character: Character!
+  description: String!
+}
+
 `;
 
 export default characters;
