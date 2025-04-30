@@ -87,7 +87,10 @@ export function InlineEdit({
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
-              className={cn('min-h-[80px] h-full  resize-none mx-4 w-full', inputClassName)}
+              className={cn(
+                'min-h-[80px] h-full  resize-none mx-4 w-full',
+                inputClassName,
+              )}
               placeholder={placeholder}
               rows={rows}
             />
@@ -117,7 +120,7 @@ export function InlineEdit({
           <span
             className={cn(
               `block whitespace-pre-wrap text-${fontSize} font-${weight}`,
-              !value && 'text-muted-foreground'
+              !value && 'text-muted-foreground',
             )}
           >
             {value || placeholder}

@@ -30,5 +30,5 @@ type Scene @node {
 }
 
 
-`
+`;
 export default outline;

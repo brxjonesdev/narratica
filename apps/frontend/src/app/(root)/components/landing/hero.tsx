@@ -12,10 +12,11 @@ export default function NarraticaHero() {
               Every great story starts here.
             </h1>
             <p className="text-lg md:text-xl leading-relaxed tracking-tight text-muted-foreground max-w-xl text-center">
-              Build immersive worlds, develop rich characters, and structure compelling plots—all in
-              one powerful writing space.{' '}
-              <span className="text-wisteria font-semibold tracking-wide">Narratica</span> is your
-              creative companion, designed to bring your stories to life like never before.
+              Build immersive worlds, develop rich characters, and structure compelling
+              plots—all in one powerful writing space.{' '}
+              <span className="text-wisteria font-semibold tracking-wide">Narratica</span>{' '}
+              is your creative companion, designed to bring your stories to life like
+              never before.
             </p>
           </div>
           <div className="flex flex-row gap-3">

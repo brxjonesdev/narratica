@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import React from 'react';
 
 interface LoadingProps {
   message?: string;
@@ -43,7 +44,9 @@ export default function Loading({
         className={`relative w-16 h-16 ${size === 'sm' ? 'w-4 h-4' : size === 'lg' ? 'w-24 h-24' : ''}`}
       >
         {/* Background circle */}
-        <motion.div className={`absolute inset-0 rounded-full border-4 border-muted opacity-30`} />
+        <motion.div
+          className={`absolute inset-0 rounded-full border-4 border-muted opacity-30`}
+        />
 
         {/* Animated progress circle */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">

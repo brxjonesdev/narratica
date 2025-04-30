@@ -11,12 +11,10 @@ import {
 
 interface CharacterRepository {
   fetchCharacters: (narrativeID: string) => Promise<Result<Character[], string>>;
-  addNewCharacter: (
-    character: Character
-  ) => Promise<Result<Character, string>>;
+  addNewCharacter: (character: Character) => Promise<Result<Character, string>>;
   modifyCharacterByID: (
     characterID: string,
-    character: Character
+    character: Character,
   ) => Promise<Result<{ ok: boolean }, string>>;
   deleteCharacterByID: (characterID: string) => Promise<Result<{ ok: boolean }, string>>;
 }
@@ -24,42 +22,105 @@ interface CharacterRepository {
 export const characterRepository: CharacterRepository = {
   async fetchCharacters(narrativeID: string) {
     const FETCH_CHARACTERS = `
-        query Characters($where: CharacterWhere) {
-        characters(where: $where) {
-            id
-            narrative
-            name
-            subname
-            alias
-            description
-            backstory
-            appearance
-            personality
-            role
-            age
-            height
-            weight
-            eyeColor
-            hairColor
-            skinColor
-            bodyType
-            strengths
-            weaknesses
-            fears
-            motivations
-            goals
-            isAlive
-            isActiveInStory
-            alignment
-            createdAt
-            updatedAt
+     query Characters($where: CharacterWhere) {
+  characters(where: $where) {
+    id
+    narrative
+    name
+    subname
+    alias
+    description
+    backstory
+    appearance
+    personality
+    role
+    age
+    height
+    weight
+    eyeColor
+    hairColor
+    skinColor
+    bodyType
+    strengths
+    weaknesses
+    fears
+    motivations
+    goals
+    isAlive
+    alignment
+    createdAt
+    updatedAt
+    allies {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
+    mentors {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
+    enemies {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
+    mentees {
+      character {
+        name
+        subname
+        id
+      }
+      description
+    }
+    loveInterests {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
+    family {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
+    friends {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
+    rivals {
+      character {
+        id
+        name
+        subname
+      }
+      description
+    }
   }
 }`;
 
     try {
       const response: { data?: { characters?: Character[] } } = await GraphQLFetcher(
         FETCH_CHARACTERS,
-        { where: { narrative: narrativeID } }
+        { where: { narrative_EQ: narrativeID } },
       );
       const characters = response?.data?.characters ?? [];
       return ok(characters);
@@ -69,7 +130,7 @@ export const characterRepository: CharacterRepository = {
     }
   },
 
-  async addNewCharacter( character: Character) {
+  async addNewCharacter(character: Character) {
     const ADD_CHARACTER = `
     mutation Mutation($input: [CharacterCreateInput!]!) {
   createCharacters(input: $input) {
@@ -115,7 +176,10 @@ export const characterRepository: CharacterRepository = {
         },
       ],
     };
-    const response: CreateCharactersResponse = await GraphQLFetcher(ADD_CHARACTER, variables);
+    const response: CreateCharactersResponse = await GraphQLFetcher(
+      ADD_CHARACTER,
+      variables,
+    );
     console.log('Response:', response);
     if (wasCharacterNodeCreated(response)) {
       return ok(response.data.createCharacters.characters[0]);
@@ -133,6 +197,7 @@ export const characterRepository: CharacterRepository = {
   }
 }`;
     const updatePayload = buildUpdateInput(character);
+    console.log('Update Payload:', updatePayload);
     try {
       await GraphQLFetcher(MODIFY_CHARACTER, {
         where: { id: characterID },

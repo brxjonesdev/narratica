@@ -3,7 +3,7 @@ import { characterRepository } from '../repository/CharacterRepository';
 import { err, Result, ok } from '@/shared/types/result';
 export async function addNewCharacter(
   narrativeID: string,
-  newCharacter: Character
+  newCharacter: Character,
 ): Promise<Result<Character, string>> {
   console.log('Adding new character:', newCharacter);
 

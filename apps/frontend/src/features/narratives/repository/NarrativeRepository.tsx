@@ -4,11 +4,14 @@ import { Result, ok, err } from '@/shared/types/result';
 
 interface NarrativeRepository {
   fetchUserNarratives: (userId: string) => Promise<Result<Narrative[], string>>;
-  addNewNarrative: (id: string, narrative: Narrative) => Promise<Result<Narrative, string>>;
+  addNewNarrative: (
+    id: string,
+    narrative: Narrative,
+  ) => Promise<Result<Narrative, string>>;
   fetchNarrativeDetails: (narrativeID: string) => Promise<Result<Narrative, string>>;
   editNarrativeMetadata: (
     narrativeID: string,
-    updates: Partial<Narrative>
+    updates: Partial<Narrative>,
   ) => Promise<Result<Narrative, string>>;
   deleteNarrative: (narrativeID: string) => Promise<Result<null, string>>;
 }
@@ -32,7 +35,7 @@ export const narrativeRepository: NarrativeRepository = {
     try {
       const response: { data?: { narratives?: Narrative[] } } = await GraphQLFetcher(
         GET_USER_NARRATIVES,
-        { where: { userID_EQ: userId } }
+        { where: { userID_EQ: userId } },
       );
 
       const narratives = response?.data?.narratives ?? [];
@@ -74,7 +77,7 @@ export const narrativeRepository: NarrativeRepository = {
             },
           ],
         });
-        console.log('response', response);
+      console.log('response', response);
 
       const created = response?.data?.createNarratives?.narratives[0];
       if (!created) return err('Narrative was not created.');
@@ -176,10 +179,10 @@ export const narrativeRepository: NarrativeRepository = {
     try {
       await GraphQLFetcher(DELETE_NARRATIVE, {
         where: {
-          narrativeID_EQ: narrativeID
+          narrativeID_EQ: narrativeID,
         },
         deleteOutlinesWhere2: {
-          narrativeID_EQ: narrativeID
+          narrativeID_EQ: narrativeID,
         },
         delete: {
           acts: [
@@ -190,22 +193,22 @@ export const narrativeRepository: NarrativeRepository = {
                     delete: {
                       scenes: [
                         {
-                          delete: null
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          ]
+                          delete: null,
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
         },
         deleteCharactersWhere2: {
-          narrative_EQ: narrativeID
+          narrative_EQ: narrativeID,
         },
         deleteLocationsWhere2: {
-          narrative_EQ: narrativeID
-        }
+          narrative_EQ: narrativeID,
+        },
       });
 
       return ok(null); // success, nothing to return

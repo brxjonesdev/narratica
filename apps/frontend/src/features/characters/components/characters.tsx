@@ -11,7 +11,11 @@ import {
 } from '@/shared/ui/sidebar';
 import { Heart, HeartOff, Plus } from 'lucide-react';
 import React from 'react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
 import { Separator } from '@radix-ui/react-separator';
 import Loading from '@/shared/loading';
 import CharacterView from './view-character';
@@ -35,7 +39,9 @@ export default function Characters() {
   return (
     <SidebarContent className="p-2 flex flex-col  h-full ">
       <SidebarGroup className="flex-1 items-start justify-start ">
-        <SidebarGroupLabel className="text-base font-semibold">Characters</SidebarGroupLabel>
+        <SidebarGroupLabel className="text-base font-semibold">
+          Characters
+        </SidebarGroupLabel>
         <SidebarGroupAction
           className="hover:bg-primary/10 hover:text-primary"
           onClick={() => {
@@ -61,7 +67,9 @@ export default function Characters() {
                     <div className="flex items-center gap-3 w-full py-2 justify-center">
                       <div className="flex flex-col flex-1 min-w-0 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium truncate text-md">{character.name}</span>
+                          <span className="font-medium truncate text-md">
+                            {character.name}
+                          </span>
                           {character.isAlive ? (
                             <Heart className="h-3.5 w-3.5 text-red-500 fill-red-500" />
                           ) : (
@@ -106,7 +114,9 @@ export default function Characters() {
               ))
             ) : (
               <div className="my-2 flex flex-col items-center justify-center w-full flex-1  bg-white/5 rounded-xl ">
-                <span className="text-sm text-muted-foreground">No characters found.</span>
+                <span className="text-sm text-muted-foreground">
+                  No characters found.
+                </span>
                 <span className="text-sm text-muted-foreground">
                   Click the + button to add one.{' '}
                 </span>

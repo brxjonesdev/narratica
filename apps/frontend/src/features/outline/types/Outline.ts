@@ -34,7 +34,6 @@ export type Outline = {
   acts: Act[];
 };
 
-
 export function createNewOutline(narrativeID: string): Outline {
   return {
     id: `${nanoid(12)}-${nanoid(6)}`,
@@ -72,5 +71,5 @@ export function createNewScene(title: string, order: number, chapterID: string):
     content: '',
     characters: [],
     locations: [],
-  };  
+  };
 }

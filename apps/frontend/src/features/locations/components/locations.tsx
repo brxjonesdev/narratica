@@ -9,7 +9,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/shared/ui/sidebar';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/shared/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from '@/shared/ui/dropdown-menu';
 import { useLocations } from '@/features/locations/hooks/use-locations';
 import { Delete, Plus } from 'lucide-react';
 import LocationsError from './error';
@@ -28,12 +32,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/ui/alert-dialog";
-
+} from '@/shared/ui/alert-dialog';
 
 export function Locations() {
-  const { locations, handleLocationSelect, activeID, modifyLocation, addLocation, error, loading, deleteLocation } =
-    useLocations();
+  const {
+    locations,
+    handleLocationSelect,
+    activeID,
+    modifyLocation,
+    addLocation,
+    error,
+    loading,
+    deleteLocation,
+  } = useLocations();
 
   if (!locations) {
     return null;
@@ -50,7 +61,9 @@ export function Locations() {
   return (
     <SidebarContent className="p-2 flex flex-col  h-full ">
       <SidebarGroup className="flex-1 items-start justify-start ">
-        <SidebarGroupLabel className="text-base font-semibold mb-3">Locations</SidebarGroupLabel>
+        <SidebarGroupLabel className="text-base font-semibold mb-3">
+          Locations
+        </SidebarGroupLabel>
         <SidebarGroupAction
           className="hover:bg-primary/10 hover:text-primary"
           onClick={() => {
@@ -71,7 +84,9 @@ export function Locations() {
                     <div className="flex items-center gap-3 w-full py-2 justify-center">
                       <div className="flex flex-col flex-1 min-w-0 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium truncate text-md">{location.name}</span>
+                          <span className="font-medium truncate text-md">
+                            {location.name}
+                          </span>
                         </div>
                         <span className="text-xs text-muted-foreground truncate tracking-wider font-semibold">
                           {location.subname || 'No subname'}
@@ -119,41 +134,41 @@ export function Locations() {
                             </div>
                           </div>
                           <AlertDialog>
-  <AlertDialogTrigger asChild>
-    <Button
-      className="hover:bg-red-600/60"
-      variant="ghost"
-      size="icon"
-    >
-      <Delete />
-    </Button>
-  </AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>Are you sure you want to delete {location.name}?</AlertDialogTitle>
-      <AlertDialogDescription>
-        This action cannot be undone. This will permanently delete {location.name} from your narrative.
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-      <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction
-      className=' hover:bg-red-600/80'
-      onClick={() => deleteLocation(location.id)}>
-        Delete
-      </AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
-
-
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                className="hover:bg-red-600/60"
+                                variant="ghost"
+                                size="icon"
+                              >
+                                <Delete />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you sure you want to delete {location.name}?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will permanently
+                                  delete {location.name} from your narrative.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className=" hover:bg-red-600/80"
+                                  onClick={() => deleteLocation(location.id)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </CardHeader>
 
                       <CardContent className="flex-1 flex ">
-                        <LocationDetails location={location} onUpdate={
-                         modifyLocation
-                        } />
+                        <LocationDetails location={location} onUpdate={modifyLocation} />
                       </CardContent>
                     </DropdownMenuContent>
                   </DropdownMenu>

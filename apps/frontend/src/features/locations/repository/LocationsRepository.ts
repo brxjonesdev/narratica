@@ -1,15 +1,25 @@
 import { Result, ok, err } from '@/shared/types/result';
 import { NarrativeLocation } from '../types/Location';
-import { buildLocationUpdateInput, CreateLocationResponse, DeleteLocationResponse, wasLocationNodeCreated, wasLocationNodeDeleted } from '../utils/locations';
+import {
+  buildLocationUpdateInput,
+  CreateLocationResponse,
+  DeleteLocationResponse,
+  wasLocationNodeCreated,
+  wasLocationNodeDeleted,
+} from '../utils/locations';
 import { GraphQLFetcher } from '@/lib/fetcher';
 
 interface LocationsRepository {
-  fetchNarrativeLocations: (narrativeID: string) => Promise<Result<NarrativeLocation[], string>>;
+  fetchNarrativeLocations: (
+    narrativeID: string,
+  ) => Promise<Result<NarrativeLocation[], string>>;
   addLocationToNarrative: (
-    location: NarrativeLocation
+    location: NarrativeLocation,
   ) => Promise<Result<NarrativeLocation, string>>;
   deleteLocation: (locationID: string) => Promise<Result<{ ok: boolean }, string>>;
-  modifyLocation: (location: NarrativeLocation) => Promise<Result<{ ok: boolean }, string>>;
+  modifyLocation: (
+    location: NarrativeLocation,
+  ) => Promise<Result<{ ok: boolean }, string>>;
 }
 
 export const locationsRepository: LocationsRepository = {
@@ -28,10 +38,8 @@ export const locationsRepository: LocationsRepository = {
   }
 }`;
     try {
-      const response: { data?: { locations?: NarrativeLocation[] } } = await GraphQLFetcher(
-        FETCH_LOCATIONS,
-        { where: { narrative: narrativeID } }
-      );
+      const response: { data?: { locations?: NarrativeLocation[] } } =
+        await GraphQLFetcher(FETCH_LOCATIONS, { where: { narrative: narrativeID } });
       console.log('Locationsssss:', response);
       const locations = response?.data?.locations ?? [];
       return ok(locations);
@@ -63,7 +71,10 @@ export const locationsRepository: LocationsRepository = {
       input: [location],
     };
 
-    const response: CreateLocationResponse = await GraphQLFetcher(ADD_LOCATION, variables);
+    const response: CreateLocationResponse = await GraphQLFetcher(
+      ADD_LOCATION,
+      variables,
+    );
     if (wasLocationNodeCreated(response)) {
       return ok(location);
     }
@@ -71,22 +82,22 @@ export const locationsRepository: LocationsRepository = {
   },
 
   async deleteLocation(locationID: string) {
-      const DELETE_LOCATION = `
+    const DELETE_LOCATION = `
       mutation Mutation($where: LocationWhere) {
     deleteLocations(where: $where) {
       nodesDeleted
     }
   }`;
-      
-      const response: DeleteLocationResponse = await GraphQLFetcher(DELETE_LOCATION, {
-        where: { id: locationID },
-      });
-      console.log('Response:', response?.data?.deleteLocations?.nodesDeleted);
-      if (wasLocationNodeDeleted(response)) {
-        return ok({ ok: true });
-      }
-      return err('Failed to delete location');
-    },
+
+    const response: DeleteLocationResponse = await GraphQLFetcher(DELETE_LOCATION, {
+      where: { id: locationID },
+    });
+    console.log('Response:', response?.data?.deleteLocations?.nodesDeleted);
+    if (wasLocationNodeDeleted(response)) {
+      return ok({ ok: true });
+    }
+    return err('Failed to delete location');
+  },
 
   async modifyLocation(location: NarrativeLocation) {
     const MODIFY_LOCATION = `
@@ -105,12 +116,9 @@ export const locationsRepository: LocationsRepository = {
         update: updatePayload,
       });
       return ok({ ok: true });
-    } catch(error: string | unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      return err(`Failed to modify location: ${errorMessage}`);
+    } catch (error) {
+      console.error('Error modifying location:', error);
+      return err(`Failed to modify location`);
     }
-  
-  }
-}
-
-
+  },
+};

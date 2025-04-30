@@ -1,6 +1,6 @@
 import React from 'react';
 import { Separator } from '@/shared/ui/separator';
-import Narratives from '@/app/(root)/components/dashboard/narratives';
+import Narratives from '@/features/narratives/components/narratives';
 import DashboardHeader from '@/app/(root)/components/dashboard/header';
 
 export default function Dashboard() {

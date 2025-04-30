@@ -22,6 +22,7 @@ export const useCharacters = () => {
     const result = await fetchCharacters(narrativeID);
     if (!result.ok) {
       setError('Failed to fetch characters. Please try again later.');
+      setLoading(false);
       return;
     }
     setCharacters(result.data);
@@ -34,11 +35,13 @@ export const useCharacters = () => {
   }, []);
 
   const addCharacter = async () => {
-    const newCharacter = createNewCharacter(id as string);
-    console.log(newCharacter, 'horrrrrn');
+    const newCharacter = createNewCharacter(id as string)
+    setCharacters(prev => {
+  const updated = [...prev, newCharacter];
+  setCharactersGlobal(updated);
+  return updated;
+});
 
-    setCharacters([...characters, newCharacter]);
-    setCharactersGlobal([...characters, newCharacter]);
     setActiveID(newCharacter.id);
 
     try {
@@ -47,6 +50,7 @@ export const useCharacters = () => {
         setError('Failed to add character. Please try again later.');
         setCharacters(characters);
         setCharactersGlobal(characters);
+        setActiveID(null);
         return;
       }
       toast.success('Character added successfully');

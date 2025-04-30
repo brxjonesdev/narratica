@@ -5,7 +5,14 @@ import { z } from 'zod';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/shared/ui/form';
 import { Card, CardContent, CardFooter } from '@/shared/ui/card';
 import { createNewNarrative } from '@/features/narratives/types/Narrative';
 import { useAuth } from '@/shared/hooks/use-user';
@@ -14,13 +21,15 @@ import { addNewNarrative } from '@/features/narratives/services/createNewNarrati
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  name: z.string().min(1, 'name is required').max(100, 'name must be 100 characters or less'),
+  name: z
+    .string()
+    .min(1, 'name is required')
+    .max(100, 'name must be 100 characters or less'),
   tagline: z.string().max(200, 'tagline must be 200 characters or less').optional(),
   blurb: z.string().max(500, 'Blurb must be 500 characters or less').optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
-
 
 export default function NarrativeForm() {
   const { user } = useAuth();

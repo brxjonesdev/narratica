@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import NarrativeCard from './narrative-card';
+import NarrativeCard from '../../../app/(root)/components/dashboard/narrative-card';
 import { useUserNarratives } from '@/features/narratives/hooks/use-narratives';
 import Loading from '@/shared/loading';
-import AddNarrative from './add-narrative-btn';
+import AddNarrative from '../../../app/(root)/components/dashboard/add-narrative-btn';
 
 export default function Narratives() {
   const MAX_NARRATIVES = 6;
@@ -20,9 +20,7 @@ export default function Narratives() {
           </p>
         </div>
         <div>
-          <AddNarrative
-            isMaxedOut={narratives.length > MAX_NARRATIVES}
-          />
+          <AddNarrative isMaxedOut={narratives.length > MAX_NARRATIVES} />
         </div>
       </div>
       <div className="flex-1 bg-white/5 rounded-lg p-4 flex w-full ">

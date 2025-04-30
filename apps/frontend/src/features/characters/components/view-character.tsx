@@ -18,21 +18,21 @@ import {
 
 import { Delete } from 'lucide-react';
 import CharacterDetails from '@/features/characters/components/character-details';
-import CharacterRelationships from '@/features/characters/components/character-relationships';
 import { Relationship } from '@/features/characters/types/Relationship';
 
 export default function CharacterView({
-  availableCharacters,
   character,
   onDelete,
   updateCharacter,
 }: {
   character: Character;
-  availableCharacters: Character[];
   onDelete: (id: string) => void;
   updateCharacter: (updatedCharacter: Character) => void;
 }) {
-  function handleEdit(target: string, value: string | string[] | boolean | Relationship[]) {
+  function handleEdit(
+    target: string,
+    value: string | string[] | boolean | Relationship[],
+  ) {
     updateCharacter({
       ...character,
       [target]: value,
@@ -45,18 +45,6 @@ export default function CharacterView({
       value: 'details',
       component: <CharacterDetails character={character} onChange={handleEdit} />,
     },
-    {
-      label: 'Relationships',
-      value: 'relationships',
-      component: (
-        <CharacterRelationships
-          character={character}
-          availableCharacters={availableCharacters}
-          onChange={(target, value) => handleEdit(target, value)}
-        />
-      ),
-    },
-    { label: 'Mentions', value: 'mentions', component: null },
   ];
 
   return (
@@ -89,7 +77,8 @@ export default function CharacterView({
                   Are you sure you want to delete {character.name.split(' ')[0]}?
                 </AlertDialogTitle>
                 <AlertDialogDescription className="text-sm">
-                  This action cannot be undone. This will permanently delete this character.
+                  This action cannot be undone. This will permanently delete this
+                  character.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

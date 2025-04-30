@@ -68,8 +68,8 @@ export default function DeleteDialog({
             Confirm Deletion
           </DialogTitle>
           <DialogDescription>
-            This will permanently delete the narrative &quot;{narrativeName}&quot; and all connected
-            information. This action cannot be undone.
+            This will permanently delete the narrative &quot;{narrativeName}&quot; and all
+            connected information. This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 

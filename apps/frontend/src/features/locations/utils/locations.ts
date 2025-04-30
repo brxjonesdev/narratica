@@ -28,7 +28,7 @@ export function wasLocationNodeDeleted(response: DeleteLocationResponse) {
 }
 
 export function buildLocationUpdateInput(
-  data: Partial<NarrativeLocation>
+  data: Partial<NarrativeLocation>,
 ): Record<string, unknown> {
   const update: Record<string, unknown> = {};
   for (const key in data) {

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       console.log('Response status:', response);
       return NextResponse.json(
         { error: 'Failed to fetch GraphQL data' },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     console.error('GraphQL Proxy Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal Server Error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

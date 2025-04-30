@@ -33,7 +33,6 @@ export default function InfoCard() {
           <h2 className="font-semibold tracking-wide text-lg">{info.name}</h2>
 
           <p className="text-xs text-muted-foreground tracking-wide">{info.tagline}</p>
-
         </div>
 
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -47,21 +46,25 @@ export default function InfoCard() {
             <DialogContent className="max-w-xl font-figtree">
               <DialogHeader>
                 <DialogTitle>Edit Project</DialogTitle>
-                <DialogDescription>Make changes to your project or delete it.</DialogDescription>
+                <DialogDescription>
+                  Make changes to your project or delete it.
+                </DialogDescription>
               </DialogHeader>
-              <EditMetadata info={{
-                name: info.name || '',
-                tagline: info.tagline || '',
-                blurb: info.blurb || ''
-              }} id={id} closeModal={
-                () => {
+              <EditMetadata
+                info={{
+                  name: info.name || '',
+                  tagline: info.tagline || '',
+                  blurb: info.blurb || '',
+                }}
+                id={id}
+                closeModal={() => {
                   setIsModalOpen(false);
-                }
-              } />
+                }}
+              />
             </DialogContent>
           </Dialog>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -4,7 +4,13 @@ import { InlineEdit } from '@/shared/inline-edit';
 import { Label } from '@radix-ui/react-label';
 import { Separator } from '@/shared/ui/separator';
 import { Checkbox } from '@/shared/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select';
 import { InlineEditableList } from '@/shared/inline-list-edit';
 import { Input } from '@/shared/ui/input';
 
@@ -68,7 +74,10 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
       {/* Role */}
       <div className="flex items-center text-sm gap-2 justify-between">
         <Label className="font-semibold">Role:</Label>
-        <Select value={character.role ?? ''} onValueChange={(value) => onChange('role', value)}>
+        <Select
+          value={character.role ?? ''}
+          onValueChange={(value) => onChange('role', value)}
+        >
           <SelectTrigger className="w-1/2 mr-2">
             <SelectValue placeholder="Select role" />
           </SelectTrigger>
@@ -80,14 +89,20 @@ export default function CharacterDetails({ character, onChange }: CharacterDetai
             <SelectItem value="mentor">Mentor</SelectItem>
             <SelectItem value="foil">Foil</SelectItem>
             <SelectItem value="comic-relief">Comic Relief</SelectItem>
-            <SelectItem value="contagonist">Contagonist (Tempts the Protagonist)</SelectItem>
+            <SelectItem value="contagonist">
+              Contagonist (Tempts the Protagonist)
+            </SelectItem>
             <SelectItem value="love-interest">Love Interest</SelectItem>
             <SelectItem value="rival">Rival</SelectItem>
             <SelectItem value="sidekick">Sidekick</SelectItem>
             <SelectItem value="herald">Herald (Bringer of Change)</SelectItem>
             <SelectItem value="guardian">Guardian (Moral Compass)</SelectItem>
-            <SelectItem value="shapeshifter">Shapeshifter (Allegiance Unknown)</SelectItem>
-            <SelectItem value="shadow">Shadow (Dark Reflection of Protagonist)</SelectItem>
+            <SelectItem value="shapeshifter">
+              Shapeshifter (Allegiance Unknown)
+            </SelectItem>
+            <SelectItem value="shadow">
+              Shadow (Dark Reflection of Protagonist)
+            </SelectItem>
             <SelectItem value="ally">Ally</SelectItem>
             <SelectItem value="bystander">Bystander</SelectItem>
             <SelectItem value="narrator">Narrator</SelectItem>

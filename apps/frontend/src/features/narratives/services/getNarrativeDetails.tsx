@@ -4,7 +4,7 @@ import { narrativeRepository } from '../repository/NarrativeRepository';
 import { Narrative } from '../types/Narrative';
 
 export const getNarrativeDetails = async (
-  narrativeID: string
+  narrativeID: string,
 ): Promise<Result<Partial<Narrative>, string>> => {
   if (!narrativeID) return err('narrativeID is required');
   const result = await narrativeRepository.fetchNarrativeDetails(narrativeID);

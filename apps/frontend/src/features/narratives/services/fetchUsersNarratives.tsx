@@ -3,7 +3,9 @@ import { Result } from '@/shared/types/result';
 import { narrativeRepository } from '../repository/NarrativeRepository';
 import { Narrative } from '../types/Narrative';
 
-export async function fetchUserNarratives(userId: string): Promise<Result<Narrative[], string>> {
+export async function fetchUserNarratives(
+  userId: string,
+): Promise<Result<Narrative[], string>> {
   const result = await narrativeRepository.fetchUserNarratives(userId);
   if (!result.ok) {
     return {

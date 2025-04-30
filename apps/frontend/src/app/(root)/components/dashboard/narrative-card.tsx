@@ -1,7 +1,13 @@
 'use client';
 
 import type React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import Link from 'next/link';
 import { Separator } from '@/shared/ui/separator';
 import { Narrative } from '@/features/narratives/types/Narrative';

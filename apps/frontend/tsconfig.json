@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": ["vitest/globals"],
     "plugins": [
       {
         "name": "next"
@@ -27,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/infrastructure/types"
+    "src/infrastructure/types",
+    "src/features/characters/hooks/use-characters.test.jsx"
   ],
   "exclude": ["node_modules"]
 }

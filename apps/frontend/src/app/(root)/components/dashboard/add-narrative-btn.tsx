@@ -12,7 +12,6 @@ import { PlusCircle } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import NarrativeForm from './create-form';
 
-
 interface AddNarrativeProps {
   isMaxedOut?: boolean;
 }
@@ -34,13 +33,12 @@ export default function AddNarrativeBtn({ isMaxedOut }: AddNarrativeProps) {
         <DialogHeader>
           <DialogTitle>Create New Narrative</DialogTitle>
           <DialogDescription>
-            Let&apos;s start creating a new narrative. The world&apos;s next big story starts here
-            and now!
+            Let&apos;s start creating a new narrative. The world&apos;s next big story
+            starts here and now!
           </DialogDescription>
         </DialogHeader>
         <Separator />
-        <NarrativeForm
-        />
+        <NarrativeForm />
       </DialogContent>
     </Dialog>
   );

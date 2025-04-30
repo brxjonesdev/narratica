@@ -170,7 +170,7 @@ export default function MarkdownNotebook() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button  variant="outline" className='h-16'>
+        <Button variant="outline" className="h-16">
           <NotebookPen className="h-4 w-4 " />
           Notes
         </Button>
@@ -286,7 +286,9 @@ export default function MarkdownNotebook() {
         <AlertDialogContent className="font-figtree">
           <AlertDialogHeader>
             <AlertDialogTitle>Rename Note</AlertDialogTitle>
-            <AlertDialogDescription>Enter a new title for your note.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Enter a new title for your note.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <Input
             value={newNoteTitle}

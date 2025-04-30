@@ -19,8 +19,6 @@ import { Separator } from '@/shared/ui/separator';
 import Link from 'next/link';
 
 export default function NarrativeLayout({ children }: { children: React.ReactNode }) {
-
-
   return (
     <main className="font-figtree">
       <NarrativeStoreProvider>
@@ -41,30 +39,32 @@ export default function NarrativeLayout({ children }: { children: React.ReactNod
             <SidebarRail />
           </Sidebar>
 
-
           <SidebarInset>
-      <header className="h-16 shrink-0 items-center gap-2 border-b justify-between pr-4 sticky top-0 bg-background z-10 hidden lg:flex">
-        <div className="flex items-center gap-2 px-3">
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="h-4" />
-          <Link href="/">
-            <Button variant="ghost" size="icon" className="h-7 w-7">
-              <Home />
-            </Button>
-          </Link>
-          {/* <Separator orientation="vertical" className="h-4" /> */}
-         
-        </div>
-      </header>
-      {children}
-  
-            </SidebarInset>
+            <header className="h-16 shrink-0 items-center gap-2 border-b justify-between pr-4 sticky top-0 bg-background z-10 hidden lg:flex">
+              <div className="flex items-center gap-2 px-3">
+                <SidebarTrigger />
+                <Separator orientation="vertical" className="h-4" />
+                <Link href="/">
+                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <Home />
+                  </Button>
+                </Link>
+                {/* <Separator orientation="vertical" className="h-4" /> */}
+              </div>
+            </header>
+            {children}
+          </SidebarInset>
 
-
-          <Sidebar className="transition-all duration-300 ease-in-out " side="right" style={{}}>
+          <Sidebar
+            className="transition-all duration-300 ease-in-out "
+            side="right"
+            style={{}}
+          >
             <SidebarHeader className="border-b h-full min-h-32 max-h-32 flex flex-col">
               <div className="h-16 flex items-center justify-center bg-slate-400/5 rounded-xl">
-                <p className="text-2xl text-center font-semibold tracking-wider">Narratica</p>
+                <p className="text-2xl text-center font-semibold tracking-wider">
+                  Narratica
+                </p>
               </div>
               <Notebook />
             </SidebarHeader>
