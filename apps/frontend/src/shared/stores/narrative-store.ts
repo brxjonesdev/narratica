@@ -42,7 +42,9 @@ export const defaultInitState: NarrativeState = {
 export const createNarrativeStore = (initState: NarrativeState = defaultInitState) => {
   return createStore<NarrativeStore>()((set) => ({
     ...initState,
-    setCharactersGlobal: (characters: Character[]) => set(() => ({ characters })),
+    setCharactersGlobal: (characters: Character[]) => {
+      set(() => ({ characters }));
+    },
     setLocationsGlobal: (locations: NarrativeLocation[]) => set(() => ({ locations })),
     setStoryGlobal: (story: Outline) => set(() => ({ story })),
   }));

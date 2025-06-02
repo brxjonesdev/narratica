@@ -128,7 +128,7 @@ export default function EditMetadata({
 
           <div className="flex items-center gap-4 justify-end">
             <DeleteDialog
-              narrativeName={info.name}
+              narrativeName={info.name as string}
               isDeleteDialogOpen={isDeleteDialogOpen}
               setIsDeleteDialogOpen={setIsDeleteDialogOpen}
               handleDelete={handleDelete}
