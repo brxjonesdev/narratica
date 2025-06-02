@@ -101,7 +101,7 @@ export default function Characters() {
                       }}
                     >
                       <CharacterView
-                        availableCharacters={characters}
+                        // availableCharacters={characters}
                         character={character}
                         onDelete={deleteCharacter}
                         updateCharacter={(updatedCharacter: Character) => {
