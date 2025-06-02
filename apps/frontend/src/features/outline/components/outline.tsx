@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog';
-import { PlusCircle, PlusCircleIcon, Trash2 } from 'lucide-react';
+import { PlusCircle, PlusCircleIcon, Trash2, X } from 'lucide-react';
 import type { Act, Chapter, Outline, Scene } from '@/features/outline/types/Outline';
 import { InlineEdit } from '@/shared/inline-edit';
 import { Card, CardContent, CardFooter, CardHeader } from '@/shared/ui/card';
