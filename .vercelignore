@@ -1,0 +1,36 @@
+# Node modules (Vercel installs dependencies)
+node_modules/
+
+# Local env files
+.env.local
+.env.development
+.env.test
+.env.production.local
+
+# Build output
+.next/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Test files and folders (Vitest, Jest, etc.)
+tests/
+__tests__/
+*.test.*
+*.spec.*
+coverage/
+
+# Vitest cache or reports
+.vitest/
+
+# IDE/editor config
+.vscode/
+.idea/
+.DS_Store
+
+# Git
+.git/
+.gitignore
