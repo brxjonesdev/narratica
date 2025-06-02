@@ -4,7 +4,6 @@ import { Neo4jGraphQL } from "@neo4j/graphql";
 import neo4j from "neo4j-driver";
 import typeDefs from "./graphql-schema/index.js";
 import dotenv from "dotenv";
-import cors from "cors"; // Import the cors package
 dotenv.config();
 
 const driver = neo4j.driver(
@@ -17,11 +16,6 @@ const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
 const server = new ApolloServer({
   schema: await neoSchema.getSchema(),
 });
-
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-};
 
 const { url } = await startStandaloneServer(server, {
   context: async ({ req }) => ({ req }),
