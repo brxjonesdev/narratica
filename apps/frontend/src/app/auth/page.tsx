@@ -21,7 +21,7 @@ export default function AuthPage() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `narratica.braxtonjones.dev/auth/callback`,
+        redirectTo: `http://narratica.braxtonjones.dev/auth/callback`,
       },
     });
     if (error) {
