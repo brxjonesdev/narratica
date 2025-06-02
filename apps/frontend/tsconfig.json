@@ -31,5 +31,5 @@
     "src/infrastructure/types",
     "src/features/characters/hooks/use-characters.test.jsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "vitest.config.ts"]
 }
