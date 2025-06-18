@@ -8,8 +8,6 @@ Storytelling can get complicated when managing multiple characters, timelines, a
 * Connect and map relationships between characters, events, and locations
 * Designed specifically for novelists, screenwriters, and worldbuilders
 
----
-
 #### Tech Stack
 
 * Frontend: React, Next.js
