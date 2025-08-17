@@ -1,4 +1,4 @@
-### Narratica
+### Narratica (Currently on hold to re-launch as Apricity)
 
 Storytelling can get complicated when managing multiple characters, timelines, and settings. I built Narratica to give writers a visual and interactive tool that mirrors the complexity of their narratives, helping them keep track of every relationship as their story grows.
 
